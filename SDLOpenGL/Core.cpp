@@ -7,6 +7,7 @@ Core::Core()
 	dt = 0.0f;
 }
 
+/* It's actually not needed
 Core::Core(int w, int h, std::function<::Internalupdate()> update)
 {
 	window_ = LWindow(this, w, h);
@@ -14,7 +15,7 @@ Core::Core(int w, int h, std::function<::Internalupdate()> update)
 	dt = 0.0f;
 	startTime = 0.0f;
 	Internalupdate = update();
-}
+}*/
 
 
 Core::Core(int w, int h, ::Internalupdate update)

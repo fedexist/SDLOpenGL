@@ -11,7 +11,7 @@ class Core
 {
 	public:
 		Core();
-		Core(int w, int h, std::function<::Internalupdate()> update);
+		//Core(int w, int h, std::function<::Internalupdate()> update);
 		Core(int w, int h, Internalupdate);
 		void quit();
 		bool init();
