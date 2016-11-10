@@ -15,7 +15,7 @@ bool LSampleShader::loadProgram()
 
 	//Get vertex source
 	const std::string vertexShaderSource = 
-		#include "shaders/sample1.vert"
+		#include "shaders/sample2.vert"
 	;
 
 	const char* src = vertexShaderSource.c_str();
@@ -45,7 +45,7 @@ bool LSampleShader::loadProgram()
 
 	//Get fragment source
 	const std::string fragmentShaderSource =
-			#include "shaders/sample1.frag"
+			#include "shaders/sample2.frag"
 		;
 
 	src = fragmentShaderSource.c_str(); 
@@ -62,6 +62,7 @@ bool LSampleShader::loadProgram()
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "Unable to compile fragment shader %d!\n", fragmentShader );
 		printShaderLog( fragmentShader );
+
 		return false;
 	}
 
@@ -95,9 +96,12 @@ bool LSampleShader::loadProgram()
 		//VBO data
 		GLfloat vertexData[] =
 		{
-			0.5f, -0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+			-1.0f, 1.0f, 0.0f,
+			-1.0f, -1.0f, 0.0f,
+			1.0f,  -1.0f, 0.0f,
+			1.0f, 1.0f, 0.0f,
+			-1.0f, 1.0f, 0.0f,
+			1.0f, -1.0f, 0.0f
 		};
 
 		glGenVertexArrays(1, &gVAO);
@@ -142,15 +146,21 @@ bool LSampleShader::loadProgram()
 void LSampleShader::render() { 	 
 
 	GLfloat timeValue = SDL_GetTicks();
-	GLfloat greenValue = (sin(timeValue/288) / 2) + 0.5;
+	GLfloat greenValue = 1.0f;//(sin(timeValue/288) / 2) + 0.5;
+	GLfloat radius = 0.6;	//*((sin(timeValue / 1000) / 2) + 0.5);
+	GLfloat parameters[] = { 1, 0.0, 10, 0.5+0.05*(sin(timeValue / 500) )};
 	GLint vertexColorLocation = glGetUniformLocation(mProgramID, "LSampleFrag");
-	glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.1f, 1.0f);
+	GLint radiusLocation = glGetUniformLocation(mProgramID, "radius");
+	GLint paramLocation = glGetUniformLocation(mProgramID, "parameters");
+	glUniform4f(vertexColorLocation, 0.08f, 0.3f, 0.7f, 1.0f);
+	glUniform4f(paramLocation, parameters[0], parameters[1], parameters[2],parameters[3]);
+	glUniform1f(radiusLocation, radius);
 
 	//Enable vertex position
 	//glEnableVertexAttribArray( gVertexPos2DLocation );
 
 	glBindVertexArray(gVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
 
 	/*

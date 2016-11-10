@@ -124,7 +124,7 @@ void LVertexShader::render()
 	GLfloat timeValue = SDL_GetTicks();
 	GLfloat blueValue = sin(timeValue/144) / 2 + 0.5;
 	GLint vertexColorLocation = glGetUniformLocation(mProgramID, "LSampleFrag");
-	glUniform4f(vertexColorLocation, 0.0f, 0.1f , blueValue, 1.0f);
+	glUniform4f(vertexColorLocation, 0.0f, 0.1f , 0.1f, 1.0f);
 
 
 	//Enable vertex position
@@ -133,6 +133,7 @@ void LVertexShader::render()
 	//Set vertex data
 	glBindBuffer( GL_ARRAY_BUFFER, gVBO );
 	glVertexAttribPointer( gVertexPos2DLocation, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), nullptr );
+	
 
 	//Set index data and render
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, gIBO );

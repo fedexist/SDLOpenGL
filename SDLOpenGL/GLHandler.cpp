@@ -162,16 +162,16 @@ bool GLHandler::testFunction()
 	SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "About to add shader to queue\n" );
 
 	LShaderProgram* sampleShader = new LSampleShader();
-	LShaderProgram* sampleShader1 = new LVertexShader();
+	//LShaderProgram* sampleShader1 = new LVertexShader();
 	//LShaderProgram* lightShader = new LightShader();
 
 	SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "SampleShader is constructed\n" );
 	
-	if(!gl_renderer_.AddShaderToQueue(sampleShader1))
+	/*if(!gl_renderer_.AddShaderToQueue(sampleShader1))
 	{
 		SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Failed to add shader to queue\n" );
 		return false;
-	}
+	}*/
 	
 	if(!gl_renderer_.AddShaderToQueue(sampleShader))
 	{
