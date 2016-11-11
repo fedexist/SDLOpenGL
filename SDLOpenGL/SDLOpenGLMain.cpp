@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "GameClass.h"
 
+GameClass game = GameClass();
+
 int main(int argc, char* argv[])
 {
-	GameClass game;
-	Core core = Core(800, 600, game.update);
+	
+	Core core = Core(800, 600, &game);
 
 	SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
 

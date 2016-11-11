@@ -152,7 +152,7 @@ void LSampleShader::render() {
 	GLint vertexColorLocation = glGetUniformLocation(mProgramID, "LSampleFrag");
 	GLint radiusLocation = glGetUniformLocation(mProgramID, "radius");
 	GLint paramLocation = glGetUniformLocation(mProgramID, "parameters");
-	glUniform4f(vertexColorLocation, 0.08f, 0.3f, 0.7f, 1.0f);
+	glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 0.0f);
 	glUniform4f(paramLocation, parameters[0], parameters[1], parameters[2],parameters[3]);
 	glUniform1f(radiusLocation, radius);
 

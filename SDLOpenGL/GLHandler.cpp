@@ -21,14 +21,18 @@ bool GLHandler::initGL(LWindow* window)
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glShadeModel(GL_SMOOTH);
-
+	glClearDepth(1.0f);									// Depth Buffer Setup
+	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
+	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glViewport(0, 0, window->getWidth(), window->getHeight());
+	gluLookAt(0.0,0.0,0.0, 0.0,0.0,-1.0, 0.0,1.0,0.0);
 	//Enable texturing
 	glEnable( GL_TEXTURE_2D );
 	
 
 	//Set blending
 	glEnable( GL_BLEND );
-	//glDisable( GL_DEPTH_TEST );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
 	SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "OpenGL initialised correctly\n");

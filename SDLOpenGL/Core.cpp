@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <functional>
 #include "EventHandler.h"
+#include "DrawingPlane.h"
 
 Core::Core()
 {
@@ -15,17 +16,27 @@ Core::Core(int w, int h, std::function<::Internalupdate()> update)
 	dt = 0.0f;
 	startTime = 0.0f;
 	Internalupdate = update();
-}*/
+}
 
 
-Core::Core(int w, int h, ::Internalupdate update)
+Core::Core(int w, int h, ::Internalupdate update, ::InternalRender render)
 {
 	window_ = LWindow(this, w, h);
 	event_handler_ = EventHandler();
 	dt = 0.0f;
 	startTime = 0.0f;
 	Internalupdate = update;
+	InternalRender = render;
+}*/
+Core::Core(int w, int h, GameClass* game)
+{
+	window_ = LWindow(this, w, h);
+	event_handler_ = EventHandler();
+	dt = 0.0f;
+	startTime = 0.0f;
+	Game = game;
 }
+
 
 void Core::quit()
 {
@@ -153,18 +164,19 @@ void Core::handleEvents()
 
 void Core::update() const
 {
-	if (Internalupdate == nullptr)
+	/*if (Internalupdate == nullptr)
 	{
 		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "There is no valid update(dt) function assigned");
 		return;
 	}
 		
-	Internalupdate(dt);
+	Internalupdate(dt);*/
+	Game->update(dt);
 }
 
 void Core::render()
 {
-	gl_handler_.gl_renderer_.Render();
+	gl_handler_.gl_renderer_.Render(Game);
 	dt = SDL_GetTicks() - startTime;
 	SDL_GL_SwapWindow( window_.getSDLWindow());
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Delta time is: %f", dt);

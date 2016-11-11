@@ -3,16 +3,18 @@
 #include "LWindow.h"
 #include "GLHandler.h"
 #include "EventHandler.h"
-#include <functional>
+#include "GameClass.h"
 
 typedef void(*Internalupdate)(float dt);
+typedef void(*InternalRender)();
 
 class Core
 {
 	public:
 		Core();
 		//Core(int w, int h, std::function<::Internalupdate()> update);
-		Core(int w, int h, Internalupdate);
+		//Core(int w, int h, Internalupdate, InternalRender);
+		Core(int w, int h, GameClass*);
 		void quit();
 		bool init();
 		void renderPresent();
@@ -23,11 +25,14 @@ class Core
 		static bool checkQuitEvent();
 		~Core();
 		Internalupdate Internalupdate;
-	private:
+		InternalRender InternalRender;
+		
+private:
 		LWindow window_;
 		SDL_Renderer* mRenderer;
 		GLHandler gl_handler_;
 		EventHandler event_handler_;
 		float dt, startTime;
+		GameClass* Game;
 };
 

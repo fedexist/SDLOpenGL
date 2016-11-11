@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "LShaderProgram.h"
+#include "GameClass.h"
 
 class GLRenderer
 {
@@ -9,7 +10,7 @@ public:
 	GLRenderer();
 	GLRenderer(LWindow*);
 	~GLRenderer();
-	GLvoid Render();
+	GLvoid Render(GameClass*);
 	GLvoid bindShaders();
 	GLvoid unbindShaders();
 	GLboolean LoadShaders();

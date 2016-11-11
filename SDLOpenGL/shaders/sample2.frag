@@ -22,6 +22,6 @@ R"(
 			li = (c2/(distance * distance) + c1/(distance));
 			li = pow(li,c4); 
 		}
-		color = LSampleFrag + vec4(li,li,li,1.0);
+		color = LSampleFrag + vec4(1.0,1.0,1.0,li);
 	}
 )"
