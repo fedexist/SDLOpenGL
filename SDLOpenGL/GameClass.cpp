@@ -6,7 +6,7 @@ GameClass::GameClass()
 {
 	GLfloat p1[] = { -1.0f, 1.0f, 0.0f };
 	GLfloat p2[] = { 1.0f, 1.0f, 0.0f };
-	GLfloat p3[] = { 1.0f, 1.0f, 0.0f };
+	GLfloat p3[] = { 1.0f, -1.0f, 0.0f };
 	GLfloat p4[] = { -1.0f, -1.0f, 0.0f };
 	plane = DrawingPlane(p1, p2, p3, p4);
 }
