@@ -29,6 +29,10 @@ DrawingPlane::DrawingPlane(GLfloat a[3], GLfloat b[3], GLfloat c[3], GLfloat d[3
 	color[1] = 0.2f;
 	color[2] = 0.6f;
 	color[3] = 1.0f;
+
+	std::string path = "./assets/not_a_sprite.png";
+
+	tex = LTexture2D(path, 4, 1);
 }
 
 void DrawingPlane::render()

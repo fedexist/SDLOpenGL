@@ -121,11 +121,11 @@ bool Core::init()
 					SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
 				}
 
-				gl_handler_.testFunction();
+				//gl_handler_.testFunction();
 
 				//Create renderer for window
-				/*window_.mRenderer = window_.createRenderer();
-				if( window_.mRenderer == nullptr )
+				mRenderer = window_.createRenderer();
+				if( mRenderer == nullptr )
 				{
 					SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
 					success = false;
@@ -133,15 +133,18 @@ bool Core::init()
 				else
 				{
 					//Initialize renderer color
-					SDL_SetRenderDrawColor( window_.mRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+					//SDL_SetRenderDrawColor( mRenderer, 0xFF, 0xFF, 0xFF, 0 );
+					Game->loadMedia(mRenderer);
 
 					//Initialize PNG loading
 					int imgFlags = IMG_INIT_PNG;
-					if( !( IMG_Init( imgFlags ) & imgFlags ) )
+					if (!(IMG_Init(imgFlags) & imgFlags))
 					{
-						SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+						SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 						success = false;
-				}*/
+					}
+				}
+
 			}
 		}
 	}
@@ -192,8 +195,6 @@ bool Core::checkQuitEvent()
 {
 	return EventHandler::getQuitEvent();
 }
-
-
 
 
 

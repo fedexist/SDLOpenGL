@@ -11,6 +11,7 @@ public:
 	GameClass();
 	~GameClass();
 	static void update(float);
+	void loadMedia(SDL_Renderer*);
 	void render();
 };
 
