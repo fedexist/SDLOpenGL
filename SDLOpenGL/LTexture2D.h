@@ -19,8 +19,8 @@ class LTexture2D
 	std::vector<Tile> tile_list;
 public:
 	LTexture2D();
-	bool loadFromFile();
-	LTexture2D(std::string, unsigned int, unsigned int);
+	bool loadFromFile(SDL_Renderer * sdl_renderer);
+	LTexture2D(std::string path, unsigned int w_number, unsigned int h_number, SDL_Renderer * sdl_renderer);
 	void drawSpritesheet();
 	void free();
 	~LTexture2D();

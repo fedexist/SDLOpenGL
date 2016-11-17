@@ -24,7 +24,8 @@ void GameClass::update(float dt)
 
 void GameClass::loadMedia(SDL_Renderer* sdl_renderer)
 {
-
+	//AllGameResources.loadMedia(sdl_renderer)
+	plane.loadMedia(sdl_renderer);
 }
 
 void GameClass::render()

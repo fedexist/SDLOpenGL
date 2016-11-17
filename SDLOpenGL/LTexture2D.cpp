@@ -6,7 +6,7 @@ LTexture2D::LTexture2D()
 {
 }
 
-bool LTexture2D::loadFromFile()
+bool LTexture2D::loadFromFile(SDL_Renderer* sdl_renderer)
 {
 		//Get rid of preexisting texture
 	free();
@@ -28,7 +28,7 @@ bool LTexture2D::loadFromFile()
 		//Create texture from surface pixels
 
 		
-		newTexture = SDL_CreateTextureFromSurface( mRenderer, loadedSurface );
+		newTexture = SDL_CreateTextureFromSurface(sdl_renderer, loadedSurface );
 		if( newTexture == nullptr )
 		{
 			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
@@ -51,13 +51,13 @@ bool LTexture2D::loadFromFile()
 
 }
 
-LTexture2D::LTexture2D(std::string path, unsigned int w_number, unsigned int h_number )
+LTexture2D::LTexture2D(std::string path, unsigned int w_number, unsigned int h_number, SDL_Renderer* sdl_renderer)
 {
 	this->path = path;
 	w_step = w_number;
 	h_step = h_number;
 
-	loadFromFile();
+	loadFromFile(sdl_renderer);
 }
 
 void LTexture2D::drawSpritesheet()
@@ -69,6 +69,17 @@ void LTexture2D::drawSpritesheet()
 			
 		}
 
+	}
+}
+
+void LTexture2D::free()
+{
+	if (tex != NULL)
+	{
+		SDL_DestroyTexture(tex);
+		tex = NULL;
+		width = 0;
+		height = 0;
 	}
 }
 
