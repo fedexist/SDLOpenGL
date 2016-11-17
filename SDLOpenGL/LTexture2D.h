@@ -4,7 +4,9 @@
 class Tile
 {
 public:
-	GLuint textureId;
+	Tile(GLuint x, GLuint y) : posX(x), posY(y) {}
+	GLuint posX;
+	GLuint posY;
 
 };
 
@@ -21,7 +23,7 @@ public:
 	LTexture2D();
 	bool loadFromFile(SDL_Renderer * sdl_renderer);
 	LTexture2D(std::string path, unsigned int w_number, unsigned int h_number, SDL_Renderer * sdl_renderer);
-	void drawSpritesheet();
+	void drawSprite(float posX, float posY, int frameIndex);
 	void free();
 	~LTexture2D();
 };

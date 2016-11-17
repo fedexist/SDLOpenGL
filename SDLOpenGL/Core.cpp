@@ -134,6 +134,7 @@ bool Core::init()
 				{
 					//Initialize renderer color
 					//SDL_SetRenderDrawColor( mRenderer, 0xFF, 0xFF, 0xFF, 0 );
+					SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadMedia()\n");
 					Game->loadMedia(mRenderer);
 
 					//Initialize PNG loading

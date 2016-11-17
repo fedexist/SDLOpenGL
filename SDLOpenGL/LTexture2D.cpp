@@ -8,7 +8,7 @@ LTexture2D::LTexture2D()
 
 bool LTexture2D::loadFromFile(SDL_Renderer* sdl_renderer)
 {
-		//Get rid of preexisting texture
+	//Get rid of preexisting texture
 	free();
 
 	//The final texture
@@ -26,7 +26,6 @@ bool LTexture2D::loadFromFile(SDL_Renderer* sdl_renderer)
 		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 		//Create texture from surface pixels
-
 		
 		newTexture = SDL_CreateTextureFromSurface(sdl_renderer, loadedSurface );
 		if( newTexture == nullptr )
@@ -56,28 +55,38 @@ LTexture2D::LTexture2D(std::string path, unsigned int w_number, unsigned int h_n
 	this->path = path;
 	w_step = w_number;
 	h_step = h_number;
+	tex = nullptr;
 
-	loadFromFile(sdl_renderer);
+	if( loadFromFile(sdl_renderer))
+	{
+		for(int i=0; i< height; i += h_step)
+		{
+			for(int j=0; j<width; j += w_step)
+			{
+				tile_list.push_back(Tile(i, j));
+			}
+		}
+	}
+
+	
+		
 }
 
-void LTexture2D::drawSpritesheet()
+void LTexture2D::drawSprite(float posX, float posY, int frameIndex)
 {
-	for(int i=0; i<width; i+w_step)
-	{
-		for(int j=0; j<height; j+h_step)
-		{
-			
-		}
 
-	}
+	/*
+	glVertexPointer(2, GL_FLOAT, verts);
+	glTexCoordPointer(2, GL_FLOAT, texVerts);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);*/
 }
 
 void LTexture2D::free()
 {
-	if (tex != NULL)
+	if (tex != nullptr)
 	{
 		SDL_DestroyTexture(tex);
-		tex = NULL;
+		tex = nullptr;
 		width = 0;
 		height = 0;
 	}

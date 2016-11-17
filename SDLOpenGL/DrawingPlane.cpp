@@ -35,11 +35,15 @@ void DrawingPlane::loadMedia(SDL_Renderer* sdl_renderer)
 {
 	std::string path = "./assets/not_a_sprite.png";
 
-	tex = LTexture2D(path, 4, 1, sdl_renderer);
+	tex = LTexture2D(path, 64, 64, sdl_renderer);
 }
 
 void DrawingPlane::render()
 {
+
+	//tex.drawSprite();
+
+	/*
 	glBegin(GL_TRIANGLES);
 	glColor3fv(color);
 
@@ -50,7 +54,7 @@ void DrawingPlane::render()
 	glVertex3f(vertices[2][0], vertices[2][1], vertices[2][2]);
 	glVertex3f(vertices[3][0], vertices[3][1], vertices[3][2]);
 	glVertex3f(vertices[0][0], vertices[0][1], vertices[0][2]);
-	glEnd();
+	glEnd();*/
 
 	SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Rendering Plane");
 }
