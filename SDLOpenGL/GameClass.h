@@ -7,6 +7,7 @@ class GameClass
 	std::vector<GameObject> gameObjectArray;
 	DrawingPlane plane;
 	std::vector<GLuint*> currentLevelLayout;
+	unsigned int leveLayoutW, levelLayoutH;
 	std::string levelPath = "./assets/levels/";
 	std::vector< std::vector<GLuint*> > cachedLevelLayouts;
 

@@ -71,9 +71,9 @@ void LTexture2D::drawSprite(float posX, float posY, int frameIndex)
 {
 	GLfloat Lvertices[] = {
 		posX, posY, 0,
-		posX + w_step/64, posY, 0,
-		posX + w_step/64, posY + h_step/64, 0,
-		posX, posY + h_step/64, 0
+		posX +float( w_step)/width, posY, 0,
+		posX + float(w_step) / width, posY + float(h_step) / (width), 0,
+		posX, posY + float(h_step) / (width), 0
 	};
 	GLfloat Lcolors[] = {
 		1, 1, 1, 1.0,
@@ -82,10 +82,10 @@ void LTexture2D::drawSprite(float posX, float posY, int frameIndex)
 		1, 1, 1, 1.0,
 	};
 	const float tx = float(tile_list.at(frameIndex).posX) / width;
-	const float ty = float(tile_list.at(frameIndex).posY)/ height +1;
+	const float ty = float(tile_list.at(frameIndex).posY)/ height +float(h_step)/height;
 	 char a[255] = "";
 	sprintf_s(a, "%d %f %f", frameIndex,tx,ty);
-	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, a);
+	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, a);
 	
 	const float tex_verts[] = {
 		
@@ -95,9 +95,9 @@ void LTexture2D::drawSprite(float posX, float posY, int frameIndex)
 		0,0*/
 
 		tx, ty,
-		tx + float(w_step) / 256, ty,
-		tx + float(w_step) / 256, ty - float(h_step) /64,
-		tx, ty - float(h_step) / 64
+		tx + float(w_step) / width, ty,
+		tx + float(w_step) / width, ty - float(h_step) /height,
+		tx, ty - float(h_step) / height
 
 
 		/*ty, tx + w_step / 64,
@@ -106,7 +106,12 @@ void LTexture2D::drawSprite(float posX, float posY, int frameIndex)
 		ty, tx*/
 	};
 
-
+	/*std::string str = "";
+	for (int i = 0; i < 8; i++)
+	{
+		str = str + " " + std::to_string(tex_verts[i]) ;
+	}
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, str.c_str());*/
 	// activate and specify pointer to vertex array
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);

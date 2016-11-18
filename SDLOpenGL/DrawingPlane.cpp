@@ -38,24 +38,17 @@ void DrawingPlane::loadMedia()
 	tex = LTexture2D(path, 64, 64);
 }
 
-void DrawingPlane::render()
+void DrawingPlane::render(std::vector<GLuint*> *levelLayout, unsigned int w, unsigned int h)
 {
-	tex.drawSprite(0, 0, 0);
-	tex.drawSprite(-1, 0, 3);
 
-	tex.drawSprite(0, -1, 2);
-	tex.drawSprite(-1, -1, 1);
-	/*glBegin(GL_TRIANGLES);
-	glColor3fv(color);
+	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%d %d %d", levelLayout->at(1)[9], w, h );
+	
+	for (int i = h-1; i == 0; i--)
+		for (int j = 0; j < w; j++)
 
-	glVertex3f(vertices[0][0], vertices[0][1], vertices[0][2]);
-	glVertex3f(vertices[1][0], vertices[1][1], vertices[1][2]);
-	glVertex3f(vertices[2][0], vertices[2][1], vertices[2][2]);
-
-	glVertex3f(vertices[2][0], vertices[2][1], vertices[2][2]);
-	glVertex3f(vertices[3][0], vertices[3][1], vertices[3][2]);
-	glVertex3f(vertices[0][0], vertices[0][1], vertices[0][2]);
-	glEnd();*/
+			//tex.drawSprite(2*float(j)/w - 1, 1- 2*float(i)/h, levelLayout->at(i)[j]);
+	
+	//tex.drawSprite(0, 0, 9);
 
 
 	/*GLfloat Lvertices[] = {

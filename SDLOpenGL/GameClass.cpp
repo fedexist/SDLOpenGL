@@ -34,7 +34,7 @@ void GameClass::loadMedia()
 
 void GameClass::render()
 {
-	plane.render();
+	plane.render(&currentLevelLayout, leveLayoutW, levelLayoutH);
 }
 
 void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsigned int height)
@@ -42,6 +42,8 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 
 	currentLevelLayout.clear();
 
+	leveLayoutW = width;
+	levelLayoutH = height;
 
 	for (int i = 0; i < height; ++i)
 		currentLevelLayout.push_back(new GLuint[width]);
@@ -56,8 +58,10 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 	{
 		std::string line;
 		getline(file, line);
-		if ( !file.good() )
-			break;
+		
+		
+		//if ( !file.good() )
+			//break;
 
 		std::stringstream iss(line);
 
@@ -65,11 +69,14 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 		{
 			std::string val;
 			getline(iss, val, ',');
-			if ( !iss.good() )
-				break;
+			
+			//if ( !iss.good() )
+				//break;
 
 			currentLevelLayout.at(row)[col] = stoi(val);
+			
 		}
+		
 	}
 
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Tiles (0,0) (0,1) (0,2) (0,3): %d %d %d %d\n", currentLevelLayout.at(0)[0], currentLevelLayout.at(0)[1], currentLevelLayout.at(0)[2], currentLevelLayout.at(0)[3]);

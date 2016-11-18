@@ -14,8 +14,8 @@ class LTexture2D
 {
 	std::string path;
 	GLuint texId;
-	unsigned int width;
-	unsigned int height;
+	float width;
+	float height;
 	unsigned int w_step, h_step;
 
 	std::vector<Tile> tile_list;

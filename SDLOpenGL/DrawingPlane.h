@@ -12,6 +12,6 @@ public:
 	DrawingPlane(GLfloat[3], GLfloat[3], GLfloat[3], GLfloat[3]);
 	void loadMedia();	
 	~DrawingPlane();
-	void render();
+	void render(std::vector<GLuint*>*, unsigned int, unsigned int);
 };
 
