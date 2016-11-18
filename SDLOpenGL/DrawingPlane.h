@@ -10,7 +10,7 @@ class DrawingPlane
 public:
 	DrawingPlane();
 	DrawingPlane(GLfloat[3], GLfloat[3], GLfloat[3], GLfloat[3]);
-	void loadMedia(SDL_Renderer * sdl_renderer);	
+	void loadMedia();	
 	~DrawingPlane();
 	void render();
 };

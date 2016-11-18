@@ -24,12 +24,12 @@ void GameClass::update(float dt)
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
 }
 
-void GameClass::loadMedia(SDL_Renderer* sdl_renderer)
+void GameClass::loadMedia()
 {
 	//AllGameResources.loadMedia(sdl_renderer)
-	plane.loadMedia(sdl_renderer);
+	plane.loadMedia();
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
-	loadLevelLayout("test.csv", 100, 100);
+	loadLevelLayout("room1.csv", 10, 10);
 }
 
 void GameClass::render()
