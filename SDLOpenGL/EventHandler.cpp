@@ -12,12 +12,20 @@ static int QuitEventFilter(void* userdata, SDL_Event* event)
 	return 0;
 }
 
-
 EventHandler::EventHandler()
 {
 	currentKeyStates = SDL_GetKeyboardState( nullptr );
 	SDL_AddEventWatch( QuitEventFilter , nullptr);
 	quitEvent = false;
+	core = nullptr;
+}
+
+EventHandler::EventHandler(Core* c)
+{
+	currentKeyStates = SDL_GetKeyboardState( nullptr );
+	SDL_AddEventWatch( QuitEventFilter , nullptr);
+	quitEvent = false;
+	core = c;
 
 }
 
@@ -32,7 +40,8 @@ void EventHandler::processEvents()
 {
 	if (SDL_PollEvent(&event) != 0)
 	{
-		
+		//window event handling
+		core->getWindow()->handleEvent(event);
 	}
 		
 }

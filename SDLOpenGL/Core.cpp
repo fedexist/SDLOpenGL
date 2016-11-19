@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include <functional>
 #include "EventHandler.h"
-#include "DrawingPlane.h"
 
 Core::Core()
 {
@@ -31,7 +30,7 @@ Core::Core(int w, int h, ::Internalupdate update, ::InternalRender render)
 Core::Core(int w, int h, GameClass* game)
 {
 	window_ = LWindow(this, w, h);
-	event_handler_ = EventHandler();
+	event_handler_ = EventHandler(this);
 	dt = 0.0f;
 	startTime = 0.0f;
 	Game = game;
@@ -161,7 +160,6 @@ void Core::renderPresent()
 void Core::handleEvents()
 {
 	startTime = SDL_GetTicks();
-
 	event_handler_.processEvents();
 
 }

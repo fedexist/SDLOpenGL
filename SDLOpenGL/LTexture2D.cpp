@@ -127,6 +127,7 @@ void LTexture2D::drawSprite(float posX, float posY, int frameIndex)
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	
 

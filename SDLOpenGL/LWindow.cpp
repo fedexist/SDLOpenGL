@@ -61,11 +61,14 @@ void LWindow::handleEvent( SDL_Event& e )
 			case SDL_WINDOWEVENT_SIZE_CHANGED:
 			mWidth = e.window.data1;
 			mHeight = e.window.data2;
+			SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Window resized");
+			SDL_GL_SwapWindow(mWindow);
 			coreInstance->renderPresent();
 			break;
 
 			//Repaint on exposure
 			case SDL_WINDOWEVENT_EXPOSED:
+			SDL_GL_SwapWindow(mWindow);
 			coreInstance->renderPresent();
 			break;
 
@@ -108,14 +111,6 @@ void LWindow::handleEvent( SDL_Event& e )
 			mMinimized = false;
 			break;
 		default: break;
-		}
-
-		//Update window caption with new data
-		if( updateCaption )
-		{
-			std::stringstream caption;
-			caption << "SDL Tutorial - MouseFocus:" << ( ( mMouseFocus ) ? "On" : "Off" ) << " KeyboardFocus:" << ( ( mKeyboardFocus ) ? "On" : "Off" );
-			SDL_SetWindowTitle( mWindow, caption.str().c_str() );
 		}
 	}
 	//Enter exit full screen on return key

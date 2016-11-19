@@ -17,6 +17,8 @@
 #include <GL/GL.h>
 #include <gl/GLU.h>
 #include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 //SDL inclusions
 #include <SDL.h>

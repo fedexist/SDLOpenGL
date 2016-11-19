@@ -63,6 +63,9 @@
     <ClInclude Include="LTexture2D.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -108,6 +111,9 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Core.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
