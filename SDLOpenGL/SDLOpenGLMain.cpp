@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
 		core.handleEvents();
 		core.update();
 		core.render();
+
 	}
 	core.quit();
 	return 0;

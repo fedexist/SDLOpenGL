@@ -25,7 +25,10 @@ bool GLHandler::initGL(LWindow* window)
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
 	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	glViewport(0, 0, window->getWidth(), window->getHeight());
+	glViewport(0, 0, window->getWidth() , window->getHeight());
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0.0, float(window->getWidth()), 0.0,  float(window->getHeight()));
 	gluLookAt(0.0,0.0,0.0, 0.0,0.0,-1.0, 0.0,1.0,0.0);
 	//Enable texturing
 	glEnable( GL_TEXTURE_2D );

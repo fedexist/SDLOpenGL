@@ -40,16 +40,15 @@ void DrawingPlane::loadMedia()
 
 void DrawingPlane::render(std::vector<GLuint*> *levelLayout, unsigned int w, unsigned int h)
 {
-
-	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "%d %d %d", levelLayout->at(1)[9], w, h );
 	
-	for (int i = h-1; i == 0; i--)
-		for (int j = 0; j < w; j++)
+	for (int i = 0; i < h; i++) // riga
+	{
+		for (int j = 0; j < w; j++) //colonna
+		{
+			tex.drawSprite(j, i, levelLayout->at(h - i - 1)[j]); //drawsprite(x,y, value)
 
-			//tex.drawSprite(2*float(j)/w - 1, 1- 2*float(i)/h, levelLayout->at(i)[j]);
-	
-	//tex.drawSprite(0, 0, 9);
-
+		}
+	}
 
 	/*GLfloat Lvertices[] = {
 		 vertices[0][0], vertices[0][1], vertices[0][2] ,

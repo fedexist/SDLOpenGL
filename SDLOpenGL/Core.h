@@ -4,6 +4,7 @@
 #include "GLHandler.h"
 #include "EventHandler.h"
 #include "GameClass.h"
+#include "Camera.h"
 
 typedef void(*Internalupdate)(float dt);
 typedef void(*InternalRender)();
@@ -34,5 +35,6 @@ private:
 		EventHandler event_handler_;
 		float dt, startTime;
 		GameClass* Game;
+		//Camera camera;
 };
 

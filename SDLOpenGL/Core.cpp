@@ -34,6 +34,7 @@ Core::Core(int w, int h, GameClass* game)
 	dt = 0.0f;
 	startTime = 0.0f;
 	Game = game;
+	//camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 }
 
 

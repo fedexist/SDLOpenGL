@@ -49,19 +49,23 @@ SDL_Renderer* LWindow::createRenderer() const
 
 void LWindow::handleEvent( SDL_Event& e )
 {
+	float old_w = mWidth, old_h = mHeight;
 	//Window event occured
 	if( e.type == SDL_WINDOWEVENT )
 	{
-		//Caption update flag
-		bool updateCaption = false;
-
 		switch( e.window.event )
 		{
 			//Get new dimensions and repaint on window size change
 			case SDL_WINDOWEVENT_SIZE_CHANGED:
 			mWidth = e.window.data1;
 			mHeight = e.window.data2;
-			SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Window resized");
+			
+			glViewport(0, 0, mWidth, mHeight);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			gluOrtho2D(0.0, float(mWidth), 0.0, float(mHeight));
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
 			SDL_GL_SwapWindow(mWindow);
 			coreInstance->renderPresent();
 			break;
@@ -75,25 +79,21 @@ void LWindow::handleEvent( SDL_Event& e )
 			//Mouse entered window
 			case SDL_WINDOWEVENT_ENTER:
 			mMouseFocus = true;
-			updateCaption = true;
 			break;
 			
 			//Mouse left window
 			case SDL_WINDOWEVENT_LEAVE:
 			mMouseFocus = false;
-			updateCaption = true;
 			break;
 
 			//Window has keyboard focus
 			case SDL_WINDOWEVENT_FOCUS_GAINED:
 			mKeyboardFocus = true;
-			updateCaption = true;
 			break;
 
 			//Window lost keyboard focus
 			case SDL_WINDOWEVENT_FOCUS_LOST:
 			mKeyboardFocus = false;
-			updateCaption = true;
 			break;
 
 			//Window minimized
@@ -155,17 +155,20 @@ int LWindow::getHeight() const
 void LWindow::setWidth(int w)
 {
 	mWidth = w;
+	SDL_SetWindowSize(mWindow, mWidth, mHeight);
 }
 
 void LWindow::setHeight(int h)
 {
 	mHeight = h;
+	SDL_SetWindowSize(mWindow, mWidth, mHeight);
 }
 
 void LWindow::setDimensions(int w, int h)
 {
 	mWidth = w;
 	mHeight = h;
+	SDL_SetWindowSize(mWindow, mWidth, mHeight);
 }
 
 bool LWindow::hasMouseFocus() const
