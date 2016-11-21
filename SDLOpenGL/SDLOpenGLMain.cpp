@@ -6,7 +6,7 @@ GameClass game = GameClass();
 int main(int argc, char* argv[])
 {
 
-	Core core = Core(800, 600, &game);
+	Core core = Core(1280, 720, &game);
 
 	SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
 

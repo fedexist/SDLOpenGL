@@ -14,5 +14,9 @@ private:
 	LWindow* window_;
 	GLRenderer gl_renderer_;
 	SDL_GLContext gl_context_;
+
+	//Orthographic Projection Data
+	GLfloat left, right, bottom, top;
+	GLdouble cameraVelocity = 0.0, cameraAcceleration = 1.5;
 };
 

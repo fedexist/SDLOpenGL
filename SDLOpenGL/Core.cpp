@@ -179,8 +179,12 @@ void Core::update() const
 
 void Core::render()
 {
+
+		//Free Camera Movement
+	FreeCameraMovement();
 	gl_handler_.gl_renderer_.Render(Game);
 	dt = SDL_GetTicks() - startTime;
+
 	SDL_GL_SwapWindow( window_.getSDLWindow());
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Delta time is: %f", dt);
 
@@ -196,5 +200,51 @@ bool Core::checkQuitEvent()
 	return EventHandler::getQuitEvent();
 }
 
+void Core::FreeCameraMovement()
+{
+	const Uint8* currentKeyStates = SDL_GetKeyboardState( nullptr );
+	
+	double oldVelocity = gl_handler_.cameraVelocity;
+	gl_handler_.cameraVelocity = glm::min<double>(oldVelocity + gl_handler_.cameraAcceleration * dt, 20.0);
+	double translation = dt * (oldVelocity + gl_handler_.cameraVelocity) / 2;;
+	
+	glMatrixMode(GL_PROJECTION);
+	if( currentKeyStates[SDL_SCANCODE_W] )
+	{
+		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "W is pressed");
+		gl_handler_.bottom += translation;
+		gl_handler_.top += translation;
 
+		glTranslatef(0.0, -translation, 0.0);
+
+	}
+	else if(currentKeyStates[SDL_SCANCODE_S])
+	{
+		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "S is pressed");
+		gl_handler_.bottom -= translation;
+		gl_handler_.top -= translation;
+
+		glTranslatef(0.0, translation, 0.0);
+
+	}
+	if(currentKeyStates[SDL_SCANCODE_D])
+	{
+		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "D is pressed");
+		gl_handler_.right += translation;
+		gl_handler_.left += translation;
+
+		glTranslatef(-translation, 0.0, 0.0);
+	} 
+	else if (currentKeyStates[SDL_SCANCODE_A]) 
+	{
+		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "A is pressed");
+		gl_handler_.right -= translation;
+		gl_handler_.left -= translation;
+
+		glTranslatef(translation, 0.0, 0.0);
+	}
+
+	SDL_PumpEvents();
+
+}
 

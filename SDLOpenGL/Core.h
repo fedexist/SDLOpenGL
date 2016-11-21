@@ -24,6 +24,7 @@ class Core
 		void render();
 		LWindow* getWindow();
 		static bool checkQuitEvent();
+		void FreeCameraMovement();
 		~Core();
 		Internalupdate Internalupdate;
 		InternalRender InternalRender;
@@ -33,7 +34,7 @@ private:
 		SDL_Renderer* mRenderer;
 		GLHandler gl_handler_;
 		EventHandler event_handler_;
-		float dt, startTime;
+		double dt, startTime;
 		GameClass* Game;
 		//Camera camera;
 };
