@@ -17,6 +17,6 @@ private:
 
 	//Orthographic Projection Data
 	GLfloat left, right, bottom, top;
-	GLdouble cameraVelocity = 0.0, cameraAcceleration = 1.5;
+	GLdouble cameraVelocityX = 0.0, cameraVelocityY = 0.0, cameraAcceleration = 1.5,/*questi sono test ->*/ cameraMomentumX = 0.0, cameraMomentumY = 0.0, cameraMass = 1.0;
 };
 

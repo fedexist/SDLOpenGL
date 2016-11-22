@@ -31,9 +31,9 @@ bool GLHandler::initGL(LWindow* window)
 	glLoadIdentity();
 
 	left = 0.0f;
-	right = float(window->getWidth());
+	right = 3 *float(window->getWidth());
 	bottom = 0.0f;
-	top = float(window->getHeight());
+	top = 3 *float(window->getHeight());
 
 	gluOrtho2D(left, right, bottom,  top);
 
