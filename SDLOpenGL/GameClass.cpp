@@ -11,6 +11,7 @@ GameClass::GameClass()
 	GLfloat p4[] = { -1.0f, -1.0f, 0.0f };
 	plane = DrawingPlane(p1, p2, p3, p4);
 	cachedLevelLayouts = std::vector< std::vector<GLuint*> >();
+	gameObjectArray = std::vector<GameObject>();
 }
 
 
@@ -21,6 +22,10 @@ GameClass::~GameClass()
 
 void GameClass::update(float dt)
 {
+	for (int i = 0; i < gameObjectArray.size();i++)
+	{
+		gameObjectArray.at(i).update(dt);
+	}
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
 }
 
@@ -30,11 +35,19 @@ void GameClass::loadMedia()
 	plane.loadMedia();
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
 	loadLevelLayout("room1.csv", 10, 10);
+	allTextures = std::vector<LTexture2D>();
+	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,10));
+
+	gameObjectArray.push_back(GameObject(glm::vec2(0.5, 0.5), glm::vec2(0.5, 0.5), glm::vec2(64, 64), true, true, &allTextures.at(0), 1, 0, 4));
 }
 
 void GameClass::render()
 {
 	plane.render(&currentLevelLayout, leveLayoutW, levelLayoutH);
+	for (int i = 0; i < gameObjectArray.size(); i++)
+	{
+		gameObjectArray.at(i).render();
+	}
 }
 
 void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsigned int height)

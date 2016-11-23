@@ -174,7 +174,8 @@ void Core::update() const
 	}
 		
 	Internalupdate(dt);*/
-	Game->update(dt);
+	//CHANGEEEEE
+	Game->update(1);
 }
 
 void Core::render()
@@ -205,7 +206,9 @@ void Core::FreeCameraMovement()
 
 
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
-	float dt = 1; //da cancellare
+	float dt = 1; //CHANGEEEEEE
+
+	gl_handler_.cameraMass = 0.5; //Parametro principale
 
 	float alpha, beta, mu, nu; //alpha è la forza per ogni tick in cui è premuto il tasto, 
 							//beta è la costante di resistenza(tipo attrito)
@@ -214,7 +217,7 @@ void Core::FreeCameraMovement()
 	alpha = 1;
 	mu = 20;
 	beta = alpha/mu; //condizione per il quale a velocità massima mantenendo acceleratore la velocità sia costante
-	nu = alpha - beta * gl_handler_.cameraMass; //ragionevole e inutilizzato
+	nu = beta * gl_handler_.cameraMass; //ragionevole e inutilizzato
 
 	float oldVelocityX = gl_handler_.cameraVelocityX;
 	float oldVelocityY = gl_handler_.cameraVelocityY;
@@ -258,9 +261,17 @@ void Core::FreeCameraMovement()
 		ForceInputY *= sqrt(2) / 2;
 	}
 	
+	float StaticResistanceX = 0;
+	float StaticResistanceY = 0;
 
-	float ForceX = alpha * ForceInputX - beta * oldVelocityX; //la forza totale è quella di input meno la viscosità
-	float ForceY = alpha * ForceInputY - beta * oldVelocityY;
+	if (oldVelocityX > -0.1 && oldVelocityX < 0.1)
+		StaticResistanceX = - nu * ForceInputX;
+	
+	if (oldVelocityY > -0.1 && oldVelocityY < 0.1)
+		StaticResistanceY = -nu * ForceInputY;
+
+	float ForceX = alpha * ForceInputX - beta * oldVelocityX + StaticResistanceX; //la forza totale è quella di input meno la viscosità
+	float ForceY = alpha * ForceInputY - beta * oldVelocityY + StaticResistanceY;
 
 	float MomX = oldMomentumX + ForceX * dt; //integro la forza per aggiornare la quantità di moto
 	float MomY = oldMomentumY + ForceY * dt;

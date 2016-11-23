@@ -31,7 +31,7 @@ bool LTexture2D::loadFromFile()
 			glBindTexture(GL_TEXTURE_2D, texId);
 
 			glGenerateMipmap(GL_TEXTURE_2D);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, loadedSurface->w, loadedSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, loadedSurface->pixels);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, loadedSurface->w, loadedSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, loadedSurface->pixels);
 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -50,7 +50,7 @@ LTexture2D::LTexture2D(std::string path, unsigned int w_number, unsigned int h_n
 	this->path = path;
 	w_step = w_number;
 	h_step = h_number;
-
+	framePeriod = 0;
 
 	if( loadFromFile())
 	{
@@ -62,18 +62,38 @@ LTexture2D::LTexture2D(std::string path, unsigned int w_number, unsigned int h_n
 			}
 		}
 	}
-
-	
 		
 }
 
-void LTexture2D::drawSprite(float posX, float posY, int frameIndex)
+
+LTexture2D::LTexture2D(std::string path, unsigned int w_number, unsigned int h_number, unsigned int framePeriod)
+{
+	this->path = path;
+	w_step = w_number;
+	h_step = h_number;
+	this->framePeriod = framePeriod;
+
+	if (loadFromFile())
+	{
+		for (int i = 0; i< height; i += h_step)
+		{
+			for (int j = 0; j<width; j += w_step)
+			{
+				tile_list.push_back(Tile(j, i));
+			}
+		}
+	}
+
+}
+
+
+void LTexture2D::drawSprite(float posX, float posY, float posZ, int frameIndex)
 {
 	GLfloat Lvertices[] = {
-		posX*w_step, posY*h_step,
-		(posX + 1)*w_step, posY*h_step,
-		(posX + 1)*w_step, (posY + 1)*h_step,
-		posX*w_step, (posY + 1)*h_step
+		posX*w_step, posY*h_step, posZ,
+		(posX + 1)*w_step, posY*h_step, posZ,
+		(posX + 1)*w_step, (posY + 1)*h_step, posZ,
+		posX*w_step, (posY + 1)*h_step, posZ
 	};
 	GLfloat Lcolors[] = {
 		1, 1, 1, 1.0,
@@ -122,7 +142,7 @@ void LTexture2D::drawSprite(float posX, float posY, int frameIndex)
 	
 	glBindTexture(GL_TEXTURE_2D, texId);
 	glTexCoordPointer(2, GL_FLOAT, 0, tex_verts);
-	glVertexPointer(2, GL_FLOAT, 0, Lvertices);
+	glVertexPointer(3, GL_FLOAT, 0, Lvertices);
 	glColorPointer(4, GL_FLOAT, 0, Lcolors);
 
 	glDrawArrays(GL_QUADS, 0, 4);

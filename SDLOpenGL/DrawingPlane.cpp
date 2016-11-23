@@ -45,7 +45,7 @@ void DrawingPlane::render(std::vector<GLuint*> *levelLayout, unsigned int w, uns
 	{
 		for (int j = 0; j < w; j++) //colonna
 		{
-			tex.drawSprite(j, i, levelLayout->at(h - i - 1)[j]); //drawsprite(x,y, value)
+			tex.drawSprite(j, i, 0, levelLayout->at(h - i - 1)[j]); //drawsprite(x,y, value)
 
 		}
 	}

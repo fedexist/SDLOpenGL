@@ -7,6 +7,7 @@ class GameClass
 	std::vector<GameObject> gameObjectArray;
 	DrawingPlane plane;
 	std::vector<GLuint*> currentLevelLayout;
+	std::vector<LTexture2D> allTextures;
 	unsigned int leveLayoutW, levelLayoutH;
 	std::string levelPath = "./assets/levels/";
 	std::vector< std::vector<GLuint*> > cachedLevelLayouts;
@@ -14,7 +15,7 @@ class GameClass
 public:
 	GameClass();
 	~GameClass();
-	static void update(float);
+	void update(float);
 	void loadMedia();
 	void render();
 	void loadLevelLayout(std::string, unsigned int, unsigned int);

@@ -20,10 +20,12 @@ class LTexture2D
 
 	std::vector<Tile> tile_list;
 public:
+	unsigned int framePeriod;
 	LTexture2D();
 	bool loadFromFile();
 	LTexture2D(std::string path, unsigned int w_number, unsigned int h_number);
-	void drawSprite(float posX, float posY, int frameIndex);
+	LTexture2D(std::string path, unsigned int w_number, unsigned int h_number,unsigned int frameVelocity);
+	void drawSprite(float posX, float posY, float posz, int frameIndex);
 	void free();
 	~LTexture2D();
 };
