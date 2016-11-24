@@ -144,6 +144,7 @@ bool Core::init()
 						SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 						success = false;
 					}
+
 				}
 
 			}

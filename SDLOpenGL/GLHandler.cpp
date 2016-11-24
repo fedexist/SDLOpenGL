@@ -31,11 +31,11 @@ bool GLHandler::initGL(LWindow* window)
 	glLoadIdentity();
 
 	left = 0.0f;
-	right = 3 *float(window->getWidth());
+	right = 2 *float(window->getWidth());
 	bottom = 0.0f;
-	top = 3 *float(window->getHeight());
+	top = 2 *float(window->getHeight());
 
-	gluOrtho2D(left, right, bottom,  top);
+	gluOrtho2D(left-640, right-640, bottom-360,  top-360);
 
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );

@@ -38,7 +38,7 @@ void GameClass::loadMedia()
 	allTextures = std::vector<LTexture2D>();
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,10));
 
-	gameObjectArray.push_back(GameObject(glm::vec2(0.5, 0.5), glm::vec2(0.5, 0.5), glm::vec2(64, 64), true, true, &allTextures.at(0), 1, 0, 4));
+	gameObjectArray.push_back(GameObject(glm::vec2(0.5, 0.5), glm::vec2(0.1, 0.1), glm::vec2(64, 64), true, true, &allTextures.at(0), 1.0, 0, 4));
 }
 
 void GameClass::render()
