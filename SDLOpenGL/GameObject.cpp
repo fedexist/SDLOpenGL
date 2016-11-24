@@ -35,19 +35,19 @@ void GameObject::update(float dt)
 	
 	//movement
 	
-	float alpha, beta, mu, nu; //alpha è la forza per ogni tick in cui è premuto il tasto, 
-	//beta è la costante di resistenza(tipo attrito)
-	//mu è la velocità massima
-	//nu è la forza dopo un tick di forza partendo da fermo (resistenza statica) non utilizzato
-	alpha = 1;
-	mu = 20;
-	beta = 0.50 * 9.81 * mass;
-	nu = glm::min<float>(1.2*beta * mass, alpha); //ragionevole
+	float alpha, Fa, mu, Fas; //alpha è la forza per ogni tick in cui è premuto il tasto, 
+	//Fa è la forza di attrito
+	//mu è la costante di attrito
+	//Fas è la forza di attrito statico
+	alpha = 5;
+	mu = 0.1;
+	Fa = 0.001 * mu * 9.81 * mass;
+	Fas = glm::min<float>(1.2* mu * mass, alpha); //ragionevole
 
 	glm::vec2 oldMomentum = momentum;
 	glm::vec2 oldVelocity = oldMomentum / mass;
 	glm::vec2 forceInput;
-	glm::vec2 forceStaticResistance;
+	glm::vec2 forceStaticResistance = glm::vec2(0,0);
 
 	if (false)
 	{
@@ -79,24 +79,43 @@ void GameObject::update(float dt)
 		forceInput.x = 0;
 	}
 
-	glm::normalize(forceInput);
+	if( dot(forceInput,forceInput) > 0)
+		forceInput = glm::normalize(forceInput);
+	
 
 	if (oldVelocity.x > -0.1 && oldVelocity.x < 0.1)
-		forceStaticResistance.x = -nu * forceInput.x;
+		forceStaticResistance.x = -Fas * forceInput.x;
 
 	if (oldVelocity.y > -0.1 && oldVelocity.y < 0.1)
-		forceStaticResistance.x = -nu * forceInput.y;
+		forceStaticResistance.y = -Fas * forceInput.y;
+
 
 	glm::vec2 direction = oldMomentum;
 	
-	glm::normalize(direction);
+	SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "direction %f %f",direction.x,direction.y);
 
-	glm::vec2 force = alpha * forceInput - beta * direction + forceStaticResistance; //la forza totale è quella di input meno la viscosità
+	if (dot(direction,direction)> 0)
+		direction = glm::normalize(direction);
+	
+	glm::vec2 force = alpha * forceInput - Fa * direction + forceStaticResistance; //la forza totale è quella di input meno la viscosità
 
+	SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "force %f %f", force.x, force.y);
 	momentum = oldMomentum + force;
 
 	glm::vec2 vel = momentum / mass;
-	
+
+	if (oldVelocity.y * vel.y < 0)
+	{
+		vel.y = 0;
+		momentum.y = 0;
+	}
+	if (oldVelocity.x * vel.x < 0)
+	{
+		vel.x = 0;
+		momentum.x = 0;
+	}	
+
+
 	position += vel * dt; //calcolo spostamento dalla velocità
 
 }
