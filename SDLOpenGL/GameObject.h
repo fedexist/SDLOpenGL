@@ -20,6 +20,7 @@ protected:
 	unsigned int startingIndexFrame;
 	unsigned int endingIndexFrame;
 	unsigned int framePeriodIndex;
+	bool isPlayer = false;
 
 };
 

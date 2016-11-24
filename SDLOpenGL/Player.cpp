@@ -7,6 +7,7 @@ Player::Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canIn
 {
 	lifepoints = 1000.0f;
 	damage = 50.0f;
+	isPlayer = true;
 }
 
 
@@ -16,57 +17,63 @@ Player::~Player()
 
 void Player::Move(Direction d)
 {
-	currentDirection = d; 
 	currentState = MOVING;
-	switch(currentDirection)
+	if( currentDirection != d)
 	{
-	case LEFT: 
-		curIndexFrame = startingIndexFrame = movingLeftStart;
-		endingIndexFrame = movingLeftStart + numberOfMovingFrames - 1;
-		break;
-	case RIGHT:
-		curIndexFrame = startingIndexFrame = movingRightStart;
-		endingIndexFrame = movingRightStart + numberOfMovingFrames - 1;
-		break;
-	case UP:
-		curIndexFrame = startingIndexFrame = movingUpStart;
-		endingIndexFrame = movingUpStart + numberOfMovingFrames - 1;
-		break;	
-	case DOWN:
-		curIndexFrame = startingIndexFrame = movingDownStart;
-		endingIndexFrame = movingDownStart + numberOfMovingFrames - 1;
-		break;
-	default: break;
+		currentDirection = d;
+		switch(currentDirection)
+		{
+		case LEFT: 
+			curIndexFrame = startingIndexFrame = movingLeftStart;
+			endingIndexFrame = movingLeftStart + numberOfMovingFrames - 1;
+			break;
+		case RIGHT:
+			curIndexFrame = startingIndexFrame = movingRightStart;
+			endingIndexFrame = movingRightStart + numberOfMovingFrames - 1;
+			break;
+		case UP:
+			curIndexFrame = startingIndexFrame = movingUpStart;
+			endingIndexFrame = movingUpStart + numberOfMovingFrames - 1;
+			break;	
+		case DOWN:
+			curIndexFrame = startingIndexFrame = movingDownStart;
+			endingIndexFrame = movingDownStart + numberOfMovingFrames - 1;
+			break;
+		default: break;
+		}
+
 	}
 }
 
 void Player::Slash(Direction d)
 {
-	currentDirection = d; 
+	 
 	currentState = SLASHING;
-	switch(currentDirection)
+	if( currentDirection != d)
 	{
-	case LEFT: 
-		curIndexFrame = startingIndexFrame = slashingLeftStart;
-		endingIndexFrame = slashingLeftStart + numberOfSlashingFrames - 1;
-		break;
-	case RIGHT:
-		curIndexFrame = startingIndexFrame = slashingRightStart;
-		endingIndexFrame = slashingRightStart + numberOfSlashingFrames - 1;
-		break;
-	case UP:
-		curIndexFrame = startingIndexFrame = slashingUpStart;
-		endingIndexFrame = slashingUpStart + numberOfSlashingFrames - 1;
-		break;	
-	case DOWN:
-		curIndexFrame = startingIndexFrame = slashingDownStart;
-		endingIndexFrame = slashingDownStart + numberOfSlashingFrames - 1;
-		break;
-	default: break;
+		currentDirection = d;
+		switch(currentDirection)
+		{
+			case LEFT: 
+				curIndexFrame = startingIndexFrame = slashingLeftStart;
+				endingIndexFrame = slashingLeftStart + numberOfSlashingFrames - 1;
+				break;
+			case RIGHT:
+				curIndexFrame = startingIndexFrame = slashingRightStart;
+				endingIndexFrame = slashingRightStart + numberOfSlashingFrames - 1;
+				break;
+			case UP:
+				curIndexFrame = startingIndexFrame = slashingUpStart;
+				endingIndexFrame = slashingUpStart + numberOfSlashingFrames - 1;
+				break;	
+			case DOWN:
+				curIndexFrame = startingIndexFrame = slashingDownStart;
+				endingIndexFrame = slashingDownStart + numberOfSlashingFrames - 1;
+				break;
+			default: break;
+		}
+
 	}
-
-
-
 
 }
 

@@ -51,10 +51,8 @@ void GameObject::update(float dt)
 	
 	/*
 	 *Lo static cast potrebbe non essere la soluzione ideale
-	 *
-	Player* pg = static_cast<Player*>(this);		
-	
-	if(pg != nullptr)
+	 *	
+	if(isPlayer)
 	{
 		if ( pg->isMoving(UP))
 		{
