@@ -17,9 +17,11 @@ Player::~Player()
 
 void Player::Move(Direction d)
 {
-	currentState = MOVING;
-	if( currentDirection != d)
-	{
+	
+
+	if( currentDirection != d || currentState == IDLE)
+	{	
+		currentState = MOVING;
 		currentDirection = d;
 		switch(currentDirection)
 		{
