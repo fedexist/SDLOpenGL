@@ -41,46 +41,45 @@ void GameObject::update(float dt)
 	//Fas è la forza di attrito statico
 	alpha = 5;
 	mu = 0.1;
-	Fa = 0.001 * mu * 9.81 * mass;
+	Fa = 0.0001 * mu * 9.81 * mass;
 	Fas = glm::min<float>(1.2* mu * mass, alpha); //ragionevole
 
 	glm::vec2 oldMomentum = momentum;
 	glm::vec2 oldVelocity = oldMomentum / mass;
-	glm::vec2 forceInput;
+	glm::vec2 forceInput = glm::vec2(0.0, 0.0);
 	glm::vec2 forceStaticResistance = glm::vec2(0,0);
+	
+	/*
+	 *Lo static cast potrebbe non essere la soluzione ideale
+	 *
+	Player* pg = static_cast<Player*>(this);		
+	
+	if(pg != nullptr)
+	{
+		if ( pg->isMoving(UP))
+		{
+			forceInput.y = 1.0f;
+		}
+		else if (pg->isMoving(DOWN))
+		{
+			//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "S is pressed");
+			forceInput.y = -1.0f;
+		}
+		if (pg->isMoving(RIGHT))
+		{
+			//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "D is pressed");
+			forceInput.x = 1.0f;
+		}
+		else if (pg->isMoving(LEFT))
+		{
+			//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "A is pressed");
+			forceInput.x = -1.0f;
+		}
+	}*/
 
-	if (false)
-	{
-		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "W is pressed");
-		forceInput.y = 1;
-
-	}
-	else if (false)
-	{
-		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "S is pressed");
-		forceInput.y = -1;
-	}
-	else
-	{
-		forceInput.y = 0;
-	}
-	if (false)
-	{
-		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "D is pressed");
-		forceInput.x = 1;
-	}
-	else if (false)
-	{
-		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "A is pressed");
-		forceInput.x = -1;
-	}
-	else
-	{
-		forceInput.x = 0;
-	}
 
 	if( dot(forceInput,forceInput) > 0)
-		forceInput = glm::normalize(forceInput);
+		forceInput = normalize(forceInput);
 	
 
 	if (oldVelocity.x > -0.1 && oldVelocity.x < 0.1)
@@ -92,14 +91,15 @@ void GameObject::update(float dt)
 
 	glm::vec2 direction = oldMomentum;
 	
-	SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "direction %f %f",direction.x,direction.y);
+	//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "direction %f %f",direction.x,direction.y);
 
 	if (dot(direction,direction)> 0)
-		direction = glm::normalize(direction);
+		direction = normalize(direction);
 	
 	glm::vec2 force = alpha * forceInput - Fa * direction + forceStaticResistance; //la forza totale è quella di input meno la viscosità
 
-	SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "force %f %f", force.x, force.y);
+	//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "force %f %f", force.x, force.y);
+
 	momentum = oldMomentum + force;
 
 	glm::vec2 vel = momentum / mass;

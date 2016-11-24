@@ -24,7 +24,7 @@ public:
 	LTexture2D();
 	bool loadFromFile();
 	LTexture2D(std::string path, unsigned int w_number, unsigned int h_number);
-	LTexture2D(std::string path, unsigned int w_number, unsigned int h_number,unsigned int frameVelocity);
+	LTexture2D(std::string path, unsigned int w_number, unsigned int h_number,unsigned int framePeriod);
 	void drawSprite(float posX, float posY, float posz, int frameIndex);
 	void free();
 	~LTexture2D();

@@ -41,10 +41,12 @@ void GameClass::loadMedia()
 	allTextures = std::vector<LTexture2D>();
 
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,10));
-	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 8));
+	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 5));
 
 	gameObjectArray.push_back(new GameObject(glm::vec2(0.5, 0.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(0), 1.0, 0, 4));
-	gameObjectArray.push_back(new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 0, 4));
+
+	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+	gameObjectArray.push_back(player_);
 }
 
 void GameClass::render()
@@ -98,8 +100,44 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 		
 	}
 
-	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Tiles (0,0) (0,1) (0,2) (0,3): %d %d %d %d\n", currentLevelLayout.at(0)[0], currentLevelLayout.at(0)[1], currentLevelLayout.at(0)[2], currentLevelLayout.at(0)[3]);
-
 	cachedLevelLayouts.push_back(currentLevelLayout);
 
+}
+
+void GameClass::handleEvents(SDL_Event& e)
+{
+	handleKeyboardEvents();
+	
+}
+
+void GameClass::handleKeyboardEvents()
+{
+	const Uint8* currentKeyStates = SDL_GetKeyboardState( nullptr );
+
+	bool isMoving = currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT];
+	
+	if(isMoving)
+	{
+		if( currentKeyStates[SDL_SCANCODE_UP] )
+		{
+			player_->Move(UP);
+		}
+		else if(currentKeyStates[SDL_SCANCODE_DOWN])
+		{
+			player_->Move(DOWN);
+		}
+		if(currentKeyStates[SDL_SCANCODE_LEFT])
+		{
+			player_->Move(LEFT);
+		} 
+		else if (currentKeyStates[SDL_SCANCODE_RIGHT]) 
+		{
+			player_->Move(RIGHT);
+		}
+	}
+	else
+	{
+		player_->Idle();
+	}
+		
 }

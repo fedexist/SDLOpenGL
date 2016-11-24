@@ -8,7 +8,7 @@ public:
 	EventHandler();
 	EventHandler(Core*);
 	~EventHandler();
-	void processEvents();
+	void processEvents(GameClass*);
 	static void setQuitEvent(bool);
 	static bool getQuitEvent();
 

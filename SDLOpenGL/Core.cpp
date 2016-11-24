@@ -162,7 +162,7 @@ void Core::renderPresent()
 void Core::handleEvents()
 {
 	startTime = SDL_GetTicks();
-	event_handler_.processEvents();
+	event_handler_.processEvents(Game);
 
 }
 
@@ -361,4 +361,3 @@ void Core::FreeCameraMovement()
 	SDL_PumpEvents();
 
 }
-

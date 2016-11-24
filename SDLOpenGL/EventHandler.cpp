@@ -36,12 +36,13 @@ EventHandler::~EventHandler()
 }
 
 
-void EventHandler::processEvents()
+void EventHandler::processEvents(GameClass* game)
 {
 	if (SDL_PollEvent(&event) != 0)
 	{
 		//window event handling
 		core->getWindow()->handleEvent(event);
+		game->handleEvents(event);
 	}
 		
 }
