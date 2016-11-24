@@ -2,17 +2,17 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, LTexture2D* tex, float mass, unsigned int begInd, unsigned int endInd)
+GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, LTexture2D* texture, float mass, unsigned int beginIndex, unsigned int endingIndex)
 {
-	position = pos;
-	momentum = mom;
-	dimensions = dim;
-	visible = vis;
-	canInteractWith = canInt;
-	this->tex = tex;
-	curIndexFrame = begInd;
-	startingIndexFrame = begInd;
-	endingIndexFrame = endInd;
+	position = position_;
+	momentum = momentum_;
+	dimensions = dimensions_;
+	visible = visible_;
+	canInteractWith = interactable;
+	this->tex = texture;
+	curIndexFrame = beginIndex;
+	startingIndexFrame = beginIndex;
+	endingIndexFrame = endingIndex;
 	framePeriodIndex = tex->framePeriod;
 	this->mass = mass;
 }

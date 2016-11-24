@@ -4,7 +4,7 @@
 
 class GameClass
 {
-	std::vector<GameObject> gameObjectArray;
+	std::vector<GameObject*> gameObjectArray;
 	DrawingPlane plane;
 	std::vector<GLuint*> currentLevelLayout;
 	std::vector<LTexture2D> allTextures;

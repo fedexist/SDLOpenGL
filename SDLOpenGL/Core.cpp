@@ -208,7 +208,7 @@ void Core::FreeCameraMovement()
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
 	float dt = 1; //CHANGEEEEEE
 
-	gl_handler_.cameraMass = 0.5; //Parametro principale
+	gl_handler_.cameraMass = 0.75f; //Parametro principale
 
 	float alpha, beta, mu, nu; //alpha è la forza per ogni tick in cui è premuto il tasto, 
 							//beta è la costante di resistenza(tipo attrito)
