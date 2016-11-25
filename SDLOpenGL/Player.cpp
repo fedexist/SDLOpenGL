@@ -15,24 +15,46 @@ Player::~Player()
 {
 }
 
-void Player::Move(Direction d)
+void Player::update(float dt)
 {
+
+	handleAnims(dt);
+	glm::vec2 forceInput = glm::vec2(0.0f,0.0f);
 	
+	if (currentState == MOVING)
+	{
+		if (currentDirection.x == LEFT)
+			forceInput.x = -1.0f;
+		else if (currentDirection.x == RIGHT)
+			forceInput.x = 1.0f;
+
+		if (currentDirection.y == DOWN)
+			forceInput.y = -1.0f;
+		else if (currentDirection.y == UP)
+			forceInput.y = 1.0f;
+	}
+	
+	SDL_LogDebug(0, "%f %f", forceInput.x, forceInput.y);
+
+	//movement
+	handleMovement(dt, forceInput);
+
+}
+
+void Player::Move(glm::vec2 d)
+{
 
 	if( currentDirection != d || currentState == IDLE)
 	{	
 		currentState = MOVING;
 		currentDirection = d;
-		switch(currentDirection)
+		Direction uD, lR;
+		
+		uD = (Direction) (int) currentDirection.y;
+		lR = (Direction) (int) currentDirection.x;
+		
+		switch(uD)
 		{
-		case LEFT: 
-			curIndexFrame = startingIndexFrame = movingLeftStart;
-			endingIndexFrame = movingLeftStart + numberOfMovingFrames - 1;
-			break;
-		case RIGHT:
-			curIndexFrame = startingIndexFrame = movingRightStart;
-			endingIndexFrame = movingRightStart + numberOfMovingFrames - 1;
-			break;
 		case UP:
 			curIndexFrame = startingIndexFrame = movingUpStart;
 			endingIndexFrame = movingUpStart + numberOfMovingFrames - 1;
@@ -43,36 +65,54 @@ void Player::Move(Direction d)
 			break;
 		default: break;
 		}
-
+		switch (lR)
+		{
+		case LEFT:
+			curIndexFrame = startingIndexFrame = movingLeftStart;
+			endingIndexFrame = movingLeftStart + numberOfMovingFrames - 1;
+			break;
+		case RIGHT:
+			curIndexFrame = startingIndexFrame = movingRightStart;
+			endingIndexFrame = movingRightStart + numberOfMovingFrames - 1;
+			break;
+		}
 	}
 }
 
-void Player::Slash(Direction d)
+void Player::Slash(glm::vec2 d)
 {
 	 
 	currentState = SLASHING;
 	if( currentDirection != d)
 	{
 		currentDirection = d;
-		switch(currentDirection)
+		Direction uD, lR;
+
+		uD = (Direction) (int) currentDirection.y;
+		lR = (Direction) (int) currentDirection.x;
+
+		switch (uD)
 		{
-			case LEFT: 
-				curIndexFrame = startingIndexFrame = slashingLeftStart;
-				endingIndexFrame = slashingLeftStart + numberOfSlashingFrames - 1;
-				break;
-			case RIGHT:
-				curIndexFrame = startingIndexFrame = slashingRightStart;
-				endingIndexFrame = slashingRightStart + numberOfSlashingFrames - 1;
-				break;
-			case UP:
-				curIndexFrame = startingIndexFrame = slashingUpStart;
-				endingIndexFrame = slashingUpStart + numberOfSlashingFrames - 1;
-				break;	
-			case DOWN:
-				curIndexFrame = startingIndexFrame = slashingDownStart;
-				endingIndexFrame = slashingDownStart + numberOfSlashingFrames - 1;
-				break;
-			default: break;
+		case UP:
+			curIndexFrame = startingIndexFrame = slashingUpStart;
+			endingIndexFrame = slashingUpStart + numberOfSlashingFrames - 1;
+			break;
+		case DOWN:
+			curIndexFrame = startingIndexFrame = movingDownStart;
+			endingIndexFrame = movingDownStart + numberOfMovingFrames - 1;
+			break;
+		default: break;
+		}
+		switch (lR)
+		{
+		case LEFT:
+			curIndexFrame = startingIndexFrame = slashingLeftStart;
+			endingIndexFrame = slashingLeftStart + numberOfSlashingFrames - 1;
+			break;
+		case RIGHT:
+			curIndexFrame = startingIndexFrame = slashingDownStart;
+			endingIndexFrame = slashingDownStart + numberOfSlashingFrames - 1;
+			break;
 		}
 
 	}
@@ -82,16 +122,13 @@ void Player::Slash(Direction d)
 void Player::Idle()
 {
 	currentState = IDLE;
-	switch (currentDirection)
+	Direction uD, lR;
+
+	uD = (Direction)(int)currentDirection.y;
+	lR = (Direction)(int)currentDirection.x;
+
+	switch (uD)
 	{
-	case LEFT:
-		curIndexFrame = startingIndexFrame = movingLeftStart;
-		endingIndexFrame = movingLeftStart + numberOfIdleFrames - 1;
-		break;
-	case RIGHT:
-		curIndexFrame = startingIndexFrame = movingRightStart;
-		endingIndexFrame = movingRightStart + numberOfIdleFrames - 1;
-		break;
 	case UP:
 		curIndexFrame = startingIndexFrame = movingUpStart;
 		endingIndexFrame = movingUpStart + numberOfIdleFrames - 1;
@@ -101,6 +138,17 @@ void Player::Idle()
 		endingIndexFrame = movingDownStart + numberOfIdleFrames - 1;
 		break;
 	default: break;
-
 	}
+	switch (lR)
+	{
+	case LEFT:
+		curIndexFrame = startingIndexFrame = movingLeftStart;
+		endingIndexFrame = movingLeftStart + numberOfIdleFrames - 1;
+		break;
+	case RIGHT:
+		curIndexFrame = startingIndexFrame = movingRightStart;
+		endingIndexFrame = movingRightStart + numberOfIdleFrames - 1;
+		break;
+	}
+		
 }

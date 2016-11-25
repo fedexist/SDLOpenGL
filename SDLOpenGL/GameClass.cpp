@@ -27,6 +27,7 @@ void GameClass::update(float dt)
 	{
 		gameObjectArray.at(i)->update(dt);
 	}
+	player_->update(dt);
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
 	
 	//SDL_Delay(1);
@@ -43,10 +44,10 @@ void GameClass::loadMedia()
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,10));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 5));
 
-	gameObjectArray.push_back(new GameObject(glm::vec2(0.5, 0.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(0), 1.0, 0, 4));
+	gameObjectArray.push_back(new GameObject(glm::vec2(0.5, 0.5), glm::vec2(0,0 ), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
-	gameObjectArray.push_back(player_);
+	//gameObjectArray.push_back(player_); abbiamo player_
 }
 
 void GameClass::render()
@@ -56,6 +57,7 @@ void GameClass::render()
 	{
 		gameObjectArray.at(i)->render();
 	}
+	player_->render();
 }
 
 void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsigned int height)
@@ -118,22 +120,24 @@ void GameClass::handleKeyboardEvents()
 	
 	if(isMoving)
 	{
+		glm::vec2 uDlR = glm::vec2(-1, -1);
 		if( currentKeyStates[SDL_SCANCODE_UP] )
 		{
-			player_->Move(UP);
+			uDlR.y = UP;
 		}
 		else if(currentKeyStates[SDL_SCANCODE_DOWN])
 		{
-			player_->Move(DOWN);
+			uDlR.y = DOWN;
 		}
 		if(currentKeyStates[SDL_SCANCODE_LEFT])
 		{
-			player_->Move(LEFT);
+			uDlR.x = LEFT;
 		} 
 		else if (currentKeyStates[SDL_SCANCODE_RIGHT]) 
 		{
-			player_->Move(RIGHT);
+			uDlR.x = RIGHT;
 		}
+		player_->Move(uDlR);
 	}
 	else
 	{

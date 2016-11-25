@@ -146,7 +146,6 @@ bool LSampleShader::loadProgram()
 void LSampleShader::render() { 	 
 
 	GLfloat timeValue = SDL_GetTicks();
-	GLfloat greenValue = 1.0f;//(sin(timeValue/288) / 2) + 0.5;
 	GLfloat radius = 0.6;	//*((sin(timeValue / 1000) / 2) + 0.5);
 	GLfloat parameters[] = { 1, 0.0, 10, 0.5+0.05*(sin(timeValue / 500) )};
 	GLint vertexColorLocation = glGetUniformLocation(mProgramID, "LSampleFrag");

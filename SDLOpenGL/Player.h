@@ -9,7 +9,7 @@ class Player : public GameObject
 	float lifepoints;
 	float damage;
 	State currentState = IDLE;
-	Direction currentDirection = DOWN;	
+	glm::vec2 currentDirection = glm::vec2(RIGHT,DOWN);	
 
 	//Indici per le animazioni nello spritesheet
 
@@ -46,11 +46,13 @@ public:
 	~Player();
 	void setCurrentState(State s) { currentState = s; }
 
-	bool isMoving(Direction d) const { return currentState == MOVING && currentDirection == d; }
-	bool isSlashing(Direction d) const { return currentState == SLASHING && currentDirection == d; }
-	bool isIdle(Direction d) const { return currentState == IDLE && currentDirection == d; }
-	void Move(Direction d);
-	void Slash(Direction d);
+	void update(float dt);
+
+	bool isMoving(glm::vec2 d) const { return currentState == MOVING && currentDirection == d; }
+	bool isSlashing(glm::vec2 d) const { return currentState == SLASHING && currentDirection == d; }
+	bool isIdle(glm::vec2 d) const { return currentState == IDLE && currentDirection == d; }
+	void Move(glm::vec2 d);
+	void Slash(glm::vec2 d);
 	void Idle();
 };
 
