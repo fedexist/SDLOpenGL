@@ -41,8 +41,16 @@ bool GLHandler::initGL(LWindow* window)
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-	SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "OpenGL initialised correctly\n");
+	/*LShaderProgram* sampleShader = new LSampleShader();
 
+	if (!gl_renderer_.AddShaderToQueue(sampleShader))
+	{
+		SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Failed to add shader to queue\n");
+		return false;
+	}
+
+	SDL_LogDebug(SDL_LOG_CATEGORY_VIDEO, "OpenGL initialised correctly\n");
+	*/
 	return true;
 
 }

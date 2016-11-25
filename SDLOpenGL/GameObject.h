@@ -24,6 +24,8 @@ protected:
 	unsigned int endingIndexFrame;
 	unsigned int framePeriodIndex;
 	bool isPlayer = false;
+	void handleMovement(float dt, glm::vec2 forceInput);
+	void handleAnims(float dt);
 
 };
 

@@ -11,7 +11,7 @@ R"(
 		float c2 = parameters.y;
 		float c3 = parameters.z;
 		float c4 = parameters.w;
-		float distance = position.x*position.x * c3 *c3 + 0.60* position.y*position.y * c3 * c3;
+		float distance = position.x*position.x * c3 *c3 + 0.33* position.y*position.y * c3 * c3;
 		float r2 = radius*radius*c3*c3;
 		
 		float li = 0.0;
