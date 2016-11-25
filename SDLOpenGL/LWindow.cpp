@@ -63,9 +63,7 @@ void LWindow::handleEvent( SDL_Event& e )
 			glViewport(0, 0, mWidth, mHeight);
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
-			gluOrtho2D(0.0, float(mWidth), 0.0, float(mHeight));
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
+			coreInstance->updateProjection();
 			SDL_GL_SwapWindow(mWindow);
 			coreInstance->renderPresent();
 			break;

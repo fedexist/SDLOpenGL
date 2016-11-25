@@ -2,6 +2,9 @@
 #include "LTexture2D.h"
 
 class GameObject{
+
+	friend class GameClass;
+
 	glm::vec2 position;
 	glm::vec2 momentum;
 	glm::vec2 dimensions;

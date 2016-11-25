@@ -23,6 +23,7 @@ class Core
 		void update() const;
 		void render();
 		LWindow* getWindow();
+		void updateProjection();
 		static bool checkQuitEvent();
 		void FreeCameraMovement();
 		~Core();

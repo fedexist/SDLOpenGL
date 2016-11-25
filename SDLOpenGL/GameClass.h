@@ -21,8 +21,10 @@ public:
 	void loadMedia();
 	void render();
 	void loadLevelLayout(std::string, unsigned int, unsigned int);
+	void handleMouseEvents(const SDL_Event& sdl_event);
 	void handleEvents(SDL_Event& e);
 	void handleKeyboardEvents();
+	glm::vec2 positionToScreen(GameObject * obj);
 	std::vector<GLuint*> getLevelLayout() const { return currentLevelLayout; } //probabilmente non necessaria
 
 };

@@ -17,8 +17,6 @@ Player::~Player()
 
 void Player::Move(Direction d)
 {
-	
-
 	if( currentDirection != d || currentState == IDLE)
 	{	
 		currentState = MOVING;

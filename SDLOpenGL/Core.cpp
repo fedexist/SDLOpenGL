@@ -197,6 +197,11 @@ LWindow* Core::getWindow()
 	return &window_;
 }
 
+void Core::updateProjection()
+{
+	gluOrtho2D(gl_handler_.left, gl_handler_.right, gl_handler_.bottom, gl_handler_.top);
+}
+
 bool Core::checkQuitEvent()
 {
 	return EventHandler::getQuitEvent();
@@ -207,7 +212,7 @@ void Core::FreeCameraMovement()
 
 
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
-	float dt = 1; //CHANGEEEEEE
+	float local_dt = 1.0f;//(dt + 1) * 0.28f; //CHANGEEEEEE
 
 	gl_handler_.cameraMass = 0.75f; //Parametro principale
 
@@ -274,8 +279,8 @@ void Core::FreeCameraMovement()
 	float ForceX = alpha * ForceInputX - beta * oldVelocityX + StaticResistanceX; //la forza totale è quella di input meno la viscosità
 	float ForceY = alpha * ForceInputY - beta * oldVelocityY + StaticResistanceY;
 
-	float MomX = oldMomentumX + ForceX * dt; //integro la forza per aggiornare la quantità di moto
-	float MomY = oldMomentumY + ForceY * dt;
+	float MomX = oldMomentumX + ForceX * local_dt * 2; //integro la forza per aggiornare la quantità di moto
+	float MomY = oldMomentumY + ForceY * local_dt * 2;
 
 	gl_handler_.cameraMomentumX = MomX;
 	gl_handler_.cameraMomentumY = MomY;
@@ -288,8 +293,8 @@ void Core::FreeCameraMovement()
 
 	//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "%f,%f,%f", VelX, VelY, sqrt(pow(VelX,2)+pow(VelY,2)));
 
-	float translationX = VelX * dt; //calcolo spostamento dalla velocità
-	float translationY = VelY * dt;
+	float translationX = VelX * local_dt * 2; //calcolo spostamento dalla velocità
+	float translationY = VelY * local_dt * 2;
 
 	gl_handler_.bottom += translationY;
 	gl_handler_.top += translationY;

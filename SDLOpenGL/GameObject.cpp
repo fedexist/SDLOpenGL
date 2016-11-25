@@ -2,7 +2,15 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, LTexture2D* texture, float mass, unsigned int beginIndex, unsigned int endingIndex)
+GameObject::GameObject(	glm::vec2 position_, 
+						glm::vec2 momentum_, 
+						glm::vec2 dimensions_,
+						bool visible_, 
+						bool interactable, 
+						LTexture2D* texture, 
+						float mass, 
+						unsigned int beginIndex, 
+						unsigned int endingIndex)
 {
 	position = position_;
 	momentum = momentum_;
@@ -52,15 +60,19 @@ void GameObject::update(float dt)
 	/*
 	 *Lo static cast potrebbe non essere la soluzione ideale
 	 *	
+	 *	
+	
 	if(isPlayer)
 	{
+		Player* pg = static_cast<Player*> (this);
+
 		if ( pg->isMoving(UP))
 		{
 			forceInput.y = 1.0f;
 		}
 		else if (pg->isMoving(DOWN))
 		{
-			//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "S is pressed");
+			SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "S is pressed");
 			forceInput.y = -1.0f;
 		}
 		if (pg->isMoving(RIGHT))
@@ -73,7 +85,7 @@ void GameObject::update(float dt)
 			//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "A is pressed");
 			forceInput.x = -1.0f;
 		}
-	}*/
+	} */
 
 
 	if( dot(forceInput,forceInput) > 0)
@@ -89,16 +101,20 @@ void GameObject::update(float dt)
 
 	glm::vec2 direction = oldMomentum;
 	
-	//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "direction %f %f",direction.x,direction.y);
+	/*
+	if(isPlayer)
+		SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "direction: %f %f",direction.x,direction.y);*/
 
 	if (dot(direction,direction)> 0)
 		direction = normalize(direction);
 	
 	glm::vec2 force = alpha * forceInput - Fa * direction + forceStaticResistance; //la forza totale è quella di input meno la viscosità
 
-	//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "force %f %f", force.x, force.y);
+	/*
+	if(isPlayer)
+		SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "force: %f %f", force.x, force.y);*/
 
-	momentum = oldMomentum + force;
+	momentum = oldMomentum + force * dt;
 
 	glm::vec2 vel = momentum / mass;
 
@@ -115,6 +131,11 @@ void GameObject::update(float dt)
 
 
 	position += vel * dt; //calcolo spostamento dalla velocità
+
+	/*
+	if(isPlayer)
+		SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "position: %f %f", position.x, position.y);*/
+
 
 }
 
