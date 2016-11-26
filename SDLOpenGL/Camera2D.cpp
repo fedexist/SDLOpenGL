@@ -40,12 +40,14 @@ void Camera2D::update(float dt)
 {
 	if(!isFreeMovement)
 	{
-		/*
-		 * Qua va messo l'aggiornamento di left, right, bottom e top
-		 * in base allo spostamento dell'oggetto puntato da
-		 *
-		 */
-		gluOrtho2D(left, right, bottom, top); //o glTranslate()
+		//prima si centra la camera
+		if (!isCameraCentered)
+			centerOnObject(followedGameObject);
+
+		//Traslazione in coordinate mondo
+		glm::vec2 translation = followedGameObject->getLastTranslation();
+		glMatrixMode(GL_PROJECTION);
+		glTranslatef(-translation.x , -translation.y, 0.0f);
 
 	}
 	else
@@ -164,7 +166,7 @@ void Camera2D::setOrtho2DProjection(GLfloat left_, GLfloat right_, GLfloat botto
 
 void Camera2D::updateProjectionOnResize(GLfloat w, GLfloat h, GLfloat resize_w, GLfloat resize_h)
 {
-	/*
+	/**/
 	if (resize_w > 0)		//se la finestra è stata allargata orizzontalmente
 		right = w;
 	if (left < 0)
@@ -172,11 +174,30 @@ void Camera2D::updateProjectionOnResize(GLfloat w, GLfloat h, GLfloat resize_w, 
 		
 
 	if (resize_h > 0) //se la finestra è stata allargata verticalmente
-		top = h;*/
+		top = h;
 
 	glViewport(0, 0, w, h);
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(0, w, 0, h);
+}
+
+void Camera2D::centerOnObject(GameObject*)
+{
+		glm::vec2 worldPosition = followedGameObject->gridPositionToWorld();
+
+		SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "PlayerPosition: %f, %f", worldPosition.x, worldPosition.y);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+
+		float n_left = (left - right)/zoom + worldPosition.x;
+		float n_right = right/zoom + worldPosition.x;
+		float n_bottom = (bottom - top)/zoom + worldPosition.y;
+		float n_top = top/zoom + worldPosition.y;
+
+		gluOrtho2D(n_left, n_right, n_bottom, n_top);
+		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Camera is centered");
+
+		isCameraCentered = true;
 }

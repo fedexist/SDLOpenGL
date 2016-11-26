@@ -28,7 +28,7 @@ bool GLHandler::initGL(LWindow* window)
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glViewport(0, 0, window->getWidth() , window->getHeight());
 
-	camera.setOrtho2DProjection(0.0f, 1 * float(window->getWidth()), 0.0f, 1 * float(window->getHeight()));
+	camera.setOrtho2DProjection(0.0f, float(window->getWidth()), 0.0f, float(window->getHeight()));
 
 	/*
 	glMatrixMode(GL_PROJECTION);

@@ -158,4 +158,5 @@ void GameClass::handleKeyboardEvents()
 void GameClass::setCamera2D(Camera2D* camera_)
 {
 	camera = camera_;
+	camera->follow(player_);
 }

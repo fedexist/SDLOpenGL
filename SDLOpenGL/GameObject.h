@@ -6,6 +6,7 @@ class GameObject{
 	glm::vec2 position;
 	glm::vec2 momentum;
 	glm::vec2 dimensions;
+	glm::vec2 lastTranslation; //traslazione in coordinate griglia
 	bool visible;
 	bool canInteractWith;
 	LTexture2D* tex;
@@ -26,6 +27,9 @@ public:
 		}
 	} gameObjectComparer;
 
+	glm::vec2 gridPositionToWorld() const { return glm::vec2( position.x * dimensions.x + dimensions.x / 2, position.y * dimensions.y + dimensions.y / 2 ); }
+	glm::vec2 getLastTranslation() const { return glm::vec2( lastTranslation.x * dimensions.x, lastTranslation.y * dimensions.y); } //traslazione in coordinate mondo
+
 protected:
 	unsigned int curIndexFrame;
 	unsigned int startingIndexFrame;
@@ -33,6 +37,7 @@ protected:
 	unsigned int framePeriodIndex;
 	void handleMovement(float dt, glm::vec2 forceInput);
 	void handleAnims(float dt);
+	
 
 };
 

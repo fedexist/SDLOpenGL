@@ -102,8 +102,8 @@ void GameObject::handleMovement(float dt, glm::vec2 forceInput)
 		momentum.x = 0;
 	}
 
-
-	position += vel * dt; //calcolo spostamento dalla velocità
+	lastTranslation = vel * dt;
+	position += lastTranslation; //calcolo spostamento dalla velocità
 }
 
 GameObject::~GameObject()
