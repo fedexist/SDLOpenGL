@@ -34,7 +34,7 @@ void Player::update(float dt)
 			forceInput.y = 1.0f;
 	}
 	
-	SDL_LogDebug(0, "%f %f", forceInput.x, forceInput.y);
+	//SDL_LogDebug(0, "%f %f", forceInput.x, forceInput.y);
 
 	//movement
 	handleMovement(dt, forceInput);
@@ -50,8 +50,8 @@ void Player::Move(glm::vec2 d)
 		currentDirection = d;
 		Direction uD, lR;
 		
-		uD = (Direction) (int) currentDirection.y;
-		lR = (Direction) (int) currentDirection.x;
+		uD = static_cast<Direction>(static_cast<int>(currentDirection.y));
+		lR = static_cast<Direction>(static_cast<int>(currentDirection.x));
 		
 		switch(uD)
 		{
@@ -75,6 +75,7 @@ void Player::Move(glm::vec2 d)
 			curIndexFrame = startingIndexFrame = movingRightStart;
 			endingIndexFrame = movingRightStart + numberOfMovingFrames - 1;
 			break;
+		default: break;
 		}
 	}
 }
@@ -88,8 +89,8 @@ void Player::Slash(glm::vec2 d)
 		currentDirection = d;
 		Direction uD, lR;
 
-		uD = (Direction) (int) currentDirection.y;
-		lR = (Direction) (int) currentDirection.x;
+		uD = static_cast<Direction>(static_cast<int>(currentDirection.y));
+		lR = static_cast<Direction>(static_cast<int>(currentDirection.x));
 
 		switch (uD)
 		{
@@ -113,6 +114,7 @@ void Player::Slash(glm::vec2 d)
 			curIndexFrame = startingIndexFrame = slashingDownStart;
 			endingIndexFrame = slashingDownStart + numberOfSlashingFrames - 1;
 			break;
+		default: break;
 		}
 
 	}
@@ -124,8 +126,8 @@ void Player::Idle()
 	currentState = IDLE;
 	Direction uD, lR;
 
-	uD = (Direction)(int)currentDirection.y;
-	lR = (Direction)(int)currentDirection.x;
+		uD = static_cast<Direction>(static_cast<int>(currentDirection.y));
+		lR = static_cast<Direction>(static_cast<int>(currentDirection.x));
 
 	switch (uD)
 	{
@@ -149,6 +151,7 @@ void Player::Idle()
 		curIndexFrame = startingIndexFrame = movingRightStart;
 		endingIndexFrame = movingRightStart + numberOfIdleFrames - 1;
 		break;
+	default: break;
 	}
 		
 }

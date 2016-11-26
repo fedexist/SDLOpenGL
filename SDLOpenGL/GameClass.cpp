@@ -28,6 +28,7 @@ void GameClass::update(float dt)
 		gameObjectArray.at(i)->update(dt);
 	}
 	player_->update(dt);
+	camera->update(dt);
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
 	
 	//SDL_Delay(1);
@@ -106,6 +107,10 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 
 }
 
+void GameClass::handleMouseEvents(const SDL_Event& sdl_event)
+{
+}
+
 void GameClass::handleEvents(SDL_Event& e)
 {
 	handleKeyboardEvents();
@@ -144,4 +149,9 @@ void GameClass::handleKeyboardEvents()
 		player_->Idle();
 	}
 		
+}
+
+void GameClass::setCamera2D(Camera2D* camera_)
+{
+	camera = camera_;
 }

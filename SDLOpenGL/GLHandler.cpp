@@ -18,6 +18,7 @@ GLHandler::~GLHandler()
 bool GLHandler::initGL(LWindow* window)
 {
 	gl_renderer_ = GLRenderer(window);
+	camera = Camera2D(1.0f);
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glShadeModel(GL_SMOOTH);
@@ -27,6 +28,9 @@ bool GLHandler::initGL(LWindow* window)
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glViewport(0, 0, window->getWidth() , window->getHeight());
 
+	camera.setOrtho2DProjection(0.0f, 1 * float(window->getWidth()), 0.0f, 1 * float(window->getHeight()));
+
+	/*
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
@@ -35,7 +39,7 @@ bool GLHandler::initGL(LWindow* window)
 	bottom = 0.0f;
 	top = 1 *float(window->getHeight());
 
-	gluOrtho2D(left, right, bottom,  top);
+	gluOrtho2D(left, right, bottom,  top);*/
 
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "DrawingPlane.h"
 #include "Player.h"
+#include "Camera2D.h"
 
 class GameClass
 {
@@ -13,6 +14,7 @@ class GameClass
 	unsigned int leveLayoutW, levelLayoutH;
 	std::string levelPath = "./assets/levels/";
 	std::vector< std::vector<GLuint*> > cachedLevelLayouts;
+	Camera2D* camera;
 
 public:
 	GameClass();
@@ -26,6 +28,6 @@ public:
 	void handleKeyboardEvents();
 	glm::vec2 positionToScreen(GameObject * obj);
 	std::vector<GLuint*> getLevelLayout() const { return currentLevelLayout; } //probabilmente non necessaria
-
+	void setCamera2D(Camera2D* camera);
 };
 

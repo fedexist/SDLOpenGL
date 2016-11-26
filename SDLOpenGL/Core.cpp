@@ -115,6 +115,9 @@ bool Core::init()
 					success = false;
 				}
 
+				camera = &gl_handler_.camera;
+				camera->enablefreeMovement();
+
 				//Use Vsync
 				if( SDL_GL_SetSwapInterval(  1 ) < 0 )
 				{
@@ -136,6 +139,7 @@ bool Core::init()
 					//SDL_SetRenderDrawColor( mRenderer, 0xFF, 0xFF, 0xFF, 0 );
 					SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadMedia()\n");
 					Game->loadMedia();
+					Game->setCamera2D(camera);
 
 					//Initialize PNG loading
 					int imgFlags = IMG_INIT_PNG;
@@ -183,7 +187,7 @@ void Core::render()
 {
 
 		//Free Camera Movement
-	FreeCameraMovement();
+	//FreeCameraMovement();
 	gl_handler_.gl_renderer_.Render(Game);
 	dt = SDL_GetTicks() - startTime;
 
@@ -197,9 +201,9 @@ LWindow* Core::getWindow()
 	return &window_;
 }
 
-void Core::updateProjection()
+void Core::updateProjection() const
 {
-	gluOrtho2D(gl_handler_.left, gl_handler_.right, gl_handler_.bottom, gl_handler_.top);
+	camera->updateProjectionOnResize();
 }
 
 bool Core::checkQuitEvent()
@@ -207,6 +211,7 @@ bool Core::checkQuitEvent()
 	return EventHandler::getQuitEvent();
 }
 
+/*
 void Core::FreeCameraMovement()
 {
 
@@ -306,63 +311,6 @@ void Core::FreeCameraMovement()
 	glMatrixMode(GL_PROJECTION);
 	
 	glTranslatef(-translationX, -translationY, 0.0);
-
-	/*const Uint8* currentKeyStates = SDL_GetKeyboardState( nullptr );
-	double dt = 1; //da cancellare
-
-	double oldVelocity = gl_handler_.cameraVelocity;
-	double oldAcceleration = gl_handler_.cameraAcceleration;
-
-	double Acceleration = oldAcceleration;
-	if (oldAcceleration <= 0)
-	{
-		Acceleration = 0.1;
-	}
-	else
-	{
-		Acceleration = glm::max<double>(oldAcceleration - 0.01 * dt, 0.01);
-	}
-	gl_handler_.cameraVelocity = glm::min<double>(oldVelocity + Acceleration * dt, 20.0);
-	gl_handler_.cameraAcceleration = Acceleration;
-	double translation = dt * (oldVelocity + gl_handler_.cameraVelocity) / 2;;
-	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Velocity is: %f, Acceleration is: %f", gl_handler_.cameraVelocity, gl_handler_.cameraAcceleration);
-
-	glMatrixMode(GL_PROJECTION);
-	if( currentKeyStates[SDL_SCANCODE_W] )
-	{
-		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "W is pressed");
-		gl_handler_.bottom += translation;
-		gl_handler_.top += translation;
-
-		glTranslatef(0.0, -translation, 0.0);
-
-	}
-	else if(currentKeyStates[SDL_SCANCODE_S])
-	{
-		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "S is pressed");
-		gl_handler_.bottom -= translation;
-		gl_handler_.top -= translation;
-
-		glTranslatef(0.0, translation, 0.0);
-
-	}
-	if(currentKeyStates[SDL_SCANCODE_D])
-	{
-		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "D is pressed");
-		gl_handler_.right += translation;
-		gl_handler_.left += translation;
-
-		glTranslatef(-translation, 0.0, 0.0);
-	} 
-	else if (currentKeyStates[SDL_SCANCODE_A]) 
-	{
-		//SDL_LogDebug(SDL_LOG_CATEGORY_INPUT, "A is pressed");
-		gl_handler_.right -= translation;
-		gl_handler_.left -= translation;
-
-		glTranslatef(translation, 0.0, 0.0);
-	}
-	*/
 	SDL_PumpEvents();
 
-}
+}*/

@@ -23,9 +23,9 @@ class Core
 		void update() const;
 		void render();
 		LWindow* getWindow();
-		void updateProjection();
+		void updateProjection() const;
 		static bool checkQuitEvent();
-		void FreeCameraMovement();
+		//void FreeCameraMovement();
 		~Core();
 		Internalupdate Internalupdate;
 		InternalRender InternalRender;
@@ -37,6 +37,6 @@ private:
 		EventHandler event_handler_;
 		double dt, startTime;
 		GameClass* Game;
-		//Camera camera;
+		Camera2D* camera;
 };
 

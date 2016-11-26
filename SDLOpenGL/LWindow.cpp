@@ -49,7 +49,6 @@ SDL_Renderer* LWindow::createRenderer() const
 
 void LWindow::handleEvent( SDL_Event& e )
 {
-	float old_w = mWidth, old_h = mHeight;
 	//Window event occured
 	if( e.type == SDL_WINDOWEVENT )
 	{
