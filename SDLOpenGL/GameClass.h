@@ -3,6 +3,8 @@
 #include "DrawingPlane.h"
 #include "Player.h"
 
+
+
 class GameClass
 {
 	std::vector<GameObject*> gameObjectArray;

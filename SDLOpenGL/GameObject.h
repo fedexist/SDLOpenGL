@@ -2,6 +2,7 @@
 #include "LTexture2D.h"
 
 class GameObject{
+	friend class GameObjectComparer;
 	glm::vec2 position;
 	glm::vec2 momentum;
 	glm::vec2 dimensions;
@@ -14,13 +15,22 @@ public:
 	~GameObject();
 	void render();
 	void update(float dt);
+	bool isPlayer = false;
+	class GameObjectComparer
+	{
+		friend class GameObject;
+	public:
+		GameObjectComparer(){};
+		bool operator() (GameObject *i, GameObject *j) {
+			return (i->position.y > j->position.y);
+		}
+	} gameObjectComparer;
 
 protected:
 	unsigned int curIndexFrame;
 	unsigned int startingIndexFrame;
 	unsigned int endingIndexFrame;
 	unsigned int framePeriodIndex;
-	bool isPlayer = false;
 	void handleMovement(float dt, glm::vec2 forceInput);
 	void handleAnims(float dt);
 
