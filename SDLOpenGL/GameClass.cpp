@@ -21,6 +21,7 @@ GameClass::~GameClass()
 
 }
 
+
 void GameClass::update(float dt)
 {
 	for (int i = 0; i < gameObjectArray.size();i++)
@@ -48,17 +49,20 @@ void GameClass::loadMedia()
 	gameObjectArray.push_back(new GameObject(glm::vec2(0.5, 0.5), glm::vec2(0,0 ), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
-	//gameObjectArray.push_back(player_); abbiamo player_
-}
+	gameObjectArray.push_back(player_); }
 
 void GameClass::render()
 {
 	plane.render(&currentLevelLayout, leveLayoutW, levelLayoutH);
+	std::sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
 	for (int i = 0; i < gameObjectArray.size(); i++)
 	{
-		gameObjectArray.at(i)->render();
+		if (gameObjectArray.at(i)->isPlayer)
+			player_->render();
+		else
+			gameObjectArray.at(i)->render();
 	}
-	player_->render();
+
 }
 
 void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsigned int height)

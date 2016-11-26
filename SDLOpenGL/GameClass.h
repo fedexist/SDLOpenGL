@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "Camera2D.h"
 
+
+
 class GameClass
 {
 	std::vector<GameObject*> gameObjectArray;

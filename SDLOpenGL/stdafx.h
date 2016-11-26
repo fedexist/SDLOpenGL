@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 
 //glew, glu and glm inclusions
 #include <GL/glew.h>
