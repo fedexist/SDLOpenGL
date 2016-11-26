@@ -162,30 +162,21 @@ void Camera2D::setOrtho2DProjection(GLfloat left_, GLfloat right_, GLfloat botto
 
 }
 
-void Camera2D::updateProjectionOnResize()
+void Camera2D::updateProjectionOnResize(GLfloat w, GLfloat h, GLfloat resize_w, GLfloat resize_h)
 {
+	/*
+	if (resize_w > 0)		//se la finestra è stata allargata orizzontalmente
+		right = w;
+	if (left < 0)
+		right = w - resize_w;
+		
+
+	if (resize_h > 0) //se la finestra è stata allargata verticalmente
+		top = h;*/
+
+	glViewport(0, 0, w, h);
 	
-	GLint viewport[4];
-
-	glGetIntegerv(GL_VIEWPORT, viewport);
-/*
-	GLfloat deltaX = left - viewport[2];
-	GLfloat deltaY = bottom - viewport[3];
-
-	if (deltaX < 0)
-		SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Dimensione diminuita in lunghezza");
-	
-*/
-
-	left = viewport[0];
-	bottom = viewport[1];
-
-	right = viewport[2];
-	top = viewport[3];
-	
-
-
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(left, right, bottom, top);
+	gluOrtho2D(0, w, 0, h);
 }

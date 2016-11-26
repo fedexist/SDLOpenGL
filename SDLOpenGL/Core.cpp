@@ -201,9 +201,9 @@ LWindow* Core::getWindow()
 	return &window_;
 }
 
-void Core::updateProjection() const
+void Core::updateProjection(GLfloat resize_w, GLfloat resize_h) const
 {
-	camera->updateProjectionOnResize();
+	camera->updateProjectionOnResize(window_.getWidth(), window_.getHeight(), resize_w, resize_h);
 }
 
 bool Core::checkQuitEvent()

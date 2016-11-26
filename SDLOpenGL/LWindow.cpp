@@ -49,6 +49,8 @@ SDL_Renderer* LWindow::createRenderer() const
 
 void LWindow::handleEvent( SDL_Event& e )
 {
+	GLfloat old_width = mWidth;
+	GLfloat old_height = mHeight;
 	//Window event occured
 	if( e.type == SDL_WINDOWEVENT )
 	{
@@ -58,11 +60,11 @@ void LWindow::handleEvent( SDL_Event& e )
 			case SDL_WINDOWEVENT_SIZE_CHANGED:
 			mWidth = e.window.data1;
 			mHeight = e.window.data2;
-			
-			glViewport(0, 0, mWidth, mHeight);
+			/*
+			glViewport(0, 0, );
 			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			coreInstance->updateProjection();
+			glLoadIdentity();*/
+			coreInstance->updateProjection(mWidth - old_width, mHeight - old_height);
 			SDL_GL_SwapWindow(mWindow);
 			coreInstance->renderPresent();
 			break;

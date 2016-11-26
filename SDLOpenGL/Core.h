@@ -23,7 +23,7 @@ class Core
 		void update() const;
 		void render();
 		LWindow* getWindow();
-		void updateProjection() const;
+		void updateProjection(GLfloat resize_w, GLfloat resize_h) const;
 		static bool checkQuitEvent();
 		//void FreeCameraMovement();
 		~Core();

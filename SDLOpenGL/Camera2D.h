@@ -23,6 +23,6 @@ public:
 	void disablefreeMovement();
 	void update(float dt);
 	void setOrtho2DProjection(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top);
-	void updateProjectionOnResize();
+	void updateProjectionOnResize(GLfloat w, GLfloat h, GLfloat old_w, GLfloat old_h);
 };
 
