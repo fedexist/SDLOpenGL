@@ -14,7 +14,7 @@ private:
 	LWindow* window_;
 	GLRenderer gl_renderer_;
 	SDL_GLContext gl_context_;
-	Camera2D camera;
+	Camera2D camera = Camera2D(1.0f, 1.0f);
 
 	/*
 	//Orthographic Projection Data

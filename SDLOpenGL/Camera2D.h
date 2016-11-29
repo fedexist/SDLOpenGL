@@ -17,16 +17,20 @@ class Camera2D
 	float cameraMomentumX = 0.0f;
 	float cameraMomentumY = 0.0f;
 
-	float zoom = 2.0f; //a valore più alto corrisponde un maggiore zoom
+	const float maxZoom = 2.0f; //zoom massimo
+	float currentZoom;
 public:
 	Camera2D();
 	Camera2D(float);
+	Camera2D(float, float);
 	~Camera2D();
 	void follow(GameObject*);
 	void enablefreeMovement();
 	void disablefreeMovement();
 	void update(float dt);
 	void setOrtho2DProjection(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top);
+	void applyZoom();
+	void applyZoom(float zoom_);
 	void updateProjectionOnResize(GLfloat w, GLfloat h, GLfloat old_w, GLfloat old_h);
 	void centerOnObject(GameObject*);
 };

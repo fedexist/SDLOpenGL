@@ -6,9 +6,17 @@ Camera2D::Camera2D()
 	
 }
 
-Camera2D::Camera2D(float mass)
+Camera2D::Camera2D(float)
+{
+}
+
+Camera2D::Camera2D(float mass, float zoom_)
 {
 	cameraMass = mass; //Parametro principale
+	if (zoom_ <= 1.000f)
+		currentZoom = zoom_ * maxZoom;
+	else
+		currentZoom = maxZoom;
 	isFreeMovement = false;
 	followedGameObject = dummyObjectPointer = nullptr;
 }
@@ -26,14 +34,21 @@ void Camera2D::follow(GameObject * obj)
 
 void Camera2D::enablefreeMovement()
 {
-	isFreeMovement = true;
-	followedGameObject = nullptr;
+	if(!isFreeMovement)
+	{
+		isFreeMovement = true;
+		followedGameObject = nullptr;
+		isCameraCentered = false;	
+	}
 }
 
 void Camera2D::disablefreeMovement()
 {
-	isFreeMovement = false;
-	followedGameObject = dummyObjectPointer;
+	if(isFreeMovement)
+	{
+		isFreeMovement = false;
+		followedGameObject = dummyObjectPointer;
+	}
 }
 
 void Camera2D::update(float dt)
@@ -162,42 +177,52 @@ void Camera2D::setOrtho2DProjection(GLfloat left_, GLfloat right_, GLfloat botto
 
 	gluOrtho2D(left, right, bottom, top);
 
+	SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Ortho2D projection set at: left: %f, right: %f, bottom: %f, top: %f", left, right, bottom, top);
+
 }
+
+void Camera2D::applyZoom()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(left/currentZoom, right/currentZoom, bottom/currentZoom, top/currentZoom);
+
+}
+
+void Camera2D::applyZoom(float zoom_)
+{
+	if (zoom_ <= 1.000f)
+		currentZoom = zoom_ * maxZoom;
+	else
+		currentZoom = maxZoom;
+	applyZoom();
+}
+
 
 void Camera2D::updateProjectionOnResize(GLfloat w, GLfloat h, GLfloat resize_w, GLfloat resize_h)
 {
-	/**/
-	if (resize_w > 0)		//se la finestra è stata allargata orizzontalmente
-		right = w;
-	if (left < 0)
-		right = w - resize_w;
-		
+	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Left: %f, right: %f, bottom: %f, top: %f", left, right, bottom, top);
+	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Viewport W: %f, Viewport H: %f, Resize W: %f, Resize H: %f", w, h, resize_w, resize_h);
+	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Aspect Ratio: %f, zoom/ratio: %f", ratio, currentZoom/ratio);
 
-	if (resize_h > 0) //se la finestra è stata allargata verticalmente
-		top = h;
-
-	glViewport(0, 0, w, h);
-	
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(0, w, 0, h);
+	if(!isFreeMovement)
+	{
+		glViewport(0, 0, w, h);
+		setOrtho2DProjection(0, w, 0, h);
+		centerOnObject(followedGameObject);		
+	}
 }
 
 void Camera2D::centerOnObject(GameObject*)
 {
 		glm::vec2 worldPosition = followedGameObject->gridPositionToWorld();
 
-		SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "PlayerPosition: %f, %f", worldPosition.x, worldPosition.y);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
+		float n_left = (left - right)/currentZoom + worldPosition.x;
+		float n_right = right/currentZoom + worldPosition.x;
+		float n_bottom = (bottom - top)/currentZoom + worldPosition.y;
+		float n_top = top/currentZoom + worldPosition.y;
 
-		float n_left = (left - right)/zoom + worldPosition.x;
-		float n_right = right/zoom + worldPosition.x;
-		float n_bottom = (bottom - top)/zoom + worldPosition.y;
-		float n_top = top/zoom + worldPosition.y;
-
-		gluOrtho2D(n_left, n_right, n_bottom, n_top);
-		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Camera is centered");
+		setOrtho2DProjection(n_left, n_right, n_bottom, n_top);
 
 		isCameraCentered = true;
 }

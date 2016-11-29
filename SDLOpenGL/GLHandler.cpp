@@ -18,7 +18,6 @@ GLHandler::~GLHandler()
 bool GLHandler::initGL(LWindow* window)
 {
 	gl_renderer_ = GLRenderer(window);
-	camera = Camera2D(1.0f);
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glShadeModel(GL_SMOOTH);
