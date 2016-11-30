@@ -17,6 +17,22 @@ GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimen
 	this->mass = mass; //Player mass (Mp) Player mass = 1 Mp
 }
 
+GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, float mass, GameObject *factory)
+{
+	position = position_;
+	momentum = momentum_;
+	dimensions = dimensions_;
+	visible = visible_;
+	canInteractWith = interactable;
+	this->mass = mass;
+
+	this->tex = factory->tex;
+	curIndexFrame = factory->curIndexFrame;
+	startingIndexFrame = factory->startingIndexFrame;
+	endingIndexFrame = factory->endingIndexFrame;
+	framePeriodIndex = tex->framePeriod;
+}
+
 void GameObject::render()
 {
 	tex->drawSprite(position.x, position.y, 1, curIndexFrame);

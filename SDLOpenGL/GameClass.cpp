@@ -13,6 +13,7 @@ GameClass::GameClass()
 	plane = DrawingPlane(p1, p2, p3, p4);
 	cachedLevelLayouts = std::vector< std::vector<GLuint*> >();
 	gameObjectArray = std::vector<GameObject*>();
+	allObjectsFactory = std::vector<GameObject*>();
 }
 
 
@@ -40,14 +41,28 @@ void GameClass::loadMedia()
 	//AllGameResources.loadMedia(sdl_renderer)
 	plane.loadMedia();
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
-	loadLevelLayout("room1.csv", 10, 10);
-	allTextures = std::vector<LTexture2D>();
 
+	loadLevelLayout("room1", 10, 10);
+
+	allTextures = std::vector<LTexture2D>();
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,10));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 5));
 
-	gameObjectArray.push_back(new GameObject(glm::vec2(0.5, 0.5), glm::vec2(0,0 ), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
-
+	allObjectsFactory.push_back(new GameObject(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
+	
+	
+	for (int j = 0; j < levelLayoutH; j++)
+	{
+		for (int i = 0; i < leveLayoutW; i++)
+		{
+			int objectIndex = currentLevelLayout_o.at(j)[i];
+			if (objectIndex > -1)
+			{
+				gameObjectArray.push_back(new GameObject(glm::vec2(i,(levelLayoutH - j-1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, allObjectsFactory.at(objectIndex)));
+			}
+		}
+	}
+	
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 	gameObjectArray.push_back(player_); }
 
@@ -67,20 +82,26 @@ void GameClass::render()
 
 void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsigned int height)
 {
-
 	currentLevelLayout.clear();
+	currentLevelLayout_l.clear();
+	currentLevelLayout_o.clear();
 
 	leveLayoutW = width;
 	levelLayoutH = height;
 
 	for (int i = 0; i < height; ++i)
+	{
 		currentLevelLayout.push_back(new GLuint[width]);
+		currentLevelLayout_l.push_back(new GLuint[width]);
+		currentLevelLayout_o.push_back(new GLuint[width]);
+	}
+		
 
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Initialised currentlevellayout");
 
 
 
-	std::ifstream file(levelPath + levelName);
+	std::ifstream file(levelPath + levelName + ".csv");
 
 	for(int row = 0; row < height; ++row)
 	{
@@ -107,7 +128,63 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 		
 	}
 
+	std::ifstream filel(levelPath + levelName + "_l.csv");
+
+	for (int row = 0; row < height; ++row)
+	{
+		std::string line;
+		getline(filel, line);
+
+
+		//if ( !file.good() )
+		//break;
+
+		std::stringstream iss(line);
+
+		for (int col = 0; col < width; ++col)
+		{
+			std::string val;
+			getline(iss, val, ',');
+
+			//if ( !iss.good() )
+			//break;
+
+			currentLevelLayout_l.at(row)[col] = stoi(val);
+
+		}
+
+	}
+
+	std::ifstream fileo(levelPath + levelName + "_o.csv");
+
+	for (int row = 0; row < height; ++row)
+	{
+		std::string line;
+		getline(fileo, line);
+
+
+		//if ( !file.good() )
+		//break;
+
+		std::stringstream iss(line);
+
+		for (int col = 0; col < width; ++col)
+		{
+			std::string val;
+			getline(iss, val, ',');
+
+			//if ( !iss.good() )
+			//break;
+
+			currentLevelLayout_o.at(row)[col] = stoi(val);
+
+		}
+
+	}
+
 	cachedLevelLayouts.push_back(currentLevelLayout);
+	cachedLevelLayouts_l.push_back(currentLevelLayout_l);
+	cachedLevelLayouts_o.push_back(currentLevelLayout_o);
 
 }
 
