@@ -9,13 +9,23 @@
 class GameClass
 {
 	std::vector<GameObject*> gameObjectArray;
+	std::vector<GameObject*> allObjectsFactory;
 	Player* player_ = nullptr;
 	DrawingPlane plane;
 	std::vector<GLuint*> currentLevelLayout;
+
+	std::vector<GLuint*> currentLevelLayout_o;
+
+	std::vector<GLuint*> currentLevelLayout_l;
+
 	std::vector<LTexture2D> allTextures;
 	unsigned int leveLayoutW, levelLayoutH;
 	std::string levelPath = "./assets/levels/";
 	std::vector< std::vector<GLuint*> > cachedLevelLayouts;
+
+	std::vector< std::vector<GLuint*> > cachedLevelLayouts_o;
+
+	std::vector< std::vector<GLuint*> > cachedLevelLayouts_l;
 	Camera2D* camera;
 
 public:
