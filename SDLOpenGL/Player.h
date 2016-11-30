@@ -1,8 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
-typedef enum { MOVING, SLASHING, IDLE, HURT } State;
-typedef enum { UP, DOWN, LEFT, RIGHT } Direction;
+typedef enum { MOVING, SLASHING, IDLE, HURT, MOVING_SLASHING } State;
+typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
 
 class Player : public GameObject
 {
@@ -21,6 +21,18 @@ class Player : public GameObject
 	unsigned int idleDownStart = 78;
 	unsigned int idleRightStart = 91;*/
 
+	unsigned int startingIndexMatrix[5][4] = 
+	{
+			{104, 117, 130, 143}, //Moving
+			{156, 169, 182, 195}, //Slashing
+			{104, 117, 130, 143}, //Idle
+			{260, 260, 260, 260}, //Hurt
+			{156, 169, 182, 195} //MovingSlashing
+	
+	};
+
+	unsigned int numberOfFrames[5] = { 9, 6, 2, 6, 6 }; 
+
 	//Movimento
 	unsigned int numberOfMovingFrames = 9;
 	unsigned int movingUpStart = 104;
@@ -31,10 +43,10 @@ class Player : public GameObject
 
 	//Slash
 	unsigned int numberOfSlashingFrames = 6;
-	unsigned int slashingLeftStart = 156;
-	unsigned int slashingRightStart = 169;
-	unsigned int slashingUpStart = 182;
-	unsigned int slashingDownStart = 195;
+	unsigned int slashingUpStart = 156;
+	unsigned int slashingLeftStart = 169;
+	unsigned int slashingDownStart = 182;
+	unsigned int slashingRightStart = 195;
 
 	//Hurt
 	unsigned int numberOfHurtFrames = 6;
@@ -51,8 +63,11 @@ public:
 	bool isMoving(glm::vec2 d) const { return currentState == MOVING && currentDirection == d; }
 	bool isSlashing(glm::vec2 d) const { return currentState == SLASHING && currentDirection == d; }
 	bool isIdle(glm::vec2 d) const { return currentState == IDLE && currentDirection == d; }
+
+	void Act(State s, glm::vec2 d);
+
 	void Move(glm::vec2 d);
-	void Slash(glm::vec2 d);
+	void Slash(glm::vec2 d, bool isMoving);
 	void Idle();
 };
 

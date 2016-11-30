@@ -123,11 +123,37 @@ void GameClass::handleEvents(SDL_Event& e)
 
 void GameClass::handleKeyboardEvents()
 {
-	const Uint8* currentKeyStates = SDL_GetKeyboardState( nullptr );
+	const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
 
-	bool isMoving = currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT];
-	
+	bool isMoving = currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_A] || currentKeyStates[SDL_SCANCODE_S] || currentKeyStates[SDL_SCANCODE_D];
+	bool isSlashing = currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT];
+
 	if(isMoving)
+	{
+		glm::vec2 uDlR = glm::vec2(-1, -1);
+		if( currentKeyStates[SDL_SCANCODE_W] )
+		{
+			uDlR.y = UP;
+		}
+		else if(currentKeyStates[SDL_SCANCODE_S])
+		{
+			uDlR.y = DOWN;
+		}
+		if(currentKeyStates[SDL_SCANCODE_A])
+		{
+			uDlR.x = LEFT;
+		} 
+		else if (currentKeyStates[SDL_SCANCODE_D]) 
+		{
+			uDlR.x = RIGHT;
+		}
+		//player_->Move(uDlR);
+		if(isSlashing)
+			player_->Act(MOVING_SLASHING, uDlR);
+		else 
+			player_->Act(MOVING, uDlR);
+	}
+	else if(isSlashing)
 	{
 		glm::vec2 uDlR = glm::vec2(-1, -1);
 		if( currentKeyStates[SDL_SCANCODE_UP] )
@@ -146,11 +172,18 @@ void GameClass::handleKeyboardEvents()
 		{
 			uDlR.x = RIGHT;
 		}
-		player_->Move(uDlR);
+		//player_->Slash(uDlR, true);
+		
+		if (isMoving)
+			player_->Act(MOVING_SLASHING, uDlR);
+		else
+			player_->Act(SLASHING, uDlR);
+
 	}
-	else
+
+	if(!(isMoving || isSlashing))
 	{
-		player_->Idle();
+		player_->Act(IDLE, glm::vec2(-1,-1));
 	}
 		
 }
