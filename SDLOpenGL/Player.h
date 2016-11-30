@@ -21,17 +21,17 @@ class Player : public GameObject
 	unsigned int idleDownStart = 78;
 	unsigned int idleRightStart = 91;*/
 
-	unsigned int startingIndexMatrix[5][4] = 
-	{
-			{104, 117, 130, 143}, //Moving
-			{156, 169, 182, 195}, //Slashing
-			{104, 117, 130, 143}, //Idle
-			{260, 260, 260, 260}, //Hurt
-			{156, 169, 182, 195} //MovingSlashing
-	
-	};
+	std::array<std::array<unsigned int, 4>, 5> startingIndexMatrix{
+		{
+			std::array<unsigned int, 4> {{ 104, 117, 130, 143 }}, //Moving
+			std::array<unsigned int, 4>{{ 156, 169, 182, 195 }}, //Slashing
+			std::array<unsigned int, 4>{{ 104, 117, 130, 143 }}, //Idle
+			std::array<unsigned int, 4>{{ 260, 260, 260, 260 }}, //Hurt
+			std::array<unsigned int, 4>{{ 156, 169, 182, 195 }} //MovingSlashing
 
-	unsigned int numberOfFrames[5] = { 9, 6, 2, 6, 6 }; 
+		} };
+
+	std::array<unsigned int, 5> numberOfFrames{ { 9, 6, 2, 6, 6 } };
 
 	//Movimento
 	unsigned int numberOfMovingFrames = 9;
