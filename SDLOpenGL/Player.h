@@ -56,15 +56,48 @@ class Player : public GameObject
 public:
 	Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, LTexture2D* tex, float mass, unsigned int begInd, unsigned int endInd);
 	~Player();
+	unsigned int coolDown = 0;
 	void setCurrentState(State s) { currentState = s; }
-
+	
 	void update(float dt);
 
 	bool isMoving(glm::vec2 d) const { return currentState == MOVING && currentDirection == d; }
 	bool isSlashing(glm::vec2 d) const { return currentState == SLASHING && currentDirection == d; }
 	bool isIdle(glm::vec2 d) const { return currentState == IDLE && currentDirection == d; }
 
-	void Act(State s, glm::vec2 d);
+	void Act(State s, glm::vec2 d, glm::vec2 d2 = glm::vec2(0,0));
+
+	int inSlashingAnim(){ 
+		GLuint upCurIndexFrame = startingIndexMatrix[SLASHING][UP];
+		GLuint upEndingIndexFrame = startingIndexMatrix[SLASHING][UP] + numberOfFrames[SLASHING] - 1;
+
+		GLuint dnCurIndexFrame = startingIndexMatrix[SLASHING][DOWN];
+		GLuint dnEndingIndexFrame = startingIndexMatrix[SLASHING][DOWN] + numberOfFrames[SLASHING] - 1;
+
+		GLuint lxCurIndexFrame = startingIndexMatrix[SLASHING][LEFT];
+		GLuint lxEndingIndexFrame = startingIndexMatrix[SLASHING][LEFT] + numberOfFrames[SLASHING] - 1;
+
+		GLuint rxCurIndexFrame = startingIndexMatrix[SLASHING][RIGHT];
+		GLuint rxEndingIndexFrame = startingIndexMatrix[SLASHING][RIGHT] + numberOfFrames[SLASHING] - 1;
+		//SDL_LogDebug(0, "%d, uprange %d %d", curIndexFrame, upCurIndexFrame);
+		if (curIndexFrame >= upCurIndexFrame && curIndexFrame < upEndingIndexFrame-1)
+			return UP;
+		if (curIndexFrame >= dnCurIndexFrame && curIndexFrame < dnEndingIndexFrame-1)
+			return DOWN;
+		if (curIndexFrame >= lxCurIndexFrame && curIndexFrame < lxEndingIndexFrame-1)
+			return LEFT;
+		if (curIndexFrame >= rxCurIndexFrame && curIndexFrame < rxEndingIndexFrame-1)
+			return RIGHT;
+		if (curIndexFrame == upEndingIndexFrame-1)
+			return UP - 6;
+		if (curIndexFrame == dnEndingIndexFrame-1)
+			return DOWN - 6;
+		if (curIndexFrame == lxEndingIndexFrame-1)
+			return LEFT - 6;
+		if (curIndexFrame == rxEndingIndexFrame-1)
+			return RIGHT - 6;
+		return -1;
+	};
 
 	void Move(glm::vec2 d);
 	void Slash(glm::vec2 d, bool isMoving);
