@@ -8,6 +8,7 @@ Player::Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canIn
 	lifepoints = 1000.0f;
 	damage = 50.0f;
 	isPlayer = true;
+	Act(IDLE, currentDirection);
 }
 
 

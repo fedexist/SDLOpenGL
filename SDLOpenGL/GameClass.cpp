@@ -49,7 +49,9 @@ void GameClass::loadMedia()
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 5));
 
 	allObjectsFactory.push_back(new GameObject(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
-	
+	allObjectsFactory.push_back(new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28));
+
+
 	
 	for (int j = 0; j < levelLayoutH; j++)
 	{
