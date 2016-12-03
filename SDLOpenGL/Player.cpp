@@ -108,7 +108,6 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 			if (lR != -1)
 				direction = lR;
 		}
-		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Actual animation direction: %d", direction);
 		currentState = s;
 		currentDirection = d;
 		tex->framePeriod = 6;
