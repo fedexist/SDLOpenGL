@@ -25,6 +25,7 @@ GameClass::~GameClass()
 
 void GameClass::update(float dt)
 {
+	setObjectWorldKnowledge(player_); //dovrebbe essere fatto per ogni actor
 	for (int i = 0; i < gameObjectArray.size();i++)
 	{
 		gameObjectArray.at(i)->update(dt);
@@ -53,7 +54,7 @@ void GameClass::loadMedia()
 	
 	for (int j = 0; j < levelLayoutH; j++)
 	{
-		for (int i = 0; i < leveLayoutW; i++)
+		for (int i = 0; i < levelLayoutW; i++)
 		{
 			int objectIndex = currentLevelLayout_o.at(j)[i];
 			if (objectIndex > -1)
@@ -68,7 +69,7 @@ void GameClass::loadMedia()
 
 void GameClass::render()
 {
-	plane.render(&currentLevelLayout, leveLayoutW, levelLayoutH);
+	plane.render(&currentLevelLayout, levelLayoutW, levelLayoutH);
 	std::sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
 	for (int i = 0; i < gameObjectArray.size(); i++)
 	{
@@ -86,14 +87,14 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 	currentLevelLayout_l.clear();
 	currentLevelLayout_o.clear();
 
-	leveLayoutW = width;
+	levelLayoutW = width;
 	levelLayoutH = height;
 
 	for (int i = 0; i < height; ++i)
 	{
 		currentLevelLayout.push_back(new GLuint[width]);
-		currentLevelLayout_l.push_back(new GLuint[width]);
-		currentLevelLayout_o.push_back(new GLuint[width]);
+		currentLevelLayout_l.push_back(new GLint[width]);
+		currentLevelLayout_o.push_back(new GLint[width]);
 	}
 		
 
@@ -263,6 +264,40 @@ void GameClass::handleKeyboardEvents()
 		player_->Act(IDLE, glm::vec2(-1,-1));
 	}
 		
+}
+
+void GameClass::setObjectWorldKnowledge(GameObject * actor)
+{
+	int centerX, centerY;
+	centerY = static_cast<int>(actor->position.y + 0.5);
+	centerX = static_cast<int>(actor->position.x + 0.5);
+
+	int currentGridCellY = 0, currentGridCellX; // cella in basso a sinistra
+
+	//SDL_LogDebug(0, "Setting Object World Knowledge");
+
+	for(int j = -1; j <= 1; j++)
+	{
+		currentGridCellX = 0;
+
+		for(int i = -1; i <= 1; i++)
+		{
+			if( centerX + i < 0 || centerX + i >= levelLayoutW || centerY + j < 0 || centerY + j >= levelLayoutH)
+			{
+				actor->currentWorldKnowledge[currentGridCellY][currentGridCellX] = -1;
+				currentGridCellX++;
+				continue;
+			}
+
+			actor->currentWorldKnowledge[currentGridCellY][currentGridCellX] = currentLevelLayout_l.at(levelLayoutH - (centerY + j) - 1)[centerX + i];
+			currentGridCellX++;
+		}
+		currentGridCellY++;
+	}
+	
+	//SDL_LogDebug(0, "Finished Setting Object World Knowledge");
+
+	
 }
 
 void GameClass::setCamera2D(Camera2D* camera_)

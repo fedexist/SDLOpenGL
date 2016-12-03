@@ -15,6 +15,11 @@ GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimen
 	endingIndexFrame = endingIndex;
 	framePeriodIndex = tex->framePeriod;
 	this->mass = mass; //Player mass (Mp) Player mass = 1 Mp
+
+	currentWorldKnowledge = std::vector< GLint* >();
+
+	for (int i = 0; i < 3; i++)
+		currentWorldKnowledge.push_back(new GLint[3]);
 }
 
 GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, float mass, GameObject *factory)
@@ -31,6 +36,12 @@ GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimen
 	startingIndexFrame = factory->startingIndexFrame;
 	endingIndexFrame = factory->endingIndexFrame;
 	framePeriodIndex = tex->framePeriod;
+
+	currentWorldKnowledge = std::vector< GLint* >();
+
+	for (int i = 0; i < 3; i++)
+		currentWorldKnowledge.push_back(new GLint[3]);
+
 }
 
 void GameObject::render()
@@ -46,6 +57,37 @@ void GameObject::update(float dt)
 
 	//movement
 	handleMovement(dt, forceInput);
+
+}
+
+
+bool GameObject::isWalkable(glm::vec2 candidateTranslation)
+{
+		glm::vec2 center = position + glm::vec2(0.5);
+		glm::vec2 candidateUpdatedPosition = glm::vec2(center + candidateTranslation);
+	
+		//nuovo centro
+		float positionX = candidateUpdatedPosition.x; 
+		float positionY = candidateUpdatedPosition.y;
+
+		/*
+		SDL_LogDebug(0, "CandidateRightLimit: %f, CandidateLeftLimit: %f", positionX + hitboxDimensions.x , positionX - hitboxDimensions.x );
+		SDL_LogDebug(0, "CandidateUpperLimit: %f, CandidateLowerLimit: %f", positionY + hitboxDimensions.y , positionY - hitboxDimensions.y );*/
+
+		int x=1, y=1; //cella centrale del proprio dominio di conoscenza
+
+		//in base alla direzione, controlla quale cella deve essere controllata
+		if (positionX > ceil(positionX) - hitboxDimensions.x && candidateTranslation.x > 0)
+			x++;
+		else if(positionX < floor(positionX) + hitboxDimensions.x && candidateTranslation.x < 0)
+			x--;
+
+		if (positionY  > ceil(positionY) - hitboxDimensions.y + 0.1f && candidateTranslation.y > 0)
+			y++;
+		else if(positionY < floor(positionY) + hitboxDimensions.y && candidateTranslation.y < 0)
+			y--;	
+
+		return currentWorldKnowledge[y][x] != -1;
 
 }
 
@@ -118,8 +160,13 @@ void GameObject::handleMovement(float dt, glm::vec2 forceInput)
 		momentum.x = 0;
 	}
 
-	lastTranslation = vel * dt;
-	position += lastTranslation; //calcolo spostamento dalla velocità
+	if(isWalkable(vel * dt))
+	{
+		lastTranslation = vel * dt;
+		position += lastTranslation; //calcolo spostamento dalla velocità
+	}
+	else
+		lastTranslation = glm::vec2(0.0);
 }
 
 GameObject::~GameObject()
