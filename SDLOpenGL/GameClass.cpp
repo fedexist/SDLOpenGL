@@ -204,7 +204,8 @@ void GameClass::handleKeyboardEvents()
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
 
 	bool isMoving = currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_A] || currentKeyStates[SDL_SCANCODE_S] || currentKeyStates[SDL_SCANCODE_D];
-	bool isSlashing = currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT];
+	bool isSlashing = player_->coolDown == 0 &&(currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT]);
+
 
 	if(isMoving)
 	{
@@ -226,13 +227,42 @@ void GameClass::handleKeyboardEvents()
 			uDlR.x = RIGHT;
 		}
 		//player_->Move(uDlR);
-		if(isSlashing)
-			player_->Act(MOVING_SLASHING, uDlR);
-		else 
+		if (isSlashing)
+		{
+
+			glm::vec2 uDlRHit = glm::vec2(-1, -1);
+	
+			if (currentKeyStates[SDL_SCANCODE_UP])
+			{
+				uDlRHit.y = UP;
+			}
+			else if (currentKeyStates[SDL_SCANCODE_DOWN])
+			{
+				uDlRHit.y = DOWN;
+			}
+			if (currentKeyStates[SDL_SCANCODE_LEFT])
+			{
+				uDlRHit.x = LEFT;
+			}
+			else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+			{
+				uDlRHit.x = RIGHT;
+			}
+			//SDL_LogDebug(0, "in the slashmove loop");
+			player_->coolDown = 60;
+			player_->Act(MOVING_SLASHING, uDlR, uDlRHit);
+		}
+		else
+		{
 			player_->Act(MOVING, uDlR);
+			//SDL_LogDebug(0, "in the move loop");
+		}
+		
 	}
-	else if(isSlashing)
+	else if(isSlashing && !isMoving)
 	{
+
+		//SDL_LogDebug(0, "SLASHING NOT MOVING, %d");
 		glm::vec2 uDlR = glm::vec2(-1, -1);
 		if( currentKeyStates[SDL_SCANCODE_UP] )
 		{
@@ -252,18 +282,16 @@ void GameClass::handleKeyboardEvents()
 		}
 		//player_->Slash(uDlR, true);
 		
-		if (isMoving)
-			player_->Act(MOVING_SLASHING, uDlR);
-		else
-			player_->Act(SLASHING, uDlR);
+		player_->coolDown = 60;
+		player_->Act(SLASHING, uDlR);
 
 	}
 
-	if(!(isMoving || isSlashing))
+	if (!(isMoving || isSlashing))
 	{
 		player_->Act(IDLE, glm::vec2(-1,-1));
 	}
-		
+
 }
 
 void GameClass::setObjectWorldKnowledge(GameObject * actor)
