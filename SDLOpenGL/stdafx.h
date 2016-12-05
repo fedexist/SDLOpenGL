@@ -13,6 +13,7 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <array>
 
 //glew, glu and glm inclusions
 #include <GL/glew.h>

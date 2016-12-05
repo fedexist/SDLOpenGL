@@ -18,14 +18,24 @@ class GameClass
 {
 	friend class Core;
 	std::vector<GameObject*> gameObjectArray;
+	std::vector<GameObject*> allObjectsFactory;
 	Player* player_ = nullptr;
 	Launcher* launcher;
 	DrawingPlane plane;
 	std::vector<GLuint*> currentLevelLayout;
+
+	std::vector<GLint*> currentLevelLayout_o;
+
+	std::vector<GLint*> currentLevelLayout_l;
+
 	std::vector<LTexture2D> allTextures;
-	unsigned int leveLayoutW, levelLayoutH;
+	unsigned int levelLayoutW, levelLayoutH;
 	std::string levelPath = "./assets/levels/";
 	std::vector< std::vector<GLuint*> > cachedLevelLayouts;
+
+	std::vector< std::vector<GLint*> > cachedLevelLayouts_o;
+
+	std::vector< std::vector<GLint*> > cachedLevelLayouts_l;
 	Camera2D* camera;
 	GameState gameState;
 
@@ -41,7 +51,8 @@ public:
 	void handleEvents(SDL_Event& e);
 	void handleKeyboardEvents();
 	glm::vec2 positionToScreen(GameObject * obj);
-	std::vector<GLuint*> getLevelLayout() const { return currentLevelLayout; } //probabilmente non necessaria
+	
+	void setObjectWorldKnowledge(GameObject*); //The World gives knowledge to the gameobject about its whereabouts
 	void setCamera2D(Camera2D* camera);
 	void setGameState(GameState gs);
 };

@@ -1,8 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
-typedef enum { MOVING, SLASHING, IDLE, HURT } State;
-typedef enum { UP, DOWN, LEFT, RIGHT } Direction;
+typedef enum { MOVING, SLASHING, IDLE, HURT, MOVING_SLASHING } State;
+typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
 
 class Player : public GameObject
 {
@@ -21,6 +21,18 @@ class Player : public GameObject
 	unsigned int idleDownStart = 78;
 	unsigned int idleRightStart = 91;*/
 
+	std::array<std::array<unsigned int, 4>, 5> startingIndexMatrix{
+		{
+			std::array<unsigned int, 4> {{ 104, 117, 130, 143 }}, //Moving
+			std::array<unsigned int, 4>{{ 156, 169, 182, 195 }}, //Slashing
+			std::array<unsigned int, 4>{{ 104, 117, 130, 143 }}, //Idle
+			std::array<unsigned int, 4>{{ 260, 260, 260, 260 }}, //Hurt
+			std::array<unsigned int, 4>{{ 156, 169, 182, 195 }} //MovingSlashing
+
+		} };
+
+	std::array<unsigned int, 5> numberOfFrames{ { 9, 6, 2, 6, 6 } };
+
 	//Movimento
 	unsigned int numberOfMovingFrames = 9;
 	unsigned int movingUpStart = 104;
@@ -31,10 +43,10 @@ class Player : public GameObject
 
 	//Slash
 	unsigned int numberOfSlashingFrames = 6;
-	unsigned int slashingLeftStart = 156;
-	unsigned int slashingRightStart = 169;
-	unsigned int slashingUpStart = 182;
-	unsigned int slashingDownStart = 195;
+	unsigned int slashingUpStart = 156;
+	unsigned int slashingLeftStart = 169;
+	unsigned int slashingDownStart = 182;
+	unsigned int slashingRightStart = 195;
 
 	//Hurt
 	unsigned int numberOfHurtFrames = 6;
@@ -44,15 +56,51 @@ class Player : public GameObject
 public:
 	Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, LTexture2D* tex, float mass, unsigned int begInd, unsigned int endInd);
 	~Player();
+	unsigned int coolDown = 0;
 	void setCurrentState(State s) { currentState = s; }
-
+	
 	void update(float dt);
 
 	bool isMoving(glm::vec2 d) const { return currentState == MOVING && currentDirection == d; }
 	bool isSlashing(glm::vec2 d) const { return currentState == SLASHING && currentDirection == d; }
 	bool isIdle(glm::vec2 d) const { return currentState == IDLE && currentDirection == d; }
+
+	void Act(State s, glm::vec2 d, glm::vec2 d2 = glm::vec2(0,0));
+
+	int inSlashingAnim(){ 
+		GLuint upCurIndexFrame = startingIndexMatrix[SLASHING][UP];
+		GLuint upEndingIndexFrame = startingIndexMatrix[SLASHING][UP] + numberOfFrames[SLASHING] - 1;
+
+		GLuint dnCurIndexFrame = startingIndexMatrix[SLASHING][DOWN];
+		GLuint dnEndingIndexFrame = startingIndexMatrix[SLASHING][DOWN] + numberOfFrames[SLASHING] - 1;
+
+		GLuint lxCurIndexFrame = startingIndexMatrix[SLASHING][LEFT];
+		GLuint lxEndingIndexFrame = startingIndexMatrix[SLASHING][LEFT] + numberOfFrames[SLASHING] - 1;
+
+		GLuint rxCurIndexFrame = startingIndexMatrix[SLASHING][RIGHT];
+		GLuint rxEndingIndexFrame = startingIndexMatrix[SLASHING][RIGHT] + numberOfFrames[SLASHING] - 1;
+		//SDL_LogDebug(0, "%d, uprange %d %d", curIndexFrame, upCurIndexFrame);
+		if (curIndexFrame >= upCurIndexFrame && curIndexFrame < upEndingIndexFrame-1)
+			return UP;
+		if (curIndexFrame >= dnCurIndexFrame && curIndexFrame < dnEndingIndexFrame-1)
+			return DOWN;
+		if (curIndexFrame >= lxCurIndexFrame && curIndexFrame < lxEndingIndexFrame-1)
+			return LEFT;
+		if (curIndexFrame >= rxCurIndexFrame && curIndexFrame < rxEndingIndexFrame-1)
+			return RIGHT;
+		if (curIndexFrame == upEndingIndexFrame-1)
+			return UP - 6;
+		if (curIndexFrame == dnEndingIndexFrame-1)
+			return DOWN - 6;
+		if (curIndexFrame == lxEndingIndexFrame-1)
+			return LEFT - 6;
+		if (curIndexFrame == rxEndingIndexFrame-1)
+			return RIGHT - 6;
+		return -1;
+	};
+
 	void Move(glm::vec2 d);
-	void Slash(glm::vec2 d);
+	void Slash(glm::vec2 d, bool isMoving);
 	void Idle();
 };
 

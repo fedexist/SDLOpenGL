@@ -38,7 +38,7 @@ void Camera2D::enablefreeMovement()
 	{
 		isFreeMovement = true;
 		followedGameObject = nullptr;
-		isCameraCentered = false;	
+		isCameraCentered = false;
 	}
 }
 
