@@ -113,7 +113,7 @@ void LWindow::handleEvent( SDL_Event& e )
 		}
 	}
 	//Enter exit full screen on return key
-	else if( e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN )
+	else if( e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_F11 )
 	{
 		if( mFullScreen )
 		{

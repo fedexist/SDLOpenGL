@@ -2,6 +2,7 @@
 #include "GameClass.h"
 #include <fstream>
 #include "Player.h"
+#include "Launcher.h"
 
 
 GameClass::GameClass()
@@ -13,6 +14,7 @@ GameClass::GameClass()
 	plane = DrawingPlane(p1, p2, p3, p4);
 	cachedLevelLayouts = std::vector< std::vector<GLuint*> >();
 	gameObjectArray = std::vector<GameObject*>();
+	gameState = LAUNCHER;
 }
 
 
@@ -40,6 +42,7 @@ void GameClass::loadMedia()
 	//AllGameResources.loadMedia(sdl_renderer)
 	plane.loadMedia();
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
+	launcher = new Launcher();
 	loadLevelLayout("room1.csv", 10, 10);
 	allTextures = std::vector<LTexture2D>();
 
@@ -49,18 +52,29 @@ void GameClass::loadMedia()
 	gameObjectArray.push_back(new GameObject(glm::vec2(0.5, 0.5), glm::vec2(0,0 ), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
-	gameObjectArray.push_back(player_); }
+	gameObjectArray.push_back(player_); 
+}
 
 void GameClass::render()
 {
-	plane.render(&currentLevelLayout, leveLayoutW, levelLayoutH);
-	std::sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
-	for (int i = 0; i < gameObjectArray.size(); i++)
+	switch (gameState)
 	{
-		if (gameObjectArray.at(i)->isPlayer)
-			player_->render();
-		else
-			gameObjectArray.at(i)->render();
+	case LAUNCHER:
+		launcher->render(); 
+		break;
+	case GAME:
+		plane.render(&currentLevelLayout, leveLayoutW, levelLayoutH);
+		std::sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
+		for (int i = 0; i < gameObjectArray.size(); i++)
+		{
+			if (gameObjectArray.at(i)->isPlayer)
+				player_->render();
+			else
+				gameObjectArray.at(i)->render();
+		}
+		break;
+	default:
+		break;
 	}
 
 }
@@ -111,47 +125,74 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 
 }
 
-void GameClass::handleMouseEvents(const SDL_Event& sdl_event)
-{
-}
 
 void GameClass::handleEvents(SDL_Event& e)
 {
 	handleKeyboardEvents();
-	
 }
 
 void GameClass::handleKeyboardEvents()
 {
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( nullptr );
+	switch (gameState)
+	{ 
+	case LAUNCHER:
+	{
+					 if (currentKeyStates[SDL_SCANCODE_UP])
+					 {
+						 if (launcher->selectedButton > 0) launcher->selectedButton--;
+						 launcher->selectedCheck();
+					 }
+					 else if (currentKeyStates[SDL_SCANCODE_DOWN])
+					 {
+						 if (launcher->selectedButton < (launcher->buttons.size() - 1)) launcher->selectedButton++;
+						 launcher->selectedCheck();
+					 }
+					 else if (currentKeyStates[SDL_SCANCODE_RETURN])
+					 {
+						 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+					 }
+					 break;
+	}
+	case GAME:
+	{
+				 bool isMoving = currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT];
 
-	bool isMoving = currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT];
+				 if (isMoving)
+				 {
+					 glm::vec2 uDlR = glm::vec2(-1, -1);
+					 if (currentKeyStates[SDL_SCANCODE_UP])
+					 {
+						 uDlR.y = UP;
+					 }
+					 else if (currentKeyStates[SDL_SCANCODE_DOWN])
+					 {
+						 uDlR.y = DOWN;
+					 }
+					 if (currentKeyStates[SDL_SCANCODE_LEFT])
+					 {
+						 uDlR.x = LEFT;
+					 }
+					 else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+					 {
+						 uDlR.x = RIGHT;
+					 }
+					 player_->Move(uDlR);
+				 }
+				 else
+				 {
+					 player_->Idle();
+				 }
+
+
+				 break;
+	}
+	default:
+	{
+			   break;
+	}
+	}
 	
-	if(isMoving)
-	{
-		glm::vec2 uDlR = glm::vec2(-1, -1);
-		if( currentKeyStates[SDL_SCANCODE_UP] )
-		{
-			uDlR.y = UP;
-		}
-		else if(currentKeyStates[SDL_SCANCODE_DOWN])
-		{
-			uDlR.y = DOWN;
-		}
-		if(currentKeyStates[SDL_SCANCODE_LEFT])
-		{
-			uDlR.x = LEFT;
-		} 
-		else if (currentKeyStates[SDL_SCANCODE_RIGHT]) 
-		{
-			uDlR.x = RIGHT;
-		}
-		player_->Move(uDlR);
-	}
-	else
-	{
-		player_->Idle();
-	}
 		
 }
 
@@ -159,4 +200,9 @@ void GameClass::setCamera2D(Camera2D* camera_)
 {
 	camera = camera_;
 	camera->follow(player_);
+}
+
+void GameClass::setGameState(GameState gs)
+{
+	gameState = gs;
 }

@@ -3,13 +3,23 @@
 #include "DrawingPlane.h"
 #include "Player.h"
 #include "Camera2D.h"
+#include "Launcher.h"
+#include <SDL_ttf.h>
 
+typedef enum GameState
+{
+	LAUNCHER,
+	GAME,
+	CREDITS,
 
+}GameState;
 
 class GameClass
 {
+	friend class Core;
 	std::vector<GameObject*> gameObjectArray;
 	Player* player_ = nullptr;
+	Launcher* launcher;
 	DrawingPlane plane;
 	std::vector<GLuint*> currentLevelLayout;
 	std::vector<LTexture2D> allTextures;
@@ -17,7 +27,9 @@ class GameClass
 	std::string levelPath = "./assets/levels/";
 	std::vector< std::vector<GLuint*> > cachedLevelLayouts;
 	Camera2D* camera;
+	GameState gameState;
 
+	
 public:
 	GameClass();
 	~GameClass();
@@ -31,5 +43,6 @@ public:
 	glm::vec2 positionToScreen(GameObject * obj);
 	std::vector<GLuint*> getLevelLayout() const { return currentLevelLayout; } //probabilmente non necessaria
 	void setCamera2D(Camera2D* camera);
+	void setGameState(GameState gs);
 };
 
