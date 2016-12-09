@@ -66,16 +66,19 @@
     <ClInclude Include="Player.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="Camera2D.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
     <ClInclude Include="Launcher.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
@@ -128,16 +131,16 @@
     <ClCompile Include="Player.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
     <ClCompile Include="Camera2D.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
     <ClCompile Include="Launcher.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>

@@ -31,6 +31,7 @@ Core::Core(int w, int h, GameClass* game)
 {
 	window_ = LWindow(this, w, h);
 	event_handler_ = EventHandler(this);
+	audio_manager_ = AudioManager();
 	dt = 0.0f;
 	startTime = 0.0f;
 	Game = game;
@@ -41,16 +42,22 @@ Core::Core(int w, int h, GameClass* game)
 void Core::quit()
 {
 	window_.free();
+	audio_manager_.quit();
 	SDL_DestroyRenderer(mRenderer);
 
 	SDL_Quit();
-
+	IMG_Quit();
 }
 
 Core::~Core()
 {
 	window_.free();
 	SDL_DestroyRenderer(mRenderer);
+
+	audio_manager_.quit();
+	IMG_Quit();
+	SDL_Quit();
+	
 
 }
 
@@ -61,7 +68,7 @@ bool Core::init()
 
 
 	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0 )
 	{
 		
 		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
@@ -137,9 +144,6 @@ bool Core::init()
 				{
 					//Initialize renderer color
 					//SDL_SetRenderDrawColor( mRenderer, 0xFF, 0xFF, 0xFF, 0 );
-					SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadMedia()\n");
-					Game->loadMedia();
-					Game->setCamera2D(camera);
 
 					//Initialize PNG loading
 					int imgFlags = IMG_INIT_PNG;
@@ -148,6 +152,19 @@ bool Core::init()
 						SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 						success = false;
 					}
+					/**/
+					if( !audio_manager_.init() )
+					{
+						SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"SDL_Mixer could not initialize! SDL Error: %s\n", Mix_GetError() );
+						success = false;
+					} else
+					{
+						Game->setAudioManager(&audio_manager_);
+						SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadMedia()\n");
+						Game->loadMedia();
+						Game->setCamera2D(camera);
+					}
+						
 
 				}
 

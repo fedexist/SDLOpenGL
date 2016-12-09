@@ -5,6 +5,7 @@
 #include "Camera2D.h"
 #include "Launcher.h"
 #include <SDL_ttf.h>
+#include "AudioManager.h"
 
 typedef enum GameState
 {
@@ -38,8 +39,8 @@ class GameClass
 	std::vector< std::vector<GLint*> > cachedLevelLayouts_l;
 	Camera2D* camera;
 	GameState gameState;
+	AudioManager* audio_manager;
 
-	
 public:
 	GameClass();
 	~GameClass();
@@ -55,5 +56,6 @@ public:
 	void setObjectWorldKnowledge(GameObject*); //The World gives knowledge to the gameobject about its whereabouts
 	void setCamera2D(Camera2D* camera);
 	void setGameState(GameState gs);
+	void setAudioManager(AudioManager* audio_manager);
 };
 

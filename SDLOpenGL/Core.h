@@ -4,7 +4,7 @@
 #include "GLHandler.h"
 #include "EventHandler.h"
 #include "GameClass.h"
-#include "Camera.h"
+#include "AudioManager.h"
 
 typedef void(*Internalupdate)(float dt);
 typedef void(*InternalRender)();
@@ -38,5 +38,6 @@ private:
 		double dt, startTime;
 		GameClass* Game;
 		Camera2D* camera;
+		AudioManager audio_manager_;
 };
 
