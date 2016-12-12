@@ -13,6 +13,16 @@ AudioManager::~AudioManager()
 
 bool AudioManager::init()
 {
+
+	int flags = MIX_INIT_MP3;
+	if(Mix_Init(flags) & flags != flags) 
+	{
+		SDL_LogDebug(SDL_LOG_CATEGORY_AUDIO, "Mix_Init: Failed to init required ogg and mp3 support!\n");
+		SDL_LogDebug(SDL_LOG_CATEGORY_AUDIO, "Mix_Init: %s\n", Mix_GetError());
+
+		return false;
+	}
+
 	if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0)
 	{
 		return false;
@@ -142,4 +152,5 @@ void AudioManager::quit()
 	effectsMap.htmap.clear();
 
 	Mix_Quit();
+	Mix_CloseAudio();
 }
