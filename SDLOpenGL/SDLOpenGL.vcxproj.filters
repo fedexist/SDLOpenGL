@@ -69,10 +69,10 @@
     <ClInclude Include="Button.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="Camera2D.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="Camera2D.h">
+    <ClInclude Include="Camera.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Launcher.h">

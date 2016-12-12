@@ -6,7 +6,7 @@
 
 GameClass::GameClass()
 {
-	GLfloat p1[] = { -1.0f, 1.0f, 0.0f };
+	GLfloat p1[] = { -0.0f, 1.0f, 0.0f };
 	GLfloat p2[] = { 1.0f, 1.0f, 0.0f };
 	GLfloat p3[] = { 1.0f, -1.0f, 0.0f };
 	GLfloat p4[] = { -1.0f, -1.0f, 0.0f };
@@ -69,7 +69,8 @@ void GameClass::loadMedia()
 	}
 	
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
-	gameObjectArray.push_back(player_); }
+	gameObjectArray.push_back(player_); 
+}
 
 void GameClass::render()
 {
@@ -202,14 +203,42 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 
 }
 
-void GameClass::handleMouseEvents(const SDL_Event& sdl_event)
-{
-}
 
 void GameClass::handleEvents(SDL_Event& e)
 {
 	handleKeyboardEvents();
+	handleMouseEvents(e);
 	
+}
+
+void GameClass::handleMouseEvents(const SDL_Event& e)
+{
+	if (e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
+	{
+		int x, y;
+		SDL_GetMouseState(&x, &y);
+		
+		for (int i = 0; i < launcher->buttons.size(); i++)
+		{
+			Button* b = launcher->buttons.at(i);
+			if (b->isInside(x,y))
+			{
+				launcher->selectedButton = i;
+				launcher->selectedCheck();
+
+				if (e.type == SDL_MOUSEBUTTONUP && launcher->selectedButton == i)
+				{
+					setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+				}
+			}
+
+			else
+			{
+				launcher->selectedButton = -1;
+				launcher->selectedCheck();
+			}
+		}
+	}
 }
 
 void GameClass::handleKeyboardEvents()
@@ -359,6 +388,7 @@ void GameClass::setObjectWorldKnowledge(GameObject * actor)
 
 	
 }
+
 
 void GameClass::setCamera2D(Camera2D* camera_)
 {
