@@ -237,7 +237,7 @@ void GameClass::handleMouseEvents(const SDL_Event& e)
 				{
 					audio_manager->playSoundEffect("ButtonSelected");
 
-					Mix_HaltMusic();
+					audio_manager->ManageMusic(STOP, "LauncherTheme");
 
 					setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
 					audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);

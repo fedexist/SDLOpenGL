@@ -86,9 +86,9 @@ void AudioManager::ManageMusic(musicActions action, std::string key, Mix_Fading 
 				}	
 			break;
 		case STOP: 
-			if (Mix_PausedMusic() || !Mix_PlayingMusic() && fading != MIX_FADING_OUT)
+			if (fading != MIX_FADING_OUT)
 				Mix_HaltMusic();
-			else if (Mix_PausedMusic() || !Mix_PlayingMusic() && fading == MIX_FADING_OUT)
+			else
 				Mix_FadeOutMusic(fadingValue);
 			break;
 		case PAUSE: 
