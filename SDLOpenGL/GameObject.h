@@ -23,7 +23,7 @@ public:
 	//GameObject();
 	~GameObject();
 	void render();
-	void update(float dt);
+	virtual void update(float dt);
 	bool isPlayer = false;
 
 	class GameObjectComparer
@@ -40,16 +40,21 @@ public:
 	glm::vec2 spriteCenter() const { return glm::vec2(position.x + 0.5, position.y + 0.5); }
 	glm::vec2 getLastTranslation() const { return glm::vec2( lastTranslation.x * dimensions.x, lastTranslation.y * dimensions.y); } //traslazione in coordinate mondo
 	bool isWalkable(glm::vec2 candidateTranslation);
+	virtual void getHit(float hitNumber, GameObject* hitter)
+	{
+	};
 
 protected:
 	unsigned int curIndexFrame;
 	unsigned int startingIndexFrame;
 	unsigned int endingIndexFrame;
 	unsigned int framePeriodIndex;
+
 	glm::vec2 position; //Il centro della sprite è Position + vec2(0.5)
 
 	glm::vec2 hitboxDimensions = glm::vec2(17.f/64.f, 30.f/64.f); //dimensione della hitbox rispetto al centro della sprite p.e. per una 64x64 -> (15,20), cioè una hitbox 30x40, con centro position + vec(0.5)
 
+	std::vector<GameObject*> areaSharing;
 	LTexture2D* tex;
 	void handleAnims(float dt);
 	void handleMovement(float dt, glm::vec2 forceInput);

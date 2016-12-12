@@ -56,11 +56,13 @@ class Player : public GameObject
 
 public:
 	Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, LTexture2D* tex, float mass, unsigned int begInd, unsigned int endInd);
+	Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, float mass, Player* other);
 	~Player();
 	unsigned int coolDown = 0;
 	void setCurrentState(State s) { currentState = s; }
 	
 	void update(float dt);
+	void getHit(float hitNumber, GameObject* hitter);
 
 	bool isMoving(glm::vec2 d) const { return currentState == MOVING && currentDirection == d; }
 	bool isSlashing(glm::vec2 d) const { return currentState == SLASHING && currentDirection == d; }

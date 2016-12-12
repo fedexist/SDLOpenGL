@@ -7,7 +7,16 @@ Player::Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canIn
 {
 	lifepoints = 1000.0f;
 	damage = 50.0f;
-	isPlayer = true;
+	//isPlayer = true; true only for the player
+	Act(IDLE, currentDirection);
+}
+
+Player::Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, float mass, Player* other) :
+GameObject(pos, mom, dim, vis, canInt,other->tex, mass, other->startingIndexFrame,other->endingIndexFrame)
+{
+	lifepoints = 1000.0f;
+	damage = 50.0f;
+	//isPlayer = true; true only for the player
 	Act(IDLE, currentDirection);
 }
 
@@ -16,8 +25,28 @@ Player::~Player()
 {
 }
 
+void Player::getHit(float hitNumber, GameObject* hitter)
+{
+	lifepoints -= hitNumber;
+	std::string msg;
+	if (this->isPlayer)
+		msg = "Player lost %f life thanks to";
+	else
+		msg = "Monster lost %f life thanks to";
+
+	if (hitter->isPlayer)
+		msg += " the Player";
+	else 
+		msg += " the fire";
+
+
+	SDL_LogDebug(0,msg.c_str(), hitNumber);
+}
+
 void Player::update(float dt)
 {
+
+
 
 	handleAnims(dt);
 
@@ -193,12 +222,11 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 
 void Player::handleFight()
 {
-	GLfloat Lvertices[] = {
-		position.x, position.y,0.1,
-		position.x+0.5, position.y,1,
-		position.x+0.5, position.y+0.5,1,
-		position.x, position.y+0.5,1
-	};
+	
+	for (int i = 0; i < areaSharing.size(); i++)
+	{
+		areaSharing.at(i)->getHit(10, this);
+	}
 
 	SDL_LogDebug(0, "Fighting direction %d, %d, indexFrrame %d", int(currentDirection.x), int(currentDirection.y), curIndexFrame);
 }

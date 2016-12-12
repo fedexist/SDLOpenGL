@@ -16,6 +16,8 @@ GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimen
 	framePeriodIndex = tex->framePeriod;
 	this->mass = mass; //Player mass (Mp) Player mass = 1 Mp
 
+	areaSharing = std::vector< GameObject* >();
+
 	currentWorldKnowledge = std::vector< GLint* >();
 
 	for (int i = 0; i < 3; i++)
@@ -37,6 +39,9 @@ GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimen
 	endingIndexFrame = factory->endingIndexFrame;
 	framePeriodIndex = tex->framePeriod;
 
+
+	areaSharing = std::vector< GameObject* >();
+
 	currentWorldKnowledge = std::vector< GLint* >();
 
 	for (int i = 0; i < 3; i++)
@@ -52,12 +57,12 @@ void GameObject::render()
 void GameObject::update(float dt)
 {
 
-	handleAnims(dt);
+	/*handleAnims(dt);
 	glm::vec2 forceInput = glm::vec2(0.f, 0.f);
 
 	//movement
 	handleMovement(dt, forceInput);
-
+	*/
 }
 
 

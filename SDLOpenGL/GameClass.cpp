@@ -2,6 +2,7 @@
 #include "GameClass.h"
 #include <fstream>
 #include "Player.h"
+#include "Fire.h"
 
 
 GameClass::GameClass()
@@ -28,16 +29,61 @@ GameClass::~GameClass()
 void GameClass::update(float dt)
 {
 	setObjectWorldKnowledge(player_); //dovrebbe essere fatto per ogni actor
+	for (int i = 0; i < gameObjectArray.size(); i++)
+	{
+		gameObjectArray.at(i)->areaSharing.clear();
+	}
 	for (int i = 0; i < gameObjectArray.size();i++)
 	{
-		gameObjectArray.at(i)->update(dt);
+		float ll, rl, ul, dl;
+		ll = gameObjectArray.at(i)->position.x - gameObjectArray.at(i)->hitboxDimensions.x;
+		rl = gameObjectArray.at(i)->position.x + gameObjectArray.at(i)->hitboxDimensions.x;
+		dl = gameObjectArray.at(i)->position.y;// - gameObjectArray.at(i)->hitboxDimensions.y;
+		ul = gameObjectArray.at(i)->position.y + gameObjectArray.at(i)->hitboxDimensions.y;
+		for (int j = i + 1; j < gameObjectArray.size(); j++)
+		{
+			float llj, rlj, ulj, dlj;
+			llj = gameObjectArray.at(j)->position.x - gameObjectArray.at(j)->hitboxDimensions.x;
+			rlj = gameObjectArray.at(j)->position.x + gameObjectArray.at(j)->hitboxDimensions.x;
+			ulj = gameObjectArray.at(j)->position.y;// - gameObjectArray.at(j)->hitboxDimensions.y;
+			dlj = gameObjectArray.at(j)->position.y + gameObjectArray.at(j)->hitboxDimensions.y;
+			bool XAligned = (rl <= rlj && rl >= llj) || (ll <= rlj && ll >= llj);
+			bool YAligned = (dl <= dlj && dl >= ulj) || (ul <= dlj && ul >= ulj);
+			/*if (XAligned )
+			{
+				SDL_LogDebug(0,"XAligned");
+			}
+			if (YAligned)
+			{
+				SDL_LogDebug(0, "YAligned");
+			}*/
+
+			if (XAligned && YAligned)
+			{
+				gameObjectArray.at(i)->areaSharing.push_back(gameObjectArray.at(j));
+
+				gameObjectArray.at(j)->areaSharing.push_back(gameObjectArray.at(i));
+			}
+		}
+		Fire* fireThis = dynamic_cast<Fire*>(gameObjectArray.at(i));
+		Player* playerThis = dynamic_cast<Player*>(gameObjectArray.at(i));
+		if (fireThis)
+		{
+			fireThis->update(dt);
+		}
+		if (playerThis)
+		{
+			playerThis->update(dt);
+		}
+		//gameObjectArray.at(i)->update(dt);
 	}
-	player_->update(dt);
+	//player_->update(dt);
 	camera->update(dt);
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
 	
 	//SDL_Delay(1);
 }
+
 
 void GameClass::loadMedia()
 {
@@ -52,7 +98,7 @@ void GameClass::loadMedia()
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,10));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 5));
 
-	allObjectsFactory.push_back(new GameObject(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
+	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28));
 	
 	for (int j = 0; j < levelLayoutH; j++)
@@ -62,12 +108,25 @@ void GameClass::loadMedia()
 			int objectIndex = currentLevelLayout_o.at(j)[i];
 			if (objectIndex > -1)
 			{
-				gameObjectArray.push_back(new GameObject(glm::vec2(i,(levelLayoutH - j-1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, allObjectsFactory.at(objectIndex)));
+				Fire* fireThis = dynamic_cast<Fire*>(allObjectsFactory.at(objectIndex));
+				Player* playerThis = dynamic_cast<Player*>(allObjectsFactory.at(objectIndex));
+
+				if (fireThis)
+				{
+					gameObjectArray.push_back (new Fire(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, (Fire*)allObjectsFactory.at(objectIndex)));
+				}
+
+				if (playerThis)
+				{
+					gameObjectArray.push_back(new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, (Player*)allObjectsFactory.at(objectIndex)));
+				}
+
 			}
 		}
 	}
 	
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+	player_->isPlayer = true;
 	gameObjectArray.push_back(player_); 
 
 	audio_manager->LoadMusic("./assets/music/journeys.mp3","MainTheme");
@@ -90,9 +149,9 @@ void GameClass::render()
 		sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
-			if (gameObjectArray.at(i)->isPlayer)
-				player_->render();
-			else
+			//if (gameObjectArray.at(i)->isPlayer)
+			//	((Player*)gameObjectArray.at(i))->render();
+			//else
 				gameObjectArray.at(i)->render();
 		}
 		break;
