@@ -46,7 +46,7 @@ GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimen
 
 void GameObject::render()
 {
-	tex->drawSprite(position.x, position.y, 1, curIndexFrame);
+	tex->drawSprite(position.x, position.y, 0.5, curIndexFrame);
 }
 
 void GameObject::update(float dt)

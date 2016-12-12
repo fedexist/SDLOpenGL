@@ -14,6 +14,7 @@ GameClass::GameClass()
 	cachedLevelLayouts = std::vector< std::vector<GLuint*> >();
 	gameObjectArray = std::vector<GameObject*>();
 	allObjectsFactory = std::vector<GameObject*>();
+	allTextures = std::vector<LTexture2D>();
 	gameState = LAUNCHER;
 }
 
@@ -43,18 +44,16 @@ void GameClass::loadMedia()
 	//AllGameResources.loadMedia(sdl_renderer)
 	plane.loadMedia();
 	launcher = new Launcher();
-	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
 
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
 	loadLevelLayout("room1", 10, 10);
 
-	allTextures = std::vector<LTexture2D>();
+	//Caricamento textures
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,10));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 5));
 
 	allObjectsFactory.push_back(new GameObject(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28));
-
-
 	
 	for (int j = 0; j < levelLayoutH; j++)
 	{
@@ -69,7 +68,15 @@ void GameClass::loadMedia()
 	}
 	
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
-	gameObjectArray.push_back(player_); 
+	gameObjectArray.push_back(player_);
+
+	audio_manager->LoadMusic("./assets/music/journeys.mp3","MainTheme");
+	audio_manager->LoadMusic("./assets/music/castlejam.mp3", "LauncherTheme");
+	audio_manager->LoadSoundEffect("./assets/sfx/swish.wav", "SwordSwish");
+	audio_manager->LoadSoundEffect("./assets/sfx/buttonsel.wav", "ButtonSelected");
+	audio_manager->setMusicVolume(0.75f);
+
+	audio_manager->ManageMusic(PLAY, "LauncherTheme", MIX_FADING_IN, 3000);
 }
 
 void GameClass::render()
@@ -81,7 +88,7 @@ void GameClass::render()
 		break;
 	case GAME:
 		plane.render(&currentLevelLayout, levelLayoutW, levelLayoutH);
-		std::sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
+		sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
 			if (gameObjectArray.at(i)->isPlayer)
@@ -228,7 +235,12 @@ void GameClass::handleMouseEvents(const SDL_Event& e)
 
 				if (e.type == SDL_MOUSEBUTTONUP && launcher->selectedButton == i)
 				{
+					audio_manager->playSoundEffect("ButtonSelected");
+
+					Mix_HaltMusic();
+
 					setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+					audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
 				}
 			}
 
@@ -310,8 +322,9 @@ void GameClass::handleKeyboardEvents()
 							 uDlRHit.x = RIGHT;
 						 }
 						 //SDL_LogDebug(0, "in the slashmove loop");
-						 player_->coolDown = 60;
+						 player_->coolDown = 40;
 						 player_->Act(MOVING_SLASHING, uDlR, uDlRHit);
+						 audio_manager->playSoundEffect("SwordSwish");
 					 }
 					 else
 					 {
@@ -341,8 +354,9 @@ void GameClass::handleKeyboardEvents()
 						 uDlR.x = RIGHT;
 					 }
 					 //player_->Slash(uDlR, true);
-					 player_->coolDown = 60;
+					 player_->coolDown = 40;
 					 player_->Act(SLASHING, uDlR);
+					 audio_manager->playSoundEffect("SwordSwish");
 				 }
 				 if (!(isMoving || isSlashing))
 				 {
@@ -400,4 +414,9 @@ void GameClass::setCamera2D(Camera2D* camera_)
 void GameClass::setGameState(GameState gs)
 {
 	gameState = gs;
+}
+
+void GameClass::setAudioManager(AudioManager* audio_manager)
+{
+	this->audio_manager = audio_manager;
 }

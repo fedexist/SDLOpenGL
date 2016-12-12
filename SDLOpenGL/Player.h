@@ -21,7 +21,7 @@ class Player : public GameObject
 	unsigned int idleDownStart = 78;
 	unsigned int idleRightStart = 91;*/
 
-	std::array<std::array<unsigned int, 4>, 5> startingIndexMatrix{
+	std::array<std::array<unsigned int, 4>, 5> startingIndexMatrix = std::array<std::array<unsigned int, 4>, 5>{
 		{
 			std::array<unsigned int, 4> {{ 104, 117, 130, 143 }}, //Moving
 			std::array<unsigned int, 4>{{ 156, 169, 182, 195 }}, //Slashing
@@ -31,7 +31,7 @@ class Player : public GameObject
 
 		} };
 
-	std::array<unsigned int, 5> numberOfFrames{ { 9, 6, 2, 6, 6 } };
+	std::array<unsigned int, 5> numberOfFrames = std::array<unsigned int, 5>{ { 9, 6, 2, 6, 6 } };
 
 	//Movimento
 	unsigned int numberOfMovingFrames = 9;
@@ -52,6 +52,7 @@ class Player : public GameObject
 	unsigned int numberOfHurtFrames = 6;
 	unsigned int hurtStart = 260;
 
+	void handleFight();
 
 public:
 	Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, LTexture2D* tex, float mass, unsigned int begInd, unsigned int endInd);

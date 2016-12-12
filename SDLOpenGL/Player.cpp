@@ -28,11 +28,15 @@ void Player::update(float dt)
 
 	}
 
-	SDL_LogDebug(0, "%d", inSlashingAnim());
+	//SDL_LogDebug(0, "%d", inSlashingAnim());
 
 	if (inSlashingAnim() < -1)
 	{
 		Act(IDLE, currentDirection);
+	}
+	else if (inSlashingAnim() > -1)
+	{
+		handleFight();
 	}
 
 	if (currentState == MOVING || currentState == MOVING_SLASHING)
@@ -185,6 +189,18 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 		endingIndexFrame = startingIndexMatrix[s][direction] + numberOfFrames[s] - 1;		
 	
 	}
+}
+
+void Player::handleFight()
+{
+	GLfloat Lvertices[] = {
+		position.x, position.y,0.1,
+		position.x+0.5, position.y,1,
+		position.x+0.5, position.y+0.5,1,
+		position.x, position.y+0.5,1
+	};
+
+	SDL_LogDebug(0, "Fighting direction %d, %d, indexFrrame %d", int(currentDirection.x), int(currentDirection.y), curIndexFrame);
 }
 
 /*
