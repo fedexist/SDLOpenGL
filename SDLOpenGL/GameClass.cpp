@@ -281,7 +281,7 @@ void GameClass::handleKeyboardEvents()
 							 uDlRHit.x = RIGHT;
 						 }
 						 //SDL_LogDebug(0, "in the slashmove loop");
-						 player_->coolDown = 60;
+						 player_->coolDown = 40;
 						 player_->Act(MOVING_SLASHING, uDlR, uDlRHit);
 					 }
 					 else
@@ -312,7 +312,7 @@ void GameClass::handleKeyboardEvents()
 						 uDlR.x = RIGHT;
 					 }
 					 //player_->Slash(uDlR, true);
-					 player_->coolDown = 60;
+					 player_->coolDown = 40;
 					 player_->Act(SLASHING, uDlR);
 				 }
 				 if (!(isMoving || isSlashing))
