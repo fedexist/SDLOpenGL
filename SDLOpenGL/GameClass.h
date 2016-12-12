@@ -48,7 +48,7 @@ public:
 	void loadMedia();
 	void render();
 	void loadLevelLayout(std::string, unsigned int, unsigned int);
-	void handleMouseEvents(const SDL_Event& sdl_event);
+	void handleMouseEvents(const SDL_Event& e);
 	void handleEvents(SDL_Event& e);
 	void handleKeyboardEvents();
 	glm::vec2 positionToScreen(GameObject * obj);

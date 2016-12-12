@@ -6,16 +6,17 @@ Button::Button(){};
 
 Button::Button(glm::vec2 pos, glm::vec2 dim, LTexture2D* tex, GameState onClick)
 {
-	position = pos;
-	dimensions = dim;
+	positionRel = pos;
 	texture = tex;
 	onClickStateTransition = onClick;
+	dimensions = dim;
+	positionPx = glm::vec2(((1280 - 640) / 2) + pos.x*dim.x, ((720 - 640) / 2) + 640 - pos.y*dim.y); // (0,0) in alto a sx
 }
 
 bool Button::isInside(int x, int y)
 {
 	bool inside = true;
-	if (x < position.x || x > position.x + dimensions.x || y < position.y || y > position.y + dimensions.y)
+	if (x < positionPx.x || x > positionPx.x + dimensions.x || y > positionPx.y || y < positionPx.y - dimensions.y)
 	{
 		inside = false;
 	}
@@ -34,7 +35,7 @@ GameState Button::getOnClickTransition()
 
 void Button::render()
 {
-	texture->drawSprite(position.x, position.y, 1, curSprite);
+	texture->drawSprite(positionRel.x, positionRel.y, 0, curSprite);
 }
 
 Button::~Button() {}

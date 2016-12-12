@@ -19,12 +19,13 @@ public:
 	void setCurSprite(enum LButtonSprite sprite);
 	GameState getOnClickTransition();
 	void render();
-	
 
 private:
 	LTexture2D* texture;
 	enum LButtonSprite curSprite;
 	enum GameState onClickStateTransition;
-	glm::vec2 position;
+	glm::vec2 positionRel;
+	glm::vec2 positionPx;
 	glm::vec2 dimensions;
+	
 };
