@@ -52,7 +52,7 @@ bool AudioManager::LoadMusic(std::string path, std::string key)
 	return true;
 }
 
-void AudioManager::ManageMusic(musicActions action, std::string key)
+void AudioManager::ManageMusic(musicActions action, std::string key, Mix_Fading fading, int fadingValue)
 {
 	Mix_Music* requestedMusic = musicMap.get(key);
 
@@ -64,27 +64,32 @@ void AudioManager::ManageMusic(musicActions action, std::string key)
 
 	switch(action)
 	{
-	case PLAY: 
-		if (Mix_PausedMusic() || !Mix_PlayingMusic())
-		{
-			SDL_LogDebug(0, "Let's play some music");
-			Mix_PlayMusic(requestedMusic, -1);
-		}
-			
-		break;
-	case STOP: 
-		if (Mix_PausedMusic() || !Mix_PlayingMusic())
-			Mix_HaltMusic();
-		break;
-	case PAUSE: 
-		if (Mix_PlayingMusic())
-			Mix_PauseMusic();			
-		break;
-	case RESUME:
-		if (Mix_PausedMusic() || !Mix_PlayingMusic())
-			Mix_ResumeMusic();
-		break;
-	default: break;
+		case PLAY:
+				if (Mix_PausedMusic() || !Mix_PlayingMusic() && fading == MIX_FADING_IN)
+				{
+					SDL_LogDebug(0, "Let's play some faded music");
+					Mix_FadeInMusic(requestedMusic, -1, fadingValue);
+				} else if (Mix_PausedMusic() || !Mix_PlayingMusic() && fading != MIX_FADING_IN)
+				{
+					SDL_LogDebug(0, "Let's play some music");
+					Mix_PlayMusic(requestedMusic, -1);
+				}	
+			break;
+		case STOP: 
+			if (Mix_PausedMusic() || !Mix_PlayingMusic() && fading != MIX_FADING_OUT)
+				Mix_HaltMusic();
+			else if (Mix_PausedMusic() || !Mix_PlayingMusic() && fading == MIX_FADING_OUT)
+				Mix_FadeOutMusic(fadingValue);
+			break;
+		case PAUSE: 
+			if (Mix_PlayingMusic())
+				Mix_PauseMusic();			
+			break;
+		case RESUME:
+			if (Mix_PausedMusic() || !Mix_PlayingMusic())
+				Mix_ResumeMusic();
+			break;
+		default: break;
 	}
 }
 

@@ -72,10 +72,10 @@ void GameClass::loadMedia()
 
 	audio_manager->LoadMusic("./assets/music/journeys.mp3","MainTheme");
 	audio_manager->LoadSoundEffect("./assets/sfx/swish.wav", "SwordSwish");
-	audio_manager->setMusicVolume(0.5f);
+	audio_manager->setMusicVolume(0.75f);
 
 	//Test per il funzionamento
-	audio_manager->ManageMusic(PLAY, "MainTheme");
+	audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 1500);
 }
 
 void GameClass::render()
