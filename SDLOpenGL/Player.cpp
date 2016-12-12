@@ -28,7 +28,7 @@ void Player::update(float dt)
 
 	}
 
-	SDL_LogDebug(0, "%d", inSlashingAnim());
+	//SDL_LogDebug(0, "%d", inSlashingAnim());
 
 	if (inSlashingAnim() < -1)
 	{

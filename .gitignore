@@ -245,3 +245,4 @@ ModelManifest.xml
 .fake/
 *.vcxproj
 libs/
+SDLOpenGL/SDLOpenGL.vcxproj.filters
