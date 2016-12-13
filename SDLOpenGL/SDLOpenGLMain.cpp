@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameClass.h"
 
-GameClass game = GameClass();
+GameClass game = GameClass("Morte's Quest");
 
 int main(int argc, char* argv[])
 {

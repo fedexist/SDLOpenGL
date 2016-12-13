@@ -5,13 +5,11 @@
 #include "Fire.h"
 
 
-GameClass::GameClass()
+GameClass::GameClass(std::string title)
 {
-	GLfloat p1[] = { -0.0f, 1.0f, 0.0f };
-	GLfloat p2[] = { 1.0f, 1.0f, 0.0f };
-	GLfloat p3[] = { 1.0f, -1.0f, 0.0f };
-	GLfloat p4[] = { -1.0f, -1.0f, 0.0f };
-	plane = DrawingPlane(p1, p2, p3, p4);
+
+	windowTitle = title;
+	plane = DrawingPlane();
 	cachedLevelLayouts = std::vector< std::vector<GLuint*> >();
 	gameObjectArray = std::vector<GameObject*>();
 	allObjectsFactory = std::vector<GameObject*>();
@@ -19,6 +17,10 @@ GameClass::GameClass()
 	gameState = LAUNCHER;
 }
 
+
+GameClass::GameClass()
+{
+}
 
 GameClass::~GameClass()
 {
@@ -28,60 +30,63 @@ GameClass::~GameClass()
 
 void GameClass::update(float dt)
 {
-	setObjectWorldKnowledge(player_); //dovrebbe essere fatto per ogni actor
-	for (int i = 0; i < gameObjectArray.size(); i++)
+	if(gameState == GAME)
 	{
-		gameObjectArray.at(i)->areaSharing.clear();
-	}
-	for (int i = 0; i < gameObjectArray.size();i++)
-	{
-		float ll, rl, ul, dl;
-		ll = gameObjectArray.at(i)->position.x - gameObjectArray.at(i)->hitboxDimensions.x;
-		rl = gameObjectArray.at(i)->position.x + gameObjectArray.at(i)->hitboxDimensions.x;
-		dl = gameObjectArray.at(i)->position.y;// - gameObjectArray.at(i)->hitboxDimensions.y;
-		ul = gameObjectArray.at(i)->position.y + gameObjectArray.at(i)->hitboxDimensions.y;
-		for (int j = i + 1; j < gameObjectArray.size(); j++)
+		setObjectWorldKnowledge(player_); //dovrebbe essere fatto per ogni actor
+		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
-			float llj, rlj, ulj, dlj;
-			llj = gameObjectArray.at(j)->position.x - gameObjectArray.at(j)->hitboxDimensions.x;
-			rlj = gameObjectArray.at(j)->position.x + gameObjectArray.at(j)->hitboxDimensions.x;
-			ulj = gameObjectArray.at(j)->position.y;// - gameObjectArray.at(j)->hitboxDimensions.y;
-			dlj = gameObjectArray.at(j)->position.y + gameObjectArray.at(j)->hitboxDimensions.y;
-			bool XAligned = (rl <= rlj && rl >= llj) || (ll <= rlj && ll >= llj);
-			bool YAligned = (dl <= dlj && dl >= ulj) || (ul <= dlj && ul >= ulj);
-			/*if (XAligned )
+			gameObjectArray.at(i)->areaSharing.clear();
+		}
+		for (int i = 0; i < gameObjectArray.size();i++)
+		{
+			float ll, rl, ul, dl;
+			ll = gameObjectArray.at(i)->position.x - gameObjectArray.at(i)->hitboxDimensions.x;
+			rl = gameObjectArray.at(i)->position.x + gameObjectArray.at(i)->hitboxDimensions.x;
+			dl = gameObjectArray.at(i)->position.y;// - gameObjectArray.at(i)->hitboxDimensions.y;
+			ul = gameObjectArray.at(i)->position.y + gameObjectArray.at(i)->hitboxDimensions.y;
+			for (int j = i + 1; j < gameObjectArray.size(); j++)
 			{
-				SDL_LogDebug(0,"XAligned");
-			}
-			if (YAligned)
-			{
-				SDL_LogDebug(0, "YAligned");
-			}*/
+				float llj, rlj, ulj, dlj;
+				llj = gameObjectArray.at(j)->position.x - gameObjectArray.at(j)->hitboxDimensions.x;
+				rlj = gameObjectArray.at(j)->position.x + gameObjectArray.at(j)->hitboxDimensions.x;
+				ulj = gameObjectArray.at(j)->position.y;// - gameObjectArray.at(j)->hitboxDimensions.y;
+				dlj = gameObjectArray.at(j)->position.y + gameObjectArray.at(j)->hitboxDimensions.y;
+				bool XAligned = (rl <= rlj && rl >= llj) || (ll <= rlj && ll >= llj);
+				bool YAligned = (dl <= dlj && dl >= ulj) || (ul <= dlj && ul >= ulj);
+				/*if (XAligned )
+				{
+					SDL_LogDebug(0,"XAligned");
+				}
+				if (YAligned)
+				{
+					SDL_LogDebug(0, "YAligned");
+				}*/
 
-			if (XAligned && YAligned)
-			{
-				gameObjectArray.at(i)->areaSharing.push_back(gameObjectArray.at(j));
+				if (XAligned && YAligned)
+				{
+					gameObjectArray.at(i)->areaSharing.push_back(gameObjectArray.at(j));
 
-				gameObjectArray.at(j)->areaSharing.push_back(gameObjectArray.at(i));
+					gameObjectArray.at(j)->areaSharing.push_back(gameObjectArray.at(i));
+				}
 			}
+			Fire* fireThis = dynamic_cast<Fire*>(gameObjectArray.at(i));
+			Player* playerThis = dynamic_cast<Player*>(gameObjectArray.at(i));
+			if (fireThis)
+			{
+				fireThis->update(dt);
+			}
+			if (playerThis)
+			{
+				playerThis->update(dt);
+			}
+			//gameObjectArray.at(i)->update(dt);
 		}
-		Fire* fireThis = dynamic_cast<Fire*>(gameObjectArray.at(i));
-		Player* playerThis = dynamic_cast<Player*>(gameObjectArray.at(i));
-		if (fireThis)
-		{
-			fireThis->update(dt);
-		}
-		if (playerThis)
-		{
-			playerThis->update(dt);
-		}
-		//gameObjectArray.at(i)->update(dt);
+		//player_->update(dt);
+		//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
 	}
-	//player_->update(dt);
+
 	camera->update(dt);
-	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
-	
-	//SDL_Delay(1);
+
 }
 
 
@@ -95,8 +100,8 @@ void GameClass::loadMedia()
 	loadLevelLayout("room1", 10, 10);
 
 	//Caricamento textures
-	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,10));
-	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 5));
+	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,60));
+	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 60));
 
 	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28));
@@ -113,12 +118,12 @@ void GameClass::loadMedia()
 
 				if (fireThis)
 				{
-					gameObjectArray.push_back (new Fire(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, (Fire*)allObjectsFactory.at(objectIndex)));
+					gameObjectArray.push_back (new Fire(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Fire*>(allObjectsFactory.at(objectIndex))));
 				}
 
 				if (playerThis)
 				{
-					gameObjectArray.push_back(new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, (Player*)allObjectsFactory.at(objectIndex)));
+					gameObjectArray.push_back(new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Player*>(allObjectsFactory.at(objectIndex))));
 				}
 
 			}
@@ -280,7 +285,7 @@ void GameClass::handleEvents(SDL_Event& e)
 
 void GameClass::handleMouseEvents(const SDL_Event& e)
 {
-	if (e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
+	if ((e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) && gameState == LAUNCHER)
 	{
 		int x, y;
 		SDL_GetMouseState(&x, &y);

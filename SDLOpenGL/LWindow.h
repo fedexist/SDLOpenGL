@@ -10,7 +10,7 @@ class LWindow
 		LWindow(Core* core, int w, int h);
 
 		 //Creates window bool 
-		bool init(); 
+		bool init(std::string title); 
 		//Creates renderer from internal window 
 		SDL_Renderer* createRenderer() const; 
 		//Handles window events 

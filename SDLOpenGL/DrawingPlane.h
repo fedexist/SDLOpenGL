@@ -9,7 +9,6 @@ class DrawingPlane
 	
 public:
 	DrawingPlane();
-	DrawingPlane(GLfloat[3], GLfloat[3], GLfloat[3], GLfloat[3]);
 	void loadMedia();	
 	~DrawingPlane();
 	void render(std::vector<GLuint*>*, unsigned int, unsigned int);

@@ -18,6 +18,7 @@ typedef enum GameState
 class GameClass
 {
 	friend class Core;
+	std::string windowTitle;
 	std::vector<GameObject*> gameObjectArray;
 	std::vector<GameObject*> allObjectsFactory;
 	Player* player_ = nullptr;
@@ -43,6 +44,7 @@ class GameClass
 
 public:
 	GameClass();
+	GameClass(std::string title);
 	~GameClass();
 	void update(float);
 	void loadMedia();

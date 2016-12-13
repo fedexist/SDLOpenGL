@@ -24,10 +24,10 @@ LWindow::LWindow(Core* core, int width, int height)
 	coreInstance = core;
 }
 
-bool LWindow::init()
+bool LWindow::init(std::string title)
 {
 	//Create window
-	mWindow = SDL_CreateWindow( "Window Title", 
+	mWindow = SDL_CreateWindow( title.c_str(), 
 								SDL_WINDOWPOS_UNDEFINED, 
 								SDL_WINDOWPOS_UNDEFINED, 
 								mWidth, 
