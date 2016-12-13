@@ -4,7 +4,7 @@
 
 Core::Core()
 {
-	dt = 0.0f;
+	//dt = 0.0f;
 }
 
 /* It's actually not needed
@@ -32,10 +32,9 @@ Core::Core(int w, int h, GameClass* game)
 	window_ = LWindow(this, w, h);
 	event_handler_ = EventHandler(this);
 	audio_manager_ = AudioManager();
-	dt = 0.0f;
+	//dt = 0.0f;
 	startTime = 0.0f;
 	Game = game;
-	//camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 }
 
 
@@ -90,7 +89,7 @@ bool Core::init()
 		}
 
 		//Create window
-		if( !window_.init() )
+		if( !window_.init(Game->windowTitle) )
 		{
 			SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"Window could not be created! SDL Error: %s\n", SDL_GetError() );
 			success = false;
@@ -182,12 +181,13 @@ void Core::renderPresent()
 
 void Core::handleEvents()
 {
-	startTime = SDL_GetTicks();
+	
 	event_handler_.processEvents(Game);
-
+	startTime = SDL_GetTicks();
+	frameTime = startTime - lastTimeStamp;
 }
 
-void Core::update() const
+void Core::update()
 {
 	/*if (Internalupdate == nullptr)
 	{
@@ -197,7 +197,15 @@ void Core::update() const
 		
 	Internalupdate(dt);*/
 	//CHANGEEEEE
-	Game->update(1);
+	while(frameTime > updateTime )
+	{
+		double startUpdate = SDL_GetTicks();
+		Game->update(1);
+		updateTime = SDL_GetTicks() - startUpdate;
+		frameTime -= updateTime;
+
+	}
+		
 }
 
 void Core::render()
@@ -205,8 +213,10 @@ void Core::render()
 
 		//Free Camera Movement
 	//FreeCameraMovement();
+	lastTimeStamp = SDL_GetTicks() - frameTime;
+
 	gl_handler_.gl_renderer_.Render(Game);
-	dt = SDL_GetTicks() - startTime;
+
 
 	SDL_GL_SwapWindow( window_.getSDLWindow());
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Delta time is: %f", dt);

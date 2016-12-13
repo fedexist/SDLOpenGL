@@ -115,7 +115,7 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 
 		currentState = s;
 		currentDirection = d;
-		tex->framePeriod = 10;
+		tex->framePeriod = 40;
 		
 
 		if (inSlashingAnim()>-1)
@@ -143,7 +143,7 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 		}
 		currentState = s;
 		currentDirection = d;
-		tex->framePeriod = 6;
+		tex->framePeriod = 60;
 
 		if (inSlashingAnim()>-1)
 			return;
@@ -181,7 +181,7 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 		}
 
 		currentState = s;
-		tex->framePeriod = 10;
+		tex->framePeriod = 60;
 		currentDirection = d;
 
 		if (inSlashingAnim()>-1)

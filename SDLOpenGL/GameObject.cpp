@@ -117,7 +117,7 @@ void GameObject::handleMovement(float dt, glm::vec2 forceInput)
 	//Fa è la forza di attrito
 	//mu è la costante di attrito
 	//Fas è la forza di attrito statico
-	v = 1; //velocità sensata, 0 = fermo, 0.5 = camminata lenta 1 = camminata, 2 = corsa
+	v = 0.5; //velocità sensata, 0 = fermo, 0.5 = camminata lenta 1 = camminata, 2 = corsa
 	alpha = (100.06f + (2*v * 0.01f)) * (1/pxlToMeter) * (1/mPToKg); //Mp * pxl/s^2
 	mu = 0.5;	//unitario real world number
 	Fa = mu * (9.81 / pxlToMeter) * mass; //Mp * pxl/s^2

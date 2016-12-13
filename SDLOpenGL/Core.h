@@ -20,7 +20,7 @@ class Core
 		bool init();
 		void renderPresent();
 		void handleEvents();
-		void update() const;
+		void update();
 		void render();
 		LWindow* getWindow();
 		void updateProjection(GLfloat resize_w, GLfloat resize_h) const;
@@ -35,9 +35,11 @@ private:
 		SDL_Renderer* mRenderer;
 		GLHandler gl_handler_;
 		EventHandler event_handler_;
-		double dt, startTime;
 		GameClass* Game;
 		Camera2D* camera;
 		AudioManager audio_manager_;
+		
+		//const double dt = 10.0f;
+		double startTime, frameTime, updateTime, lastTimeStamp;
 };
 
