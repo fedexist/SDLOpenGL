@@ -338,7 +338,10 @@ void GameClass::handleKeyboardEvents()
 				 }
 				 else if (currentKeyStates[SDL_SCANCODE_RETURN])
 				 {
-					 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+					 if (launcher->selectedButton!=-1)
+					 {
+						 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+					 }
 				 }
 				 break;}
 	case GAME:

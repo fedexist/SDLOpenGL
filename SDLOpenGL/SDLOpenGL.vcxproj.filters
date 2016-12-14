@@ -75,13 +75,16 @@
     <ClInclude Include="Launcher.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="HashTable.h">
+    <ClInclude Include="Fire.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="Fire.h">
+    <ClInclude Include="HashTable.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
@@ -141,6 +144,9 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Launcher.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
