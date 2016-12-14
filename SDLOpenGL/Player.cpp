@@ -27,7 +27,11 @@ Player::~Player()
 
 void Player::getHit(float hitNumber, GameObject* hitter)
 {
+	
 	lifepoints -= hitNumber;
+	if (lifepoints < 0)
+		lifepoints = 0;
+
 	std::string msg;
 	if (this->isPlayer)
 		msg = "Player lost %f life thanks to";
@@ -39,8 +43,8 @@ void Player::getHit(float hitNumber, GameObject* hitter)
 	else 
 		msg += " the fire";
 
-
-	SDL_LogDebug(0,msg.c_str(), hitNumber);
+	myHealthBar->healthToLevel(lifepoints);
+	//SDL_LogDebug(0,msg.c_str(), hitNumber);
 }
 
 void Player::update(float dt)
@@ -91,6 +95,10 @@ void Player::update(float dt)
 
 	//movement
 	handleMovement(dt, forceInput);
+
+	myHealthBar->position.x = position.x;
+
+	myHealthBar->position.y = position.y+0.8;
 
 }
 

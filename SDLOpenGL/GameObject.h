@@ -25,6 +25,7 @@ public:
 	void render();
 	virtual void update(float dt);
 	bool isPlayer = false;
+	GameObject* attachedTo = NULL;
 
 	class GameObjectComparer
 	{
@@ -32,7 +33,17 @@ public:
 	public:
 		GameObjectComparer(){};
 		bool operator() (GameObject *i, GameObject *j) {
-			return (i->position.y > j->position.y);
+			float ivalue, jvalue;
+			if (i->attachedTo == NULL)
+				ivalue = i->position.y;
+			else
+				ivalue = i->attachedTo->position.y;
+
+			if (j->attachedTo == NULL)
+				jvalue = j->position.y;
+			else
+				jvalue = j->attachedTo->position.y;
+			return (ivalue > jvalue);
 		}
 	} gameObjectComparer;
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "HealthBar.h"
 
 typedef enum { MOVING, SLASHING, IDLE, HURT, MOVING_SLASHING } State;
 typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
@@ -69,6 +70,8 @@ public:
 	bool isIdle(glm::vec2 d) const { return currentState == IDLE && currentDirection == d; }
 
 	void Act(State s, glm::vec2 d, glm::vec2 d2 = glm::vec2(0,0));
+
+	HealthBar* myHealthBar;
 
 	int inSlashingAnim(){ 
 		GLuint upCurIndexFrame = startingIndexMatrix[SLASHING][UP];

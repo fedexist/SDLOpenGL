@@ -202,6 +202,10 @@ void Core::update()
 		double startUpdate = SDL_GetTicks();
 		Game->update(1);
 		updateTime = SDL_GetTicks() - startUpdate;
+		if (updateTime < 1)
+		{
+			updateTime = 1.0f;
+		}
 		frameTime -= updateTime;
 
 	}

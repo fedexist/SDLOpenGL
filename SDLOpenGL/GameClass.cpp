@@ -71,6 +71,7 @@ void GameClass::update(float dt)
 			}
 			Fire* fireThis = dynamic_cast<Fire*>(gameObjectArray.at(i));
 			Player* playerThis = dynamic_cast<Player*>(gameObjectArray.at(i));
+			//HealthBar* healthThis = dynamic_cast<HealthBar*>(gameObjectArray.at(i));
 			if (fireThis)
 			{
 				fireThis->update(dt);
@@ -79,6 +80,7 @@ void GameClass::update(float dt)
 			{
 				playerThis->update(dt);
 			}
+			
 			//gameObjectArray.at(i)->update(dt);
 		}
 		//player_->update(dt);
@@ -102,10 +104,12 @@ void GameClass::loadMedia()
 	//Caricamento textures
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,60));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 60));
+	allTextures.push_back(LTexture2D("./assets/life.png", 64, 64,60));
 
 	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28));
-	
+	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 4));
+
 	for (int j = 0; j < levelLayoutH; j++)
 	{
 		for (int i = 0; i < levelLayoutW; i++)
@@ -123,7 +127,11 @@ void GameClass::loadMedia()
 
 				if (playerThis)
 				{
-					gameObjectArray.push_back(new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Player*>(allObjectsFactory.at(objectIndex))));
+					Player* creatingPlayer = new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Player*>(allObjectsFactory.at(objectIndex)));
+					creatingPlayer->myHealthBar = new HealthBar(glm::vec2(i, (levelLayoutH - j - 1)+1), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
+					creatingPlayer->myHealthBar->attachedTo = creatingPlayer;
+					gameObjectArray.push_back(creatingPlayer);
+					gameObjectArray.push_back(creatingPlayer->myHealthBar);
 				}
 
 			}
@@ -133,7 +141,11 @@ void GameClass::loadMedia()
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
 	player_->isPlayer = true;
+	HealthBar* playerHealthBar = new HealthBar(glm::vec2(4.5, 5.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
+	playerHealthBar->attachedTo =player_;
+	player_->myHealthBar = playerHealthBar;
 	gameObjectArray.push_back(player_); 
+	gameObjectArray.push_back(player_->myHealthBar);
 
 	audio_manager->LoadMusic("./assets/music/journeys.mp3","MainTheme");
 	audio_manager->LoadMusic("./assets/music/castlejam.mp3", "LauncherTheme");
@@ -340,7 +352,11 @@ void GameClass::handleKeyboardEvents()
 				 {
 					 if (launcher->selectedButton!=-1)
 					 {
+						 audio_manager->playSoundEffect("ButtonSelected");
+
+						 audio_manager->ManageMusic(STOP, "LauncherTheme");
 						 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+						 audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
 					 }
 				 }
 				 break;}
