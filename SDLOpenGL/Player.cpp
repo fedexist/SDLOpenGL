@@ -30,7 +30,11 @@ void Player::getHit(float hitNumber, GameObject* hitter)
 	
 	lifepoints -= hitNumber;
 	if (lifepoints < 0)
+	{
 		lifepoints = 0;
+		Act(HURT, glm::vec2(0, 0));
+	}
+		
 
 	std::string msg;
 	if (this->isPlayer)
@@ -50,9 +54,14 @@ void Player::getHit(float hitNumber, GameObject* hitter)
 void Player::update(float dt)
 {
 
-
-
-	handleAnims(dt);
+	//Gestisco l'animazione normale, cioè periodica
+	if (currentState != HURT || (curIndexFrame != hurtStart + numberOfHurtFrames - 2 && currentState == HURT && framePeriodIndex == 1))
+		handleAnims(dt);
+	else // se sono al penultimo frame dell'animazione di morte e alla fine del suo periodo, passo direttamente al frame finale (altrimenti, l'animazione comincerebbe da capo)
+	{		
+		curIndexFrame = hurtStart + numberOfHurtFrames - 1;
+	}
+		
 
 	glm::vec2 forceInput = glm::vec2(0.0f,0.0f);
 	if (coolDown > 0)
@@ -85,10 +94,6 @@ void Player::update(float dt)
 			forceInput.y = 1.0f;
 
 		//currentState = MOVING;
-	}
-	else
-	{
-		//currentState = IDLE;
 	}
 	
 	//SDL_LogDebug(0, "%f %f", forceInput.x, forceInput.y);
@@ -197,6 +202,14 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 
 		curIndexFrame = startingIndexFrame = startingIndexMatrix[s][directionHit];
 		endingIndexFrame = startingIndexMatrix[s][directionHit] + numberOfFrames[s] - 1;		
+
+	} else if(s == HURT && currentState != HURT)
+	{
+
+		int direction = 0;
+		currentState = s;
+		curIndexFrame = startingIndexFrame = startingIndexMatrix[s][direction];
+		endingIndexFrame = startingIndexMatrix[s][direction] + numberOfFrames[s] - 1;
 
 	} else if(s==IDLE)
 	{

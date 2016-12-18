@@ -98,7 +98,7 @@ bool GameObject::isWalkable(glm::vec2 candidateTranslation)
 
 void GameObject::handleAnims(float dt)
 {
-	if ((--framePeriodIndex) == 0)
+	if (--framePeriodIndex == 0)
 	{
 		framePeriodIndex = tex->framePeriod;
 		curIndexFrame -= startingIndexFrame;
