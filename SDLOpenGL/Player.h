@@ -7,6 +7,7 @@ typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
 
 class Player : public GameObject
 {
+	friend class AI;
 	float lifepoints;
 	float damage;
 	State currentState = IDLE;
