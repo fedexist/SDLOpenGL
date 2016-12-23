@@ -21,6 +21,7 @@ class GameClass
 	std::string windowTitle;
 	std::vector<GameObject*> gameObjectArray;
 	std::vector<GameObject*> allObjectsFactory;
+	std::vector<AI*> allAisArray;
 	Player* player_ = nullptr;
 	Launcher* launcher;
 	DrawingPlane plane;
@@ -59,5 +60,7 @@ public:
 	void setCamera2D(Camera2D* camera);
 	void setGameState(GameState gs);
 	void setAudioManager(AudioManager* audio_manager);
+
+	float distance(GameObject* obj1, GameObject* obj2) const;
 };
 

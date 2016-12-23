@@ -3,6 +3,7 @@
 #include <fstream>
 #include "Player.h"
 #include "Fire.h"
+#include "AI.h"
 
 
 GameClass::GameClass(std::string title)
@@ -13,6 +14,7 @@ GameClass::GameClass(std::string title)
 	cachedLevelLayouts = std::vector< std::vector<GLuint*> >();
 	gameObjectArray = std::vector<GameObject*>();
 	allObjectsFactory = std::vector<GameObject*>();
+	allAisArray = std::vector<AI*>();
 	allTextures = std::vector<LTexture2D>();
 	gameState = LAUNCHER;
 }
@@ -33,6 +35,10 @@ void GameClass::update(float dt)
 	if(gameState == GAME)
 	{
 		setObjectWorldKnowledge(player_); //dovrebbe essere fatto per ogni actor
+		for (int i = 0; i < allAisArray.size(); i++)
+		{
+			allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt);
+		}
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
 			gameObjectArray.at(i)->areaSharing.clear();
@@ -110,6 +116,10 @@ void GameClass::loadMedia()
 	allObjectsFactory.push_back(new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28));
 	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 4));
 
+	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+
+	player_->isPlayer = true;
+
 	for (int j = 0; j < levelLayoutH; j++)
 	{
 		for (int i = 0; i < levelLayoutW; i++)
@@ -132,15 +142,14 @@ void GameClass::loadMedia()
 					creatingPlayer->myHealthBar->attachedTo = creatingPlayer;
 					gameObjectArray.push_back(creatingPlayer);
 					gameObjectArray.push_back(creatingPlayer->myHealthBar);
+					 
+					allAisArray.push_back(new AI(creatingPlayer, player_));
 				}
 
 			}
 		}
 	}
 	
-	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
-
-	player_->isPlayer = true;
 	HealthBar* playerHealthBar = new HealthBar(glm::vec2(4.5, 5.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
 	playerHealthBar->attachedTo =player_;
 	player_->myHealthBar = playerHealthBar;
@@ -503,4 +512,15 @@ void GameClass::setGameState(GameState gs)
 void GameClass::setAudioManager(AudioManager* audio_manager)
 {
 	this->audio_manager = audio_manager;
+}
+
+
+float GameClass::distance(GameObject* obj1, GameObject* obj2) const
+{
+
+	glm::vec2 position1 = obj1->spriteCenter();
+	glm::vec2 position2 = obj2->spriteCenter();
+
+	return glm::distance2(position1, position2);
+
 }
