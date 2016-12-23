@@ -78,7 +78,8 @@ void Player::update(float dt)
 	}
 	else if (inSlashingAnim() > -1)
 	{
-		handleFight();
+		if (inDamagingAnim())
+			handleFight();
 	}
 
 	if (currentState == MOVING || currentState == MOVING_SLASHING)
@@ -249,7 +250,7 @@ void Player::handleFight()
 		areaSharing.at(i)->getHit(10, this);
 	}
 
-	SDL_LogDebug(0, "Fighting direction %d, %d, indexFrrame %d", int(currentDirection.x), int(currentDirection.y), curIndexFrame);
+	//SDL_LogDebug(0, "Fighting direction %d, %d, indexFrrame %d", int(currentDirection.x), int(currentDirection.y), curIndexFrame);
 }
 
 /*

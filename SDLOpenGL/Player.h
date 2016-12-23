@@ -105,8 +105,31 @@ public:
 		return -1;
 	};
 
-	void Move(glm::vec2 d);
-	void Slash(glm::vec2 d, bool isMoving);
-	void Idle();
+	bool inDamagingAnim(){
+		GLuint upCurIndexFrame = startingIndexMatrix[SLASHING][UP];
+		GLuint upEndingIndexFrame = startingIndexMatrix[SLASHING][UP] + numberOfFrames[SLASHING] - 1;
+
+		GLuint dnCurIndexFrame = startingIndexMatrix[SLASHING][DOWN];
+		GLuint dnEndingIndexFrame = startingIndexMatrix[SLASHING][DOWN] + numberOfFrames[SLASHING] - 1;
+
+		GLuint lxCurIndexFrame = startingIndexMatrix[SLASHING][LEFT];
+		GLuint lxEndingIndexFrame = startingIndexMatrix[SLASHING][LEFT] + numberOfFrames[SLASHING] - 1;
+
+		GLuint rxCurIndexFrame = startingIndexMatrix[SLASHING][RIGHT];
+		GLuint rxEndingIndexFrame = startingIndexMatrix[SLASHING][RIGHT] + numberOfFrames[SLASHING] - 1;
+
+		if (curIndexFrame >= upCurIndexFrame && curIndexFrame < upEndingIndexFrame - 3)
+			return true;
+		if (curIndexFrame >= dnCurIndexFrame && curIndexFrame < dnEndingIndexFrame - 3)
+			return true;
+		if (curIndexFrame >= lxCurIndexFrame && curIndexFrame < lxEndingIndexFrame - 3)
+			return true;
+		if (curIndexFrame >= rxCurIndexFrame && curIndexFrame < rxEndingIndexFrame - 3)
+			return true;
+
+		return false;
+
+	};
+
 };
 

@@ -17,7 +17,7 @@ GameObject(pos, mom, dim, vis, canInt, other->tex, mass, other->startingIndexFra
 void HealthBar::healthToLevel(float life)
 {
 	level = 8 - floor(8 * (1000 - life) / 1000); //Full life: 8 - (ceil(8*0/1000)) = 8 / half life : 8 - (ceil(8*500/1000)) = 4 / no life: 8 - (ceil(8*1000/1000)) = 0
-	SDL_LogDebug(0, "health level %d, life%f", level, life);
+	//SDL_LogDebug(0, "health level %d, life%f", level, life);
 	curIndexFrame = startingIndexFrame = 8-level;
 	endingIndexFrame = startingIndexFrame+1;
 

@@ -196,7 +196,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 	}
 		
 
-	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Initialised currentlevellayout");
+	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Initialised currentlevellayout");
 
 
 
