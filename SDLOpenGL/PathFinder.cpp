@@ -1,10 +1,14 @@
 #include "stdafx.h"
 #include "PathFinder.h"
 
-std::vector<GLint*> PathFinder::map = vector<GLint*>();
+std::vector<GLint*> PathFinder::map = std::vector<GLint*>();
 
 PathFinder::PathFinder()
 {
+    //Fuoco = 0
+    objectToCost.put(0,3);
+	//Spawner = 1
+	objectToCost.put(1,1);
 }
 
 
@@ -122,6 +126,8 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 
 				NodeDirection node_direction = NodeDirection(glm::vec2(node->x, node->y), direction );
 				
+				SDL_LogDebug(0,"%d %d",direction.x,direction.y);
+
 				solution.push_back(node_direction);
 
 				#if DISPLAY_SOLUTION
@@ -155,8 +161,52 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 	return {};
 }
 
-void PathFinder::updateWorld()
+void PathFinder::updateWorld(std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W)
 {
+
+	if (map.empty())
+	{
+		for (int i = 0; i < H; ++i)
+		{
+			PathFinder::map.push_back(new GLint[W]);
+		}
+		
+	}
+
+	//map.clear();
+	map = logicLevelMap;
+	for (int i = 0; i < H; i++)
+	{
+		for (int j = 0; j < W; j++)
+		{
+			//map[i][j] = logicLevelMap[i][j];
+			if (logicLevelMap[i][j] > -1)
+			{
+				map[i][j] = 1;
+				if (objectLevelMap[i][j]>-1)
+				{
+					map[i][j] = objectToCost.get(objectLevelMap[i][j]);
+				}
+			}
+			else
+			{
+				map[i][j] = -1; 
+			}
+		}
+	}
+
+
+	string s = "";
+	for (int i = 0; i < H; i++)
+	{
+		for (int j = 0; j < W; j++)
+		{
+			s += " " + std::to_string(map[i][j]);
+		}
+		s += "\n";
+	}
+	//SDL_LogDebug(1, s.c_str());
+  
 }
 
 bool PathFinder::MapSearchNode::IsSameState( MapSearchNode &rhs )

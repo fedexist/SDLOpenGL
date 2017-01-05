@@ -2,9 +2,10 @@
 #include "astar-algorithm/stlastar.h"
 #include "stdafx.h"
 
-#define DEBUG_LISTS false;
-#define DEBUG_LIST_LENGTHS_ONLY false;
-#define DISPLAY_SOLUTION true;
+
+#define DEBUG_LISTS 0;
+#define DEBUG_LIST_LENGTHS_ONLY 0;
+#define DISPLAY_SOLUTION 1;
 
 typedef std::pair<glm::vec2, glm::vec2 > NodeDirection;
 
@@ -36,7 +37,8 @@ public:
 	unsigned int width, height;
 	static std::vector<GLint*> map;
 	std::vector< NodeDirection > findPath(glm::vec2 start, glm::vec2 goal);
-	void updateWorld();
+	void updateWorld(std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W);
+	Hashtable<unsigned int, unsigned int> objectToCost;
 	static int GetMap(int x, int y);
 };
 

@@ -37,7 +37,7 @@ void GameClass::update(float dt)
 		setObjectWorldKnowledge(player_); //dovrebbe essere fatto per ogni actor
 		for (int i = 0; i < allAisArray.size(); i++)
 		{
-			allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt);
+			allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt, currentLevelLayout_l, currentLevelLayout_o, levelLayoutH,levelLayoutW);
 		}
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{

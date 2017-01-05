@@ -10,23 +10,23 @@ AI::AI(Player* myCharacter, Player* enemy)
 	curState = idle;
 }
 
-void AI::update(float distance, float dt)
+void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W)
 {
 	changeState(distance);
 	//dothings
-	pathfinder_.updateWorld();
+	pathfinder_.updateWorld(logicLevelMap, objectLevelMap, H,W);
 	switch (curState)
 	{
 		
 		case seek:
 		{
-			if (reaction < 10)
+			if (reaction_counter < reaction)
 			{
-				reaction++;
+				reaction_counter++;
 			}
 			else
 			{
-				reaction = 0;
+				reaction_counter = 0;
 				//A*;
 				currentPath.clear();
 				currentPath = pathfinder_.findPath(myCharacter->currentCell(), enemy->currentCell()); //calcolo del nuovo percorso
@@ -38,6 +38,7 @@ void AI::update(float distance, float dt)
 				nextNode = *(++pathIterator);
 				
 			}
+			
 			myCharacter->Act(MOVING, nextNode.second);			
 			break;		
 		}
