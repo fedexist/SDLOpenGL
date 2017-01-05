@@ -15,7 +15,7 @@ bool AudioManager::init()
 {
 
 	int flags = MIX_INIT_MP3;
-	if(Mix_Init(flags) & flags != flags) 
+	if((Mix_Init(flags) & flags) != flags) 
 	{
 		SDL_LogDebug(SDL_LOG_CATEGORY_AUDIO, "Mix_Init: Failed to init required ogg and mp3 support!\n");
 		SDL_LogDebug(SDL_LOG_CATEGORY_AUDIO, "Mix_Init: %s\n", Mix_GetError());

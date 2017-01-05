@@ -14,8 +14,10 @@ void AI::update(float distance, float dt)
 {
 	changeState(distance);
 	//dothings
+	pathfinder_.updateWorld();
 	switch (curState)
 	{
+		
 		case seek:
 		{
 			if (reaction < 10)
@@ -26,21 +28,28 @@ void AI::update(float distance, float dt)
 			{
 				reaction = 0;
 				//A*;
+				currentPath.clear();
+				currentPath = pathfinder_.findPath(myCharacter->currentCell(), enemy->currentCell()); //calcolo del nuovo percorso
+				pathIterator = currentPath.begin(); //nuovo iteratore impostato
+				nextNode = *pathIterator; //primo nodo obiettivo
+			}  
+			if(myCharacter->currentCell() == nextNode.first)
+			{
+				nextNode = *(++pathIterator);
+				
 			}
-			//myCharacter->Act(move,nextnode);
-			break;
+			myCharacter->Act(MOVING, nextNode.second);			
+			break;		
 		}
 		case destroy:
 		{
 			myCharacter->Act(SLASHING,glm::vec2(0,1));
 			break;
 		}
-		default:
-		{
-			break;
-		}
+		default: break;
 	}
 	//SDL_LogDebug(0,"%d", curState);
+	myCharacter->update(dt);
 }
 
 bool AI::changeState(float distance)

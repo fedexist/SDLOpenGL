@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="File di intestazione\A%2a-alg">
+      <UniqueIdentifier>{1bf7e6dd-81c5-4e11-8ff7-5a6fc4cc66d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -78,6 +81,9 @@
     <ClInclude Include="AudioManager.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="HashTable.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
     <ClInclude Include="Fire.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
@@ -85,6 +91,15 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="AI.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="astar-algorithm\fsa.h">
+      <Filter>File di intestazione\A%2a-alg</Filter>
+    </ClInclude>
+    <ClInclude Include="astar-algorithm\stlastar.h">
+      <Filter>File di intestazione\A%2a-alg</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinder.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
@@ -156,6 +171,9 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="AI.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>

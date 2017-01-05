@@ -53,7 +53,6 @@ void Player::getHit(float hitNumber, GameObject* hitter)
 
 void Player::update(float dt)
 {
-
 	//Gestisco l'animazione normale, cioè periodica
 	if (currentState != HURT || (curIndexFrame != hurtStart + numberOfHurtFrames - 2 && currentState == HURT && framePeriodIndex == 1))
 		handleAnims(dt);
@@ -96,6 +95,10 @@ void Player::update(float dt)
 
 		//currentState = MOVING;
 	}
+
+	if (lifepoints < 0.1)
+		currentState = HURT;
+
 	
 	//SDL_LogDebug(0, "%f %f", forceInput.x, forceInput.y);
 
@@ -104,7 +107,7 @@ void Player::update(float dt)
 
 	myHealthBar->position.x = position.x;
 
-	myHealthBar->position.y = position.y+0.8;
+	myHealthBar->position.y = position.y + 0.8;
 
 }
 
