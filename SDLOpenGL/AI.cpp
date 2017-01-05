@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "AI.h"
 
-
+PathFinder AI::pathfinder_ = PathFinder();
 
 AI::AI(Player* myCharacter, Player* enemy)
 {

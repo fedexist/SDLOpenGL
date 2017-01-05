@@ -1,6 +1,6 @@
 #pragma once
-#include <stlastar.h>
-#include <fsa.h>
+#include "astar-algorithm/stlastar.h"
+#include "stdafx.h"
 
 #define DEBUG_LISTS false;
 #define DEBUG_LIST_LENGTHS_ONLY false;
@@ -15,16 +15,16 @@ class PathFinder
 	class MapSearchNode
 	{
 		public:
-			static int x;	 // the (x,y) positions of the node
-			static int y;	
+			int x;	 // the (x,y) positions of the node
+			int y;	
 	
 			MapSearchNode() { x = y = 0; }
 			MapSearchNode( int px, int py ) { x=px; y=py; }
 
-			static float GoalDistanceEstimate( MapSearchNode &nodeGoal );
-			static bool IsGoal( MapSearchNode &nodeGoal );
-			static bool GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapSearchNode *parent_node );
-			static float GetCost( MapSearchNode &successor );
+			float GoalDistanceEstimate( MapSearchNode &nodeGoal );
+			bool IsGoal( MapSearchNode &nodeGoal );
+			bool GetSuccessors( AStarSearch<MapSearchNode> *astarsearch, MapSearchNode *parent_node );
+			float GetCost( MapSearchNode &successor );
 			bool IsSameState( MapSearchNode &rhs );
 
 			void PrintNodeInfo() const; 
@@ -34,8 +34,9 @@ public:
 	PathFinder();
 	~PathFinder();
 	unsigned int width, height;
-	std::vector<GLint*> map;
-	static std::vector< NodeDirection > findPath(glm::vec2 start, glm::vec2 goal);
-	static void updateWorld();
+	static std::vector<GLint*> map;
+	std::vector< NodeDirection > findPath(glm::vec2 start, glm::vec2 goal);
+	void updateWorld();
+	static int GetMap(int x, int y);
 };
 

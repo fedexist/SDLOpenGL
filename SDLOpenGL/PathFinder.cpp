@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "PathFinder.h"
 
+std::vector<GLint*> PathFinder::map = vector<GLint*>();
+
 PathFinder::PathFinder()
 {
 }
@@ -153,6 +155,10 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 	return {};
 }
 
+void PathFinder::updateWorld()
+{
+}
+
 bool PathFinder::MapSearchNode::IsSameState( MapSearchNode &rhs )
 {
 	// same state in a maze search is simply when (x,y) are the same
@@ -179,6 +185,11 @@ bool PathFinder::MapSearchNode::IsGoal( MapSearchNode &nodeGoal )
 
 }
 
+int PathFinder::GetMap(int x, int y)
+{
+	return map[y][x];
+}
+
 // This generates the successors to the given Node. It uses a helper function called
 // AddSuccessor to give the successors to the AStar class. The A* specific initialisation
 // is done for each node internally, so here you just set the state information that
@@ -200,7 +211,7 @@ bool PathFinder::MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astar
 
 	// push each possible move except allowing the search to go backwards
 
-	if( (GetMap( x-1, y ) < 9) 
+	if( (GetMap( x-1, y ) != -1) 
 		&& !((parent_x == x-1) && (parent_y == y))
 	  ) 
 	{
@@ -208,7 +219,7 @@ bool PathFinder::MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astar
 		astarsearch->AddSuccessor( NewNode );
 	}	
 
-	if( (GetMap( x, y-1 ) < 9) 
+	if( (GetMap( x, y-1 ) != -1) 
 		&& !((parent_x == x) && (parent_y == y-1))
 	  ) 
 	{
@@ -216,7 +227,7 @@ bool PathFinder::MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astar
 		astarsearch->AddSuccessor( NewNode );
 	}	
 
-	if( (GetMap( x+1, y ) < 9)
+	if( (GetMap( x+1, y ) != -1)
 		&& !((parent_x == x+1) && (parent_y == y))
 	  ) 
 	{
@@ -225,7 +236,7 @@ bool PathFinder::MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astar
 	}	
 
 		
-	if( (GetMap( x, y+1 ) < 9) 
+	if( (GetMap( x, y+1 ) != -1) 
 		&& !((parent_x == x) && (parent_y == y+1))
 		)
 	{
