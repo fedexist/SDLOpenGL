@@ -45,7 +45,7 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Objective direction is: %f, %f", nextNode.second.x, nextNode.second.y);
 				
 			}
-			if(currentPath.size() >= 1)
+			if(currentPath.size() > 1)
 				myCharacter->Act(MOVING, nextNode.second);
 			/*
 			if (!myCharacter->isHitboxInsideCell(nextNode.first))
