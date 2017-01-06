@@ -52,7 +52,8 @@ public:
 	glm::vec2 spriteCenter() const { return glm::vec2(position.x + 0.5, position.y + 0.5); }
 	glm::vec2 currentCell() const { return glm::vec2(floorf(position.x + 0.5), floorf(position.y + 0.5)); }
 	glm::vec2 getLastTranslation() const { return glm::vec2( lastTranslation.x * dimensions.x, lastTranslation.y * dimensions.y); } //traslazione in coordinate mondo
-	
+	bool isHitboxInsideCell(glm::vec2 cell);
+
 	bool isWalkable(glm::vec2 candidateTranslation);
 	virtual void getHit(float hitNumber, GameObject* hitter)
 	{

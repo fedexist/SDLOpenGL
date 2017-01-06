@@ -66,6 +66,22 @@ void GameObject::update(float dt)
 }
 
 
+bool GameObject::isHitboxInsideCell(glm::vec2 cell)
+{
+	/*
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().x + hitboxDimensions.x, cell.x + 1 );
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().x - hitboxDimensions.x, cell.x );
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().y + hitboxDimensions.y, cell.y + 1);
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().y - hitboxDimensions.y, cell.y);
+	*/
+
+	return  spriteCenter().x + hitboxDimensions.x < cell.x + 1 &&
+			spriteCenter().x - hitboxDimensions.x > cell.x &&
+			spriteCenter().y + hitboxDimensions.y < cell.y + 1 &&
+			spriteCenter().y - hitboxDimensions.y > cell.y;
+
+}
+
 bool GameObject::isWalkable(glm::vec2 candidateTranslation)
 {
 		glm::vec2 center = position + glm::vec2(0.5);

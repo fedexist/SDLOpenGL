@@ -149,6 +149,8 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 		int direction = -1;
 		unsigned int uD, lR;
 		
+		//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Moving");
+
 		uD = static_cast<int>(d.y);
 		lR = static_cast<int>(d.x);
 
@@ -217,6 +219,8 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 
 	} else if(s==IDLE)
 	{
+
+		//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Going Idle" );
 
 		int direction = -1;
 		unsigned int uD, lR;

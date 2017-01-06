@@ -105,7 +105,7 @@ void GameClass::loadMedia()
 	launcher = new Launcher();
 
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
-	loadLevelLayout("room1", 10, 10);
+	loadLevelLayout("room1", 40, 40);
 
 	//Caricamento textures
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,60));
@@ -209,7 +209,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 
 
 
-	std::ifstream file(levelPath + levelName + ".csv");
+	std::ifstream file(levelPath + levelName + "_tiles.csv");
 
 	for(int row = 0; row < height; ++row)
 	{
@@ -236,7 +236,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 		
 	}
 
-	std::ifstream filel(levelPath + levelName + "_l.csv");
+	std::ifstream filel(levelPath + levelName + "_logic.csv");
 
 	for (int row = 0; row < height; ++row)
 	{
@@ -263,7 +263,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 
 	}
 
-	std::ifstream fileo(levelPath + levelName + "_o.csv");
+	std::ifstream fileo(levelPath + levelName + "_objects.csv");
 
 	for (int row = 0; row < height; ++row)
 	{
@@ -345,120 +345,122 @@ void GameClass::handleKeyboardEvents()
 
 	switch (gameState)
 	{
-	case LAUNCHER:
-	{
-				 if (currentKeyStates[SDL_SCANCODE_UP])
-				 {
-					 if (launcher->selectedButton > 0) launcher->selectedButton--;
-					 launcher->selectedCheck();
-				 }
-				 else if (currentKeyStates[SDL_SCANCODE_DOWN])
-				 {
-					 if (launcher->selectedButton < (launcher->buttons.size() - 1)) launcher->selectedButton++;
-					 launcher->selectedCheck();
-				 }
-				 else if (currentKeyStates[SDL_SCANCODE_RETURN])
-				 {
-					 if (launcher->selectedButton!=-1)
-					 {
-						 audio_manager->playSoundEffect("ButtonSelected");
-
-						 audio_manager->ManageMusic(STOP, "LauncherTheme");
-						 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
-						 audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
-					 }
-				 }
-				 break;}
-	case GAME:
-	{
-				 bool isMoving = currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_A] || currentKeyStates[SDL_SCANCODE_S] || currentKeyStates[SDL_SCANCODE_D];
-				 bool isSlashing = player_->coolDown == 0 && (currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT]);
-
-				 if (isMoving)
-				 {
-					 glm::vec2 uDlR = glm::vec2(-1, -1);
-					 if (currentKeyStates[SDL_SCANCODE_W])
-					 {
-						 uDlR.y = UP;
-					 }
-					 else if (currentKeyStates[SDL_SCANCODE_S])
-					 {
-						 uDlR.y = DOWN;
-					 }
-					 if (currentKeyStates[SDL_SCANCODE_A])
-					 {
-						 uDlR.x = LEFT;
-					 }
-					 else if (currentKeyStates[SDL_SCANCODE_D])
-					 {
-						 uDlR.x = RIGHT;
-					 }
-					 //player_->Move(uDlR);
-					 if (isSlashing)
-					 {
-						 glm::vec2 uDlRHit = glm::vec2(-1, -1);
-
-						 if (currentKeyStates[SDL_SCANCODE_UP])
-						 {
-							 uDlRHit.y = UP;
-						 }
-						 else if (currentKeyStates[SDL_SCANCODE_DOWN])
-						 {
-							 uDlRHit.y = DOWN;
-						 }
-						 if (currentKeyStates[SDL_SCANCODE_LEFT])
-						 {
-							 uDlRHit.x = LEFT;
-						 }
-						 else if (currentKeyStates[SDL_SCANCODE_RIGHT])
-						 {
-							 uDlRHit.x = RIGHT;
-						 }
-						 //SDL_LogDebug(0, "in the slashmove loop");
-						 player_->coolDown = 40;
-						 player_->Act(MOVING_SLASHING, uDlR, uDlRHit);
-						 audio_manager->playSoundEffect("SwordSwish");
-					 }
-					 else
-					 {
-						 player_->Act(MOVING, uDlR);
-						 //SDL_LogDebug(0, "in the move loop");
-					 }
-
-				 }
-				 else if (isSlashing && !isMoving)
-				 {
-					 //SDL_LogDebug(0, "SLASHING NOT MOVING, %d");
-					 glm::vec2 uDlR = glm::vec2(-1, -1);
+		case LAUNCHER:
+		{
 					 if (currentKeyStates[SDL_SCANCODE_UP])
 					 {
-						 uDlR.y = UP;
+						 if (launcher->selectedButton > 0) launcher->selectedButton--;
+						 launcher->selectedCheck();
 					 }
 					 else if (currentKeyStates[SDL_SCANCODE_DOWN])
 					 {
-						 uDlR.y = DOWN;
+						 if (launcher->selectedButton < (launcher->buttons.size() - 1)) launcher->selectedButton++;
+						 launcher->selectedCheck();
 					 }
-					 if (currentKeyStates[SDL_SCANCODE_LEFT])
+					 else if (currentKeyStates[SDL_SCANCODE_RETURN])
 					 {
-						 uDlR.x = LEFT;
+						 if (launcher->selectedButton!=-1)
+						 {
+							 audio_manager->playSoundEffect("ButtonSelected");
+
+							 audio_manager->ManageMusic(STOP, "LauncherTheme");
+							 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+							 audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
+						 }
 					 }
-					 else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+					 break;}
+		case GAME:
+		{
+					 bool isMoving = currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_A] || currentKeyStates[SDL_SCANCODE_S] || currentKeyStates[SDL_SCANCODE_D];
+					 bool isSlashing = player_->coolDown == 0 && (currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT]);
+
+					 if (isMoving)
 					 {
-						 uDlR.x = RIGHT;
+						 glm::vec2 uDlR = glm::vec2(-1, -1);
+						 if (currentKeyStates[SDL_SCANCODE_W])
+						 {
+							 uDlR.y = UP;
+						 }
+						 else if (currentKeyStates[SDL_SCANCODE_S])
+						 {
+							 uDlR.y = DOWN;
+						 }
+						 if (currentKeyStates[SDL_SCANCODE_A])
+						 {
+							 uDlR.x = LEFT;
+						 }
+						 else if (currentKeyStates[SDL_SCANCODE_D])
+						 {
+							 uDlR.x = RIGHT;
+						 }
+						 //player_->Move(uDlR);
+						 if (isSlashing)
+						 {
+							 glm::vec2 uDlRHit = glm::vec2(-1, -1);
+
+							 if (currentKeyStates[SDL_SCANCODE_UP])
+							 {
+								 uDlRHit.y = UP;
+							 }
+							 else if (currentKeyStates[SDL_SCANCODE_DOWN])
+							 {
+								 uDlRHit.y = DOWN;
+							 }
+							 if (currentKeyStates[SDL_SCANCODE_LEFT])
+							 {
+								 uDlRHit.x = LEFT;
+							 }
+							 else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+							 {
+								 uDlRHit.x = RIGHT;
+							 }
+							 //SDL_LogDebug(0, "in the slashmove loop");
+							 player_->coolDown = 40;
+							 player_->Act(MOVING_SLASHING, uDlR, uDlRHit);
+							 audio_manager->playSoundEffect("SwordSwish");
+						 }
+						 else
+						 {
+							 player_->Act(MOVING, uDlR);
+							 //SDL_LogDebug(0, "in the move loop");
+						 }
+
 					 }
-					 //player_->Slash(uDlR, true);
-					 player_->coolDown = 40;
-					 player_->Act(SLASHING, uDlR);
-					 audio_manager->playSoundEffect("SwordSwish");
-				 }
-				 if (!(isMoving || isSlashing))
-				 {
-					 player_->Act(IDLE, glm::vec2(-1, -1));
-				 }
-				 break;}
-	default:
-	{
-			   break;}
+					 else if (isSlashing && !isMoving)
+					 {
+						 //SDL_LogDebug(0, "SLASHING NOT MOVING, %d");
+						 glm::vec2 uDlR = glm::vec2(-1, -1);
+						 if (currentKeyStates[SDL_SCANCODE_UP])
+						 {
+							 uDlR.y = UP;
+						 }
+						 else if (currentKeyStates[SDL_SCANCODE_DOWN])
+						 {
+							 uDlR.y = DOWN;
+						 }
+						 if (currentKeyStates[SDL_SCANCODE_LEFT])
+						 {
+							 uDlR.x = LEFT;
+						 }
+						 else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+						 {
+							 uDlR.x = RIGHT;
+						 }
+						 //player_->Slash(uDlR, true);
+						 player_->coolDown = 40;
+						 player_->Act(SLASHING, uDlR);
+						 audio_manager->playSoundEffect("SwordSwish");
+					 }
+					 if (!(isMoving || isSlashing))
+					 {
+						 player_->Act(IDLE, glm::vec2(-1, -1));
+					 }
+					 break;
+		}
+		default:
+		{
+				   break;
+		}
 	}
 }
 

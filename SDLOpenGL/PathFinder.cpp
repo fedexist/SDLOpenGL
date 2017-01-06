@@ -91,7 +91,7 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 
 		if( SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SUCCEEDED )
 		{
-			SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Search found goal state" ) ;
+			//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Search found goal state" ) ;
 
 			vector<NodeDirection> solution;
 			MapSearchNode *node = astarsearch.GetSolutionStart();
@@ -138,9 +138,10 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 
 				#if DISPLAY_SOLUTION
 					node->PrintNodeInfo();
+					SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION,"Direction: %f %f",direction.x, direction.y);
 				#endif
 
-				SDL_LogDebug(0,"Direction: %f %f",direction.x, direction.y);
+				
 				steps ++;
 				
 			};
@@ -159,7 +160,7 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 		}
 
 		// Display the number of loops the search went through
-		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "SearchSteps: %d ", SearchSteps);
+		//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "SearchSteps: %d ", SearchSteps);
 
 		SearchCount ++;
 

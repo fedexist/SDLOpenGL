@@ -12,7 +12,8 @@ AI::AI(Player* myCharacter, Player* enemy)
 
 void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W)
 {
-	changeState(distance);
+	if(changeState(distance))
+	SDL_LogDebug(0, "State has changed");
 	//dothings
 	pathfinder_.updateWorld(logicLevelMap, objectLevelMap, H,W);
 	switch (curState)
@@ -35,10 +36,15 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 			}  
 			if(myCharacter->currentCell() == nextNode.first && pathIterator != currentPath.end())
 			{
+				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Going to nextNode");
 				nextNode = *(++pathIterator);
+				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Objective node is: %f, %f", nextNode.first.x, nextNode.first.y);
+				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Objective direction is: %f, %f", nextNode.second.x, nextNode.second.y);
 				
 			}
-			if(nextNode != *currentPath.end())
+			if (nextNode != *currentPath.end() && myCharacter->isHitboxInsideCell(nextNode.first))
+				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "direction: %f %f", nextNode.second.x, nextNode.second.y);
+				//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "FSMState: %d, AnimationState: %d", curState, myCharacter->currentState);
 				myCharacter->Act(MOVING, nextNode.second);
 			break;
 		}
@@ -55,8 +61,8 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 
 bool AI::changeState(float distance)
 {
-	float k_seek = 5;
-	float k_destroy = 0.33;
+	float k_seek = 6;
+	float k_destroy = 0.7;
 	float k_idle = 7;
 
 	if (enemy->lifepoints < 0.1)
@@ -82,6 +88,7 @@ bool AI::changeState(float distance)
 		}
 		else if (distance > k_seek)
 		{
+			SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "FSM is Going idle");
 			curState = idle;
 			return true;
 		}
