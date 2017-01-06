@@ -29,9 +29,9 @@ void Player::getHit(float hitNumber, GameObject* hitter)
 {
 	
 	lifepoints -= hitNumber;
-	if (lifepoints < 0)
+	if (lifepoints <= 0.0f)
 	{
-		lifepoints = 0;
+		lifepoints = 0.0f;
 		Act(HURT, glm::vec2(0, 0));
 	}
 		
@@ -57,7 +57,7 @@ void Player::update(float dt)
 	if (currentState != HURT || (curIndexFrame != hurtStart + numberOfHurtFrames - 2 && currentState == HURT && framePeriodIndex == 1))
 		handleAnims(dt);
 	else // se sono al penultimo frame dell'animazione di morte e alla fine del suo periodo, passo direttamente al frame finale (altrimenti, l'animazione comincerebbe da capo)
-	{		
+	{	
 		curIndexFrame = hurtStart + numberOfHurtFrames - 1;
 	}
 		
@@ -66,12 +66,14 @@ void Player::update(float dt)
 	if (coolDown > 0)
 	{
 		coolDown--;	
-
 	}
+
+	if(lifepoints <= 0.0f)
+		Act(HURT, glm::vec2(0, 0));
 
 	//SDL_LogDebug(0, "%d", inSlashingAnim());
 
-	if (inSlashingAnim() < -1)
+	if (inSlashingAnim() < -1 && lifepoints != 0.0f)
 	{
 		Act(IDLE, currentDirection);
 	}
@@ -95,10 +97,6 @@ void Player::update(float dt)
 
 		//currentState = MOVING;
 	}
-
-	if (lifepoints < 0.1)
-		currentState = HURT;
-
 	
 	//SDL_LogDebug(0, "%f %f", forceInput.x, forceInput.y);
 
