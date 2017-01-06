@@ -12,7 +12,7 @@ class AI
 	std::vector< NodeDirection >::iterator pathIterator; //iteratore per scorrere il vettore
 	
 	bool changeState(float distance);
-	int reaction_counter = 0;
+	int reaction_counter = 10;
 	int reaction = 10;
 	Player* enemy;
 public:

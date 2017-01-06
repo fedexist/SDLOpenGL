@@ -5,8 +5,8 @@ std::vector<GLint*> PathFinder::map = std::vector<GLint*>();
 
 PathFinder::PathFinder()
 {
-    //Fuoco = 0
-    objectToCost.put(0,3);
+	//Fuoco = 0
+	objectToCost.put(0,3);
 	//Spawner = 1
 	objectToCost.put(1,1);
 }
@@ -102,7 +102,11 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 			#endif
 			int steps = 0;
 
-			solution.push_back(NodeDirection(glm::vec2(node->x, node->y), glm::vec2(-1, -1)));
+			NodeDirection firstNode;
+			firstNode.first = glm::vec2(node->x, node->y);
+			firstNode.second = glm::vec2(-1, -1);
+
+			solution.push_back(firstNode);
 			
 			for( ;; )
 			{
@@ -112,27 +116,31 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 					break;
 				
 				NodeDirection previousNode = solution.back();
-				glm::vec2 direction = glm::vec2(-1, -1);
 
-				if (previousNode.first.x > node->x)
-					direction.x = RIGHT;
-				else if (previousNode.first.x < node->x)
+
+				glm::vec2 direction = glm::vec2(-1.0, -1.0);
+
+				if (static_cast<int>(previousNode.first.x) > node->x)
 					direction.x = LEFT;
+				else if (static_cast<int>(previousNode.first.x) < node->x)
+					direction.x = RIGHT;
 
-				if (previousNode.first.y > node->y)
-					direction.y = UP;
-				else if (previousNode.first.y < node->y)
+				if (static_cast<int>(previousNode.first.y) > node->y)
 					direction.y = DOWN;
+				else if (static_cast<int>(previousNode.first.y) < node->y)
+					direction.y = UP;
 
-				NodeDirection node_direction = NodeDirection(glm::vec2(node->x, node->y), direction );
-				
-				SDL_LogDebug(0,"%d %d",direction.x,direction.y);
 
+				NodeDirection node_direction;
+				node_direction.first = glm::vec2(node->x, node->y);
+				node_direction.second = direction;
 				solution.push_back(node_direction);
 
 				#if DISPLAY_SOLUTION
 					node->PrintNodeInfo();
 				#endif
+
+				SDL_LogDebug(0,"Direction: %f %f",direction.x, direction.y);
 				steps ++;
 				
 			};

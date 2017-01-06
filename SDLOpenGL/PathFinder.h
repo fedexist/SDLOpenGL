@@ -5,7 +5,7 @@
 
 #define DEBUG_LISTS 0;
 #define DEBUG_LIST_LENGTHS_ONLY 0;
-#define DISPLAY_SOLUTION 1;
+#define DISPLAY_SOLUTION 0;
 
 typedef std::pair<glm::vec2, glm::vec2 > NodeDirection;
 

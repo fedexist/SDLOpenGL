@@ -33,14 +33,14 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 				pathIterator = currentPath.begin(); //nuovo iteratore impostato
 				nextNode = *pathIterator; //primo nodo obiettivo
 			}  
-			if(myCharacter->currentCell() == nextNode.first)
+			if(myCharacter->currentCell() == nextNode.first && pathIterator != currentPath.end())
 			{
 				nextNode = *(++pathIterator);
 				
 			}
-			
-			myCharacter->Act(MOVING, nextNode.second);			
-			break;		
+			if(nextNode != *currentPath.end())
+				myCharacter->Act(MOVING, nextNode.second);
+			break;
 		}
 		case destroy:
 		{
