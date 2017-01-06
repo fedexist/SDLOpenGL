@@ -69,10 +69,12 @@ void GameObject::update(float dt)
 bool GameObject::isHitboxInsideCell(glm::vec2 cell)
 {
 	/*
-	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().x + hitboxDimensions.x, cell.x + 1 );
-	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().x - hitboxDimensions.x, cell.x );
-	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().y + hitboxDimensions.y, cell.y + 1);
-	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().y - hitboxDimensions.y, cell.y);
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "CurrentCell: %f %f", currentCell().x, currentCell().y);
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "SpriteCenter: %f %f", spriteCenter().x, spriteCenter().y);
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "R: Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().x + hitboxDimensions.x, cell.x + 1 );
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "L: Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().x - hitboxDimensions.x, cell.x );
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "U: Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().y + hitboxDimensions.y, cell.y + 1);
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "D: Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().y - hitboxDimensions.y, cell.y);
 	*/
 
 	return  spriteCenter().x + hitboxDimensions.x < cell.x + 1 &&

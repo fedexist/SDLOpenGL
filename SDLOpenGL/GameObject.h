@@ -67,7 +67,7 @@ protected:
 
 	glm::vec2 position; //Il centro della sprite è Position + vec2(0.5)
 
-	glm::vec2 hitboxDimensions = glm::vec2(17.f/64.f, 30.f/64.f); //dimensione della hitbox rispetto al centro della sprite p.e. per una 64x64 -> (15,20), cioè una hitbox 30x40, con centro position + vec(0.5)
+	glm::vec2 hitboxDimensions = glm::vec2(30.f/64.f, 30.f/64.f); //dimensione della hitbox rispetto al centro della sprite p.e. per una 64x64 -> (15,20), cioè una hitbox 30x40, con centro position + vec(0.5)
 
 	std::vector<GameObject*> areaSharing;
 	LTexture2D* tex;

@@ -13,7 +13,7 @@ AI::AI(Player* myCharacter, Player* enemy)
 void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W)
 {
 	if(changeState(distance))
-	SDL_LogDebug(0, "State has changed");
+	//SDL_LogDebug(0, "State has changed");
 	//dothings
 	pathfinder_.updateWorld(logicLevelMap, objectLevelMap, H,W);
 	switch (curState)
@@ -32,9 +32,12 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 				currentPath.clear();
 				currentPath = pathfinder_.findPath(myCharacter->currentCell(), enemy->currentCell()); //calcolo del nuovo percorso
 				pathIterator = currentPath.begin(); //nuovo iteratore impostato
-				nextNode = *pathIterator; //primo nodo obiettivo
+				if(currentPath.size() == 1)
+					nextNode = *pathIterator; //primo nodo obiettivo se c'è un solo passo necessario
+				else
+					nextNode = *++pathIterator; //primo nodo obiettivo se c'è più di un passo
 			}  
-			if(myCharacter->currentCell() == nextNode.first && pathIterator != currentPath.end())
+			if(myCharacter->isHitboxInsideCell(nextNode.first) && *(pathIterator + 1) != currentPath.back() && currentPath.size() > 1)
 			{
 				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Going to nextNode");
 				nextNode = *(++pathIterator);
@@ -42,15 +45,33 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Objective direction is: %f, %f", nextNode.second.x, nextNode.second.y);
 				
 			}
-			if (nextNode != *currentPath.end() && myCharacter->isHitboxInsideCell(nextNode.first))
-				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "direction: %f %f", nextNode.second.x, nextNode.second.y);
-				//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "FSMState: %d, AnimationState: %d", curState, myCharacter->currentState);
+			if(currentPath.size() >= 1)
 				myCharacter->Act(MOVING, nextNode.second);
+			/*
+			if (!myCharacter->isHitboxInsideCell(nextNode.first))
+			{
+				//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "direction: %f %f", nextNode.second.x, nextNode.second.y);
+				//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "FSMState: %d, AnimationState: %d", curState, myCharacter->currentState);
+				
+
+			}*/
 			break;
 		}
 		case destroy:
 		{
-			myCharacter->Act(SLASHING,glm::vec2(0,1));
+			unsigned int hitDirectionX;
+			unsigned int hitDirectionY;
+
+			if (enemy->spriteCenter().x < myCharacter->spriteCenter().x)
+				hitDirectionX = LEFT;
+			else
+				hitDirectionX = RIGHT;
+
+			if (enemy->spriteCenter().y < myCharacter->spriteCenter().y)
+				hitDirectionY = DOWN;
+			else
+				hitDirectionY = UP;
+			myCharacter->Act(SLASHING, glm::vec2(hitDirectionY, hitDirectionX));
 			break;
 		}
 		default: break;
@@ -62,7 +83,7 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 bool AI::changeState(float distance)
 {
 	float k_seek = 6;
-	float k_destroy = 0.7;
+	float k_destroy = 0.33;
 	float k_idle = 7;
 
 	if (enemy->lifepoints < 0.1)
