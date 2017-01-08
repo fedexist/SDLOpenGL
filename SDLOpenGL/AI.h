@@ -12,8 +12,9 @@ class AI
 	std::vector< NodeDirection >::iterator pathIterator; //iteratore per scorrere il vettore
 	
 	bool changeState(float distance);
-	int reaction_counter = 30;
-	int reaction = 30;
+	unsigned int reaction_counter = 10;
+	int reaction = reaction_counter;
+	unsigned int movement_cooldown = 0;
 	Player* enemy;
 public:
 	void update(float distance, float dt,std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W);

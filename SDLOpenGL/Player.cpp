@@ -63,17 +63,13 @@ void Player::update(float dt)
 		
 
 	glm::vec2 forceInput = glm::vec2(0.0f,0.0f);
-	if (coolDown > 0)
-	{
-		coolDown--;	
-	}
 
 	if(lifepoints <= 0.0f)
 		Act(HURT, glm::vec2(0, 0));
 
 	//SDL_LogDebug(0, "%d", inSlashingAnim());
 
-	if (inSlashingAnim() < -1 && lifepoints != 0.0f)
+	if (inSlashingAnim() < -1 && lifepoints > 0.0f)
 	{
 		Act(IDLE, currentDirection);
 	}
@@ -112,6 +108,8 @@ void Player::update(float dt)
 void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 {
 
+	if (currentState == HURT)
+		return;
 	
 	if(s == SLASHING)
 	{

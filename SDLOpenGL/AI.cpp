@@ -21,13 +21,13 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 		
 		case seek:
 		{
-			if (reaction_counter < reaction)
+			if (SDL_GetTicks() - reaction_counter < reaction)
 			{
-				reaction_counter++;
+				//tempo passa
 			}
 			else
 			{
-				reaction_counter = 0;
+				reaction_counter = SDL_GetTicks();
 				//A*;
 				currentPath.clear();
 				currentPath = pathfinder_.findPath(myCharacter->currentCell(), enemy->currentCell()); //calcolo del nuovo percorso
@@ -46,7 +46,9 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 				
 			}
 			if(currentPath.size() > 1)
-				myCharacter->Act(MOVING, nextNode.second);
+			{
+				myCharacter->Act(MOVING, nextNode.second);	
+			}
 			/*
 			if (!myCharacter->isHitboxInsideCell(nextNode.first))
 			{
@@ -71,7 +73,13 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 				hitDirectionY = DOWN;
 			else
 				hitDirectionY = UP;
-			myCharacter->Act(SLASHING, glm::vec2(hitDirectionY, hitDirectionX));
+			
+			if (int (SDL_GetTicks() - myCharacter->coolDown) > 0 )
+			{
+				myCharacter->Act(SLASHING, glm::vec2(hitDirectionY, hitDirectionX));
+				myCharacter->coolDown = SDL_GetTicks()+400;
+			}
+			
 			break;
 		}
 		default: break;

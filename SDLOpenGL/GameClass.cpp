@@ -137,7 +137,7 @@ void GameClass::loadMedia()
 
 				if (playerThis)
 				{
-					Player* creatingPlayer = new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Player*>(allObjectsFactory.at(objectIndex)));
+					Player* creatingPlayer = new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.00002, static_cast<Player*>(allObjectsFactory.at(objectIndex)));
 					creatingPlayer->myHealthBar = new HealthBar(glm::vec2(i, (levelLayoutH - j - 1)+1), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
 					creatingPlayer->myHealthBar->attachedTo = creatingPlayer;
 					gameObjectArray.push_back(creatingPlayer);
@@ -371,8 +371,10 @@ void GameClass::handleKeyboardEvents()
 					 break;}
 		case GAME:
 		{
+
+			bool cooldownBool = int (SDL_GetTicks() - player_->coolDown) > 0;
 					 bool isMoving = currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_A] || currentKeyStates[SDL_SCANCODE_S] || currentKeyStates[SDL_SCANCODE_D];
-					 bool isSlashing = player_->coolDown == 0 && (currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT]);
+					 bool isSlashing = cooldownBool && (currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT]);
 
 					 if (isMoving)
 					 {
@@ -415,7 +417,7 @@ void GameClass::handleKeyboardEvents()
 								 uDlRHit.x = RIGHT;
 							 }
 							 //SDL_LogDebug(0, "in the slashmove loop");
-							 player_->coolDown = 40;
+							 player_->coolDown = SDL_GetTicks() + 400;
 							 player_->Act(MOVING_SLASHING, uDlR, uDlRHit);
 							 audio_manager->playSoundEffect("SwordSwish");
 						 }
@@ -447,7 +449,7 @@ void GameClass::handleKeyboardEvents()
 							 uDlR.x = RIGHT;
 						 }
 						 //player_->Slash(uDlR, true);
-						 player_->coolDown = 40;
+						 player_->coolDown = SDL_GetTicks() + 400;
 						 player_->Act(SLASHING, uDlR);
 						 audio_manager->playSoundEffect("SwordSwish");
 					 }
