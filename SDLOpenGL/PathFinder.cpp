@@ -234,7 +234,11 @@ void PathFinder::MapSearchNode::PrintNodeInfo() const
 
 float PathFinder::MapSearchNode::GoalDistanceEstimate( MapSearchNode &nodeGoal )
 {
-	return fabsf(x - nodeGoal.x) + fabsf(y - nodeGoal.y);	
+	//Manhattan
+	//return fabsf(x - nodeGoal.x) + fabsf(y - nodeGoal.y);	
+
+	//Norma euclidea
+	return sqrt( powf(fabsf(x - nodeGoal.x), 2) + powf(fabsf(y - nodeGoal.y), 2));
 }
 
 bool PathFinder::MapSearchNode::IsGoal( MapSearchNode &nodeGoal )
@@ -301,7 +305,41 @@ bool PathFinder::MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astar
 	{
 		NewNode = MapSearchNode( x, y+1 );
 		astarsearch->AddSuccessor( NewNode );
-	}	
+	}
+
+	//Successori diagonali
+
+	if( (GetMap( x+1, y+1 ) != -1) 
+		&& !((parent_x == x+1) && (parent_y == y+1))
+		)
+	{
+		NewNode = MapSearchNode( x+1, y+1 );
+		astarsearch->AddSuccessor( NewNode );
+	}
+
+	if( (GetMap( x-1, y-1 ) != -1) 
+		&& !((parent_x == x-1) && (parent_y == y-1))
+		)
+	{
+		NewNode = MapSearchNode( x-1, y-1 );
+		astarsearch->AddSuccessor( NewNode );
+	}
+
+	if( (GetMap( x-1, y+1 ) != -1) 
+		&& !((parent_x == x-1) && (parent_y == y+1))
+		)
+	{
+		NewNode = MapSearchNode( x-1, y+1 );
+		astarsearch->AddSuccessor( NewNode );
+	}
+
+	if( (GetMap( x+1, y-1 ) != -1) 
+		&& !((parent_x == x+1) && (parent_y == y-1))
+		)
+	{
+		NewNode = MapSearchNode( x+1, y-1 );
+		astarsearch->AddSuccessor( NewNode );
+	}
 
 	return true;
 }
