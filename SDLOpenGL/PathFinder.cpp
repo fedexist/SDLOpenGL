@@ -6,7 +6,7 @@ std::vector<GLint*> PathFinder::map = std::vector<GLint*>();
 PathFinder::PathFinder()
 {
 	//Fuoco = 0
-	objectToCost.put(0,3);
+	objectToCost.put(0,8);
 	//Spawner = 1
 	objectToCost.put(1,1);
 }

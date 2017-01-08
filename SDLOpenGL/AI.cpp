@@ -77,10 +77,14 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 			if (int (SDL_GetTicks() - myCharacter->coolDown) > 0 )
 			{
 				myCharacter->Act(SLASHING, glm::vec2(hitDirectionY, hitDirectionX));
-				myCharacter->coolDown = SDL_GetTicks()+400;
+				myCharacter->coolDown = SDL_GetTicks() + 500;
 			}
 			
 			break;
+		}
+		case idle:
+		{
+			myCharacter->Act(IDLE, myCharacter->currentDirection);
 		}
 		default: break;
 	}
@@ -90,9 +94,9 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 
 bool AI::changeState(float distance)
 {
-	float k_seek = 6;
+	float k_seek = 15;
 	float k_destroy = 0.33;
-	float k_idle = 7;
+	float k_idle = 30;
 
 	if (enemy->lifepoints < 0.1)
 	{
