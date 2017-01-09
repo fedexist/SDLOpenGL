@@ -59,6 +59,25 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 			}*/
 			break;
 		}
+		case approach:
+		{
+			int approachDirectionX;
+			int approachDirectionY;
+			float leftVSright = enemy->spriteCenter().x - myCharacter->spriteCenter().x;
+			float downVSup = enemy->spriteCenter().y - myCharacter->spriteCenter().y;
+
+			if (leftVSright < 0)
+				approachDirectionX = LEFT;
+			else
+				approachDirectionX = RIGHT;
+
+			if (downVSup < 0)
+				approachDirectionY = DOWN;
+			else
+				approachDirectionY = UP;
+
+			myCharacter->Act(MOVING, glm::vec2(approachDirectionX,approachDirectionY));
+		}
 		case destroy:
 		{
 			int hitDirectionX;
@@ -111,7 +130,8 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 bool AI::changeState(float distance)
 {
 	float k_seek = 15;
-	float k_destroy = 0.33;
+	float k_approach = 1;
+	float k_destroy = 0.15;
 	float k_idle = 30;
 
 	if (enemy->lifepoints < 0.1)
@@ -130,15 +150,32 @@ bool AI::changeState(float distance)
 	}
 	else if (curState == seek)
 	{
+		if (distance < k_approach)
+		{
+			curState = approach;
+			return true;
+		}
+		else if (distance > k_seek)
+		{
+			curState = idle;
+			return true;
+		}
+		else if (myCharacter->lifepoints < 0.1)
+		{
+			curState = ripinpepperoni;
+			return true;
+		}
+	}
+	else if (curState == approach)
+	{
 		if (distance < k_destroy)
 		{
 			curState = destroy;
 			return true;
 		}
-		else if (distance > k_seek)
+		else if (distance > k_approach)
 		{
-			SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "FSM is Going idle");
-			curState = idle;
+			curState = seek;
 			return true;
 		}
 		else if (myCharacter->lifepoints < 0.1)
@@ -151,7 +188,7 @@ bool AI::changeState(float distance)
 	{
 		if (distance > k_destroy)
 		{
-			curState = seek;
+			curState = approach;
 			return true;
 		}
 		else if (myCharacter->lifepoints < 0.1)

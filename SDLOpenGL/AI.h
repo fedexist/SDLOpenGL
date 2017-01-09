@@ -3,7 +3,7 @@
 
 class AI
 {
-	enum FSMstate { idle, seek, destroy, ripinpepperoni };
+	enum FSMstate { idle, seek, approach, destroy, ripinpepperoni };
 	FSMstate curState;
 
 	static PathFinder pathfinder_;
