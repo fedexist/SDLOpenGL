@@ -76,7 +76,20 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 			else
 				approachDirectionY = UP;
 
+			float YXratioNormalized = abs(downVSup) / (abs(leftVSright) + 0.1); //rapporto fra y e x con costanti per non avere 0 a denominatore
+
+			if (YXratioNormalized > 1 / 0.48) //se il rapporto fra y e x è lontano dalla diagonale, vado solo in verticale o orizzontale 0.48 ~= sin(22.5)
+			{
+				approachDirectionX = -1;
+			}
+			else if(YXratioNormalized < 0.48)
+			{
+				approachDirectionY = -1;
+			}
+
+
 			myCharacter->Act(MOVING, glm::vec2(approachDirectionX,approachDirectionY));
+			break;
 		}
 		case destroy:
 		{
@@ -96,7 +109,7 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 			else
 				hitDirectionY = UP;
 			
-			SDL_LogDebug(0,"abs(downVSup) %f abs(leftVSright) %f",abs(downVSup), abs(leftVSright));
+			//SDL_LogDebug(0,"abs(downVSup) %f abs(leftVSright) %f",abs(downVSup), abs(leftVSright));
 
 			if (abs(downVSup) > abs(leftVSright))
 			{
@@ -107,7 +120,7 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 				hitDirectionY = -1;
 			}
 
-			SDL_LogDebug(0,"%d,%d",hitDirectionX,hitDirectionY);
+			//SDL_LogDebug(0,"%d,%d",hitDirectionX,hitDirectionY);
 
 			if (int (SDL_GetTicks() - myCharacter->coolDown) > 0 )
 			{
@@ -131,7 +144,7 @@ bool AI::changeState(float distance)
 {
 	float k_seek = 15;
 	float k_approach = 1;
-	float k_destroy = 0.15;
+	float k_destroy = 0.2;
 	float k_idle = 30;
 
 	if (enemy->lifepoints < 0.1)
