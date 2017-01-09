@@ -133,7 +133,9 @@ void GameClass::loadMedia()
 
 				if (fireThis)
 				{
-					gameObjectArray.push_back (new Fire(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Fire*>(allObjectsFactory.at(objectIndex))));
+					Fire* creatingFire = new Fire(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Fire*>(allObjectsFactory.at(objectIndex)));
+					creatingFire->resizeHitBox(glm::vec2(0.5,1));
+					gameObjectArray.push_back (creatingFire);
 				}
 
 				if (playerThis)

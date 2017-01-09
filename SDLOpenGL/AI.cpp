@@ -61,22 +61,38 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 		}
 		case destroy:
 		{
-			unsigned int hitDirectionX;
-			unsigned int hitDirectionY;
+			int hitDirectionX;
+			int hitDirectionY;
 
-			if (enemy->spriteCenter().x < myCharacter->spriteCenter().x)
+			float leftVSright = enemy->spriteCenter().x - myCharacter->spriteCenter().x;
+			float downVSup = enemy->spriteCenter().y - myCharacter->spriteCenter().y;
+
+			if (leftVSright < 0)
 				hitDirectionX = LEFT;
 			else
 				hitDirectionX = RIGHT;
 
-			if (enemy->spriteCenter().y < myCharacter->spriteCenter().y)
+			if (downVSup < 0)
 				hitDirectionY = DOWN;
 			else
 				hitDirectionY = UP;
 			
+			SDL_LogDebug(0,"abs(downVSup) %f abs(leftVSright) %f",abs(downVSup), abs(leftVSright));
+
+			if (abs(downVSup) > abs(leftVSright))
+			{
+				hitDirectionX = -1;
+			}
+			else
+			{
+				hitDirectionY = -1;
+			}
+
+			SDL_LogDebug(0,"%d,%d",hitDirectionX,hitDirectionY);
+
 			if (int (SDL_GetTicks() - myCharacter->coolDown) > 0 )
 			{
-				myCharacter->Act(SLASHING, glm::vec2(hitDirectionY, hitDirectionX));
+				myCharacter->Act(SLASHING, glm::vec2(hitDirectionX, hitDirectionY));
 				myCharacter->coolDown = SDL_GetTicks() + 500;
 			}
 			
