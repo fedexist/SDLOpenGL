@@ -6,12 +6,13 @@
 #include "Launcher.h"
 #include <SDL_ttf.h>
 #include "AudioManager.h"
+#include "Help.h"
 
 typedef enum GameState
 {
 	LAUNCHER,
 	GAME,
-	CREDITS,
+	HELP
 
 }GameState;
 
@@ -21,9 +22,13 @@ class GameClass
 	std::string windowTitle;
 	std::vector<GameObject*> gameObjectArray;
 	std::vector<GameObject*> allObjectsFactory;
+	std::vector<AI*> allAisArray;
 	Player* player_ = nullptr;
+	Player* centerDummy = nullptr;
 	Launcher* launcher;
+	Help* help;
 	DrawingPlane plane;
+	LWindow* window;
 	std::vector<GLuint*> currentLevelLayout;
 
 	std::vector<GLint*> currentLevelLayout_o;
@@ -59,5 +64,7 @@ public:
 	void setCamera2D(Camera2D* camera);
 	void setGameState(GameState gs);
 	void setAudioManager(AudioManager* audio_manager);
+
+	float distance(GameObject* obj1, GameObject* obj2) const;
 };
 

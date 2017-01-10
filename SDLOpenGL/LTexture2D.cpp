@@ -29,7 +29,7 @@ bool LTexture2D::loadFromFile()
 	
 			glGenTextures(1, &texId);
 			glBindTexture(GL_TEXTURE_2D, texId);
-
+			SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "texID: %d", texId);
 			glGenerateMipmap(GL_TEXTURE_2D);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, loadedSurface->w, loadedSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, loadedSurface->pixels);
 
@@ -144,16 +144,14 @@ void LTexture2D::drawSprite(float posX, float posY, float posZ, int frameIndex)
 	glTexCoordPointer(2, GL_FLOAT, 0, tex_verts);
 	glVertexPointer(3, GL_FLOAT, 0, Lvertices);
 	glColorPointer(4, GL_FLOAT, 0, Lcolors);
-
+	
+	//glColor3ub(0, 155, 255);
 	glDrawArrays(GL_QUADS, 0, 4);
 
 	// deactivate vertex arrays after drawing
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	
-
 	
 }
 

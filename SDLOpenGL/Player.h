@@ -1,11 +1,13 @@
 #pragma once
 #include "GameObject.h"
+#include "HealthBar.h"
 
 typedef enum { MOVING, SLASHING, IDLE, HURT, MOVING_SLASHING } State;
 typedef enum { UP, LEFT, DOWN, RIGHT } Direction;
 
 class Player : public GameObject
 {
+	friend class AI;
 	float lifepoints;
 	float damage;
 	State currentState = IDLE;
@@ -70,6 +72,8 @@ public:
 
 	void Act(State s, glm::vec2 d, glm::vec2 d2 = glm::vec2(0,0));
 
+	HealthBar* myHealthBar;
+
 	int inSlashingAnim(){ 
 		GLuint upCurIndexFrame = startingIndexMatrix[SLASHING][UP];
 		GLuint upEndingIndexFrame = startingIndexMatrix[SLASHING][UP] + numberOfFrames[SLASHING] - 1;
@@ -102,8 +106,31 @@ public:
 		return -1;
 	};
 
-	void Move(glm::vec2 d);
-	void Slash(glm::vec2 d, bool isMoving);
-	void Idle();
+	bool inDamagingAnim(){
+		GLuint upCurIndexFrame = startingIndexMatrix[SLASHING][UP];
+		GLuint upEndingIndexFrame = startingIndexMatrix[SLASHING][UP] + numberOfFrames[SLASHING] - 1;
+
+		GLuint dnCurIndexFrame = startingIndexMatrix[SLASHING][DOWN];
+		GLuint dnEndingIndexFrame = startingIndexMatrix[SLASHING][DOWN] + numberOfFrames[SLASHING] - 1;
+
+		GLuint lxCurIndexFrame = startingIndexMatrix[SLASHING][LEFT];
+		GLuint lxEndingIndexFrame = startingIndexMatrix[SLASHING][LEFT] + numberOfFrames[SLASHING] - 1;
+
+		GLuint rxCurIndexFrame = startingIndexMatrix[SLASHING][RIGHT];
+		GLuint rxEndingIndexFrame = startingIndexMatrix[SLASHING][RIGHT] + numberOfFrames[SLASHING] - 1;
+
+		if (curIndexFrame >= upCurIndexFrame && curIndexFrame < upEndingIndexFrame - 3)
+			return true;
+		if (curIndexFrame >= dnCurIndexFrame && curIndexFrame < dnEndingIndexFrame - 3)
+			return true;
+		if (curIndexFrame >= lxCurIndexFrame && curIndexFrame < lxEndingIndexFrame - 3)
+			return true;
+		if (curIndexFrame >= rxCurIndexFrame && curIndexFrame < rxEndingIndexFrame - 3)
+			return true;
+
+		return false;
+
+	};
+
 };
 

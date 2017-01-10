@@ -67,6 +67,8 @@ void LWindow::handleEvent( SDL_Event& e )
 			coreInstance->updateProjection(mWidth - old_width, mHeight - old_height);
 			SDL_GL_SwapWindow(mWindow);
 			coreInstance->renderPresent();
+			coreInstance->getLauncher()->onUpdateWindow();
+			coreInstance->getHelp()->onUpdateWindow();
 			break;
 
 			//Repaint on exposure

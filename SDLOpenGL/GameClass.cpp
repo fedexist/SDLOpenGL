@@ -3,6 +3,7 @@
 #include <fstream>
 #include "Player.h"
 #include "Fire.h"
+#include "AI.h"
 
 
 GameClass::GameClass(std::string title)
@@ -13,6 +14,7 @@ GameClass::GameClass(std::string title)
 	cachedLevelLayouts = std::vector< std::vector<GLuint*> >();
 	gameObjectArray = std::vector<GameObject*>();
 	allObjectsFactory = std::vector<GameObject*>();
+	allAisArray = std::vector<AI*>();
 	allTextures = std::vector<LTexture2D>();
 	gameState = LAUNCHER;
 }
@@ -33,6 +35,10 @@ void GameClass::update(float dt)
 	if(gameState == GAME)
 	{
 		setObjectWorldKnowledge(player_); //dovrebbe essere fatto per ogni actor
+		for (int i = 0; i < allAisArray.size(); i++)
+		{
+			allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt);
+		}
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
 			gameObjectArray.at(i)->areaSharing.clear();
@@ -71,6 +77,7 @@ void GameClass::update(float dt)
 			}
 			Fire* fireThis = dynamic_cast<Fire*>(gameObjectArray.at(i));
 			Player* playerThis = dynamic_cast<Player*>(gameObjectArray.at(i));
+			//HealthBar* healthThis = dynamic_cast<HealthBar*>(gameObjectArray.at(i));
 			if (fireThis)
 			{
 				fireThis->update(dt);
@@ -79,6 +86,7 @@ void GameClass::update(float dt)
 			{
 				playerThis->update(dt);
 			}
+			
 			//gameObjectArray.at(i)->update(dt);
 		}
 		//player_->update(dt);
@@ -94,7 +102,6 @@ void GameClass::loadMedia()
 {
 	//AllGameResources.loadMedia(sdl_renderer)
 	plane.loadMedia();
-	launcher = new Launcher();
 
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
 	loadLevelLayout("room1", 10, 10);
@@ -102,10 +109,16 @@ void GameClass::loadMedia()
 	//Caricamento textures
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,60));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 60));
+	allTextures.push_back(LTexture2D("./assets/life.png", 64, 64,60));
 
 	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28));
-	
+	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 4));
+
+	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+
+	player_->isPlayer = true;
+
 	for (int j = 0; j < levelLayoutH; j++)
 	{
 		for (int i = 0; i < levelLayoutW; i++)
@@ -123,7 +136,13 @@ void GameClass::loadMedia()
 
 				if (playerThis)
 				{
-					gameObjectArray.push_back(new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Player*>(allObjectsFactory.at(objectIndex))));
+					Player* creatingPlayer = new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Player*>(allObjectsFactory.at(objectIndex)));
+					creatingPlayer->myHealthBar = new HealthBar(glm::vec2(i, (levelLayoutH - j - 1)+1), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
+					creatingPlayer->myHealthBar->attachedTo = creatingPlayer;
+					gameObjectArray.push_back(creatingPlayer);
+					gameObjectArray.push_back(creatingPlayer->myHealthBar);
+					 
+					allAisArray.push_back(new AI(creatingPlayer, player_));
 				}
 
 			}
@@ -132,8 +151,15 @@ void GameClass::loadMedia()
 	
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
+	centerDummy = new Player(glm::vec2(launcher->centredCoor(1024, 64), launcher->centredCoor(640, 64)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+
 	player_->isPlayer = true;
+
+	HealthBar* playerHealthBar = new HealthBar(glm::vec2(4.5, 5.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
+	playerHealthBar->attachedTo =player_;
+	player_->myHealthBar = playerHealthBar;
 	gameObjectArray.push_back(player_); 
+	gameObjectArray.push_back(player_->myHealthBar);
 
 	audio_manager->LoadMusic("./assets/music/journeys.mp3","MainTheme");
 	audio_manager->LoadMusic("./assets/music/castlejam.mp3", "LauncherTheme");
@@ -150,6 +176,9 @@ void GameClass::render()
 	{
 	case LAUNCHER:
 		launcher->render();
+		break;
+	case HELP:
+		help->render();
 		break;
 	case GAME:
 		plane.render(&currentLevelLayout, levelLayoutW, levelLayoutH);
@@ -184,7 +213,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 	}
 		
 
-	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Initialised currentlevellayout");
+	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Initialised currentlevellayout");
 
 
 
@@ -285,34 +314,59 @@ void GameClass::handleEvents(SDL_Event& e)
 
 void GameClass::handleMouseEvents(const SDL_Event& e)
 {
-	if ((e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) && gameState == LAUNCHER)
+	if ((e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP))
 	{
 		int x, y;
 		SDL_GetMouseState(&x, &y);
-		
-		for (int i = 0; i < launcher->buttons.size(); i++)
+		switch (gameState)
 		{
-			Button* b = launcher->buttons.at(i);
-			if (b->isInside(x,y))
+		case LAUNCHER:
+		{
+			launcher->selectedButton = -1;
+			launcher->selectedCheck();
+			for (int i = 0; i < launcher->buttons.size(); i++)
 			{
-				launcher->selectedButton = i;
-				launcher->selectedCheck();
 
-				if (e.type == SDL_MOUSEBUTTONUP && launcher->selectedButton == i)
+				Button* b = launcher->buttons.at(i);
+				if (b->isInside(x, y))
 				{
-					audio_manager->playSoundEffect("ButtonSelected");
+					launcher->selectedButton = i;
+					launcher->selectedCheck();
 
-					audio_manager->ManageMusic(STOP, "LauncherTheme");
-
-					setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
-					audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
+					if (e.type == SDL_MOUSEBUTTONUP && launcher->selectedButton == i)
+					{
+						audio_manager->playSoundEffect("ButtonSelected");
+						setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+					}
 				}
 			}
-
-			else
+			break;
+			}	
+		case HELP:
+		{
+			help->selectedButton = -1;
+			help->selectedCheck();
+			for (int i = 0; i < help->buttons.size(); i++)
 			{
-				launcher->selectedButton = -1;
-				launcher->selectedCheck();
+
+				Button* b = help->buttons.at(i);
+				if (b->isInside(x, y))
+				{
+					help->selectedButton = i;
+					help->selectedCheck();
+
+					if (e.type == SDL_MOUSEBUTTONUP && help->selectedButton == i)
+					{
+						audio_manager->playSoundEffect("ButtonSelected");
+						setGameState(help->buttons.at(help->selectedButton)->getOnClickTransition());
+					}
+				}
+			}
+			break;
+			}
+		default:
+		{
+			break;
 			}
 		}
 	}
@@ -340,7 +394,11 @@ void GameClass::handleKeyboardEvents()
 				 {
 					 if (launcher->selectedButton!=-1)
 					 {
+						 audio_manager->playSoundEffect("ButtonSelected");
+
+						 audio_manager->ManageMusic(STOP, "LauncherTheme");
 						 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+						 audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
 					 }
 				 }
 				 break;}
@@ -475,16 +533,44 @@ void GameClass::setObjectWorldKnowledge(GameObject * actor)
 void GameClass::setCamera2D(Camera2D* camera_)
 {
 	camera = camera_;
-	camera->follow(player_);
+	camera->follow(centerDummy);
 }
 
 
 void GameClass::setGameState(GameState gs)
 {
 	gameState = gs;
+	switch (gameState)
+	{
+	case GAME:
+		{
+
+			audio_manager->ManageMusic(STOP, "LauncherTheme");
+			audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
+			camera->follow(player_);
+			camera->centerOnObject(player_);
+			break;
+		}
+	default:
+	{
+		camera->follow(centerDummy);
+		break;
+	}
+	}
 }
 
 void GameClass::setAudioManager(AudioManager* audio_manager)
 {
 	this->audio_manager = audio_manager;
+}
+
+
+float GameClass::distance(GameObject* obj1, GameObject* obj2) const
+{
+
+	glm::vec2 position1 = obj1->spriteCenter();
+	glm::vec2 position2 = obj2->spriteCenter();
+
+	return glm::distance2(position1, position2);
+
 }

@@ -29,6 +29,8 @@ class Core
 		~Core();
 		Internalupdate Internalupdate;
 		InternalRender InternalRender;
+		Launcher* getLauncher();
+		Help* getHelp();
 		
 private:
 		LWindow window_;
@@ -38,6 +40,8 @@ private:
 		GameClass* Game;
 		Camera2D* camera;
 		AudioManager audio_manager_;
+		Launcher* launcher;
+		Help* help;
 		
 		//const double dt = 10.0f;
 		double startTime, frameTime, updateTime, lastTimeStamp;

@@ -75,16 +75,31 @@
     <ClInclude Include="Launcher.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Fire.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="HealthBar.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="AI.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
     <ClInclude Include="HashTable.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Help.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
@@ -146,13 +161,28 @@
     <ClCompile Include="Launcher.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Fire.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthBar.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Help.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>

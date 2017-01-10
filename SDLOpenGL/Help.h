@@ -1,22 +1,21 @@
 #pragma once
 #include "Button.h"
-#include "Background.h"
+#include "Text.h"
 
-class Launcher
+class Help
 {
 	friend class GameClass;
 	friend class Button;
 	std::vector<Button*> buttons;
 	std::vector<Text*> texts;
 	Background* background;
-	LTexture2D* title;
 	LWindow* window;
 	glm::vec2 dimButton;
 	glm::vec2 dimBackground;
 
 public:
-	Launcher(LWindow*);
-	~Launcher();
+	Help(LWindow*);
+	~Help();
 	void render();
 	int selectedButton;
 	void selectedCheck();

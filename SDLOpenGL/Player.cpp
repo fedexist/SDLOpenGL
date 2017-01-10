@@ -27,7 +27,15 @@ Player::~Player()
 
 void Player::getHit(float hitNumber, GameObject* hitter)
 {
+	
 	lifepoints -= hitNumber;
+	if (lifepoints < 0)
+	{
+		lifepoints = 0;
+		Act(HURT, glm::vec2(0, 0));
+	}
+		
+
 	std::string msg;
 	if (this->isPlayer)
 		msg = "Player lost %f life thanks to";
@@ -39,16 +47,21 @@ void Player::getHit(float hitNumber, GameObject* hitter)
 	else 
 		msg += " the fire";
 
-
-	SDL_LogDebug(0,msg.c_str(), hitNumber);
+	myHealthBar->healthToLevel(lifepoints);
+	//SDL_LogDebug(0,msg.c_str(), hitNumber);
 }
 
 void Player::update(float dt)
 {
 
-
-
-	handleAnims(dt);
+	//Gestisco l'animazione normale, cioè periodica
+	if (currentState != HURT || (curIndexFrame != hurtStart + numberOfHurtFrames - 2 && currentState == HURT && framePeriodIndex == 1))
+		handleAnims(dt);
+	else // se sono al penultimo frame dell'animazione di morte e alla fine del suo periodo, passo direttamente al frame finale (altrimenti, l'animazione comincerebbe da capo)
+	{		
+		curIndexFrame = hurtStart + numberOfHurtFrames - 1;
+	}
+		
 
 	glm::vec2 forceInput = glm::vec2(0.0f,0.0f);
 	if (coolDown > 0)
@@ -65,7 +78,8 @@ void Player::update(float dt)
 	}
 	else if (inSlashingAnim() > -1)
 	{
-		handleFight();
+		if (inDamagingAnim())
+			handleFight();
 	}
 
 	if (currentState == MOVING || currentState == MOVING_SLASHING)
@@ -82,15 +96,15 @@ void Player::update(float dt)
 
 		//currentState = MOVING;
 	}
-	else
-	{
-		//currentState = IDLE;
-	}
 	
 	//SDL_LogDebug(0, "%f %f", forceInput.x, forceInput.y);
 
 	//movement
 	handleMovement(dt, forceInput);
+
+	myHealthBar->position.x = position.x;
+
+	myHealthBar->position.y = position.y+0.8;
 
 }
 
@@ -190,6 +204,14 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 		curIndexFrame = startingIndexFrame = startingIndexMatrix[s][directionHit];
 		endingIndexFrame = startingIndexMatrix[s][directionHit] + numberOfFrames[s] - 1;		
 
+	} else if(s == HURT && currentState != HURT)
+	{
+
+		int direction = 0;
+		currentState = s;
+		curIndexFrame = startingIndexFrame = startingIndexMatrix[s][direction];
+		endingIndexFrame = startingIndexMatrix[s][direction] + numberOfFrames[s] - 1;
+
 	} else if(s==IDLE)
 	{
 
@@ -228,7 +250,7 @@ void Player::handleFight()
 		areaSharing.at(i)->getHit(10, this);
 	}
 
-	SDL_LogDebug(0, "Fighting direction %d, %d, indexFrrame %d", int(currentDirection.x), int(currentDirection.y), curIndexFrame);
+	//SDL_LogDebug(0, "Fighting direction %d, %d, indexFrrame %d", int(currentDirection.x), int(currentDirection.y), curIndexFrame);
 }
 
 /*

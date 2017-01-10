@@ -35,6 +35,7 @@ Core::Core(int w, int h, GameClass* game)
 	//dt = 0.0f;
 	startTime = 0.0f;
 	Game = game;
+	game->window = getWindow();
 }
 
 
@@ -65,7 +66,7 @@ bool Core::init()
 	//Initialization flag
 	bool success = true;
 
-
+	
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0 )
 	{
@@ -156,12 +157,22 @@ bool Core::init()
 					{
 						SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"SDL_Mixer could not initialize! SDL Error: %s\n", Mix_GetError() );
 						success = false;
-					} else
+					} 
+					if (TTF_Init() == -1)
+					{
+						SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_TTF could not initialize! SDL Error: %s\n", TTF_GetError());
+						success = false;
+					}
+					else
 					{
 						Game->setAudioManager(&audio_manager_);
 						SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadMedia()\n");
 						Game->loadMedia();
 						Game->setCamera2D(camera);
+						launcher = new Launcher(getWindow());
+						Game->launcher = launcher;
+						help = new Help(getWindow());
+						Game->help = help;
 					}
 						
 
@@ -187,6 +198,16 @@ void Core::handleEvents()
 	frameTime = startTime - lastTimeStamp;
 }
 
+Launcher* Core::getLauncher()
+{
+	return launcher;
+}
+
+Help* Core::getHelp()
+{
+	return help;
+}
+
 void Core::update()
 {
 	/*if (Internalupdate == nullptr)
@@ -202,6 +223,10 @@ void Core::update()
 		double startUpdate = SDL_GetTicks();
 		Game->update(1);
 		updateTime = SDL_GetTicks() - startUpdate;
+		if (updateTime < 1)
+		{
+			updateTime = 1.0f;
+		}
 		frameTime -= updateTime;
 
 	}
