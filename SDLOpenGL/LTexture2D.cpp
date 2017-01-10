@@ -20,7 +20,7 @@ bool LTexture2D::loadFromFile()
 	else
 	{
 		//Color key image
-		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGBA( loadedSurface->format, 0, 0, 0, 0 ) );
 
 			//Get image dimensions
 			width = loadedSurface->w;
