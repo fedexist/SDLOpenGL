@@ -8,7 +8,7 @@ DrawingPlane::DrawingPlane()
 
 void DrawingPlane::loadMedia()
 {
-	std::string path = "./assets/tiles1.png";
+	std::string path = "./assets/DungeonTiles.png";
 
 	tex = LTexture2D(path, 64, 64);
 }
