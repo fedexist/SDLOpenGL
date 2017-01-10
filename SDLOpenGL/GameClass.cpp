@@ -75,19 +75,8 @@ void GameClass::update(float dt)
 					gameObjectArray.at(j)->areaSharing.push_back(gameObjectArray.at(i));
 				}
 			}
-			Fire* fireThis = dynamic_cast<Fire*>(gameObjectArray.at(i));
-			Player* playerThis = dynamic_cast<Player*>(gameObjectArray.at(i));
-			//HealthBar* healthThis = dynamic_cast<HealthBar*>(gameObjectArray.at(i));
-			if (fireThis)
-			{
-				fireThis->update(dt);
-			}
-			if (playerThis)
-			{
-				playerThis->update(dt);
-			}
 			
-			//gameObjectArray.at(i)->update(dt);
+			gameObjectArray.at(i)->update(dt);
 		}
 		//player_->update(dt);
 		//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);

@@ -23,7 +23,7 @@ public:
 	//GameObject();
 	virtual ~GameObject();
 	void render();
-	virtual void update(float dt);
+	virtual void update(float dt)=0;
 	bool isPlayer = false;
 	GameObject* attachedTo = NULL;
 
