@@ -29,9 +29,9 @@ void Player::getHit(float hitNumber, GameObject* hitter)
 {
 	
 	lifepoints -= hitNumber;
-	if (lifepoints < 0)
+	if (lifepoints <= 0.0f)
 	{
-		lifepoints = 0;
+		lifepoints = 0.0f;
 		Act(HURT, glm::vec2(0, 0));
 	}
 		
@@ -53,26 +53,23 @@ void Player::getHit(float hitNumber, GameObject* hitter)
 
 void Player::update(float dt)
 {
-
 	//Gestisco l'animazione normale, cioè periodica
 	if (currentState != HURT || (curIndexFrame != hurtStart + numberOfHurtFrames - 2 && currentState == HURT && framePeriodIndex == 1))
 		handleAnims(dt);
 	else // se sono al penultimo frame dell'animazione di morte e alla fine del suo periodo, passo direttamente al frame finale (altrimenti, l'animazione comincerebbe da capo)
-	{		
+	{	
 		curIndexFrame = hurtStart + numberOfHurtFrames - 1;
 	}
 		
 
 	glm::vec2 forceInput = glm::vec2(0.0f,0.0f);
-	if (coolDown > 0)
-	{
-		coolDown--;	
 
-	}
+	if(lifepoints <= 0.0f)
+		Act(HURT, glm::vec2(0, 0));
 
 	//SDL_LogDebug(0, "%d", inSlashingAnim());
 
-	if (inSlashingAnim() < -1)
+	if (inSlashingAnim() < -1 && lifepoints > 0.0f)
 	{
 		Act(IDLE, currentDirection);
 	}
@@ -104,13 +101,15 @@ void Player::update(float dt)
 
 	myHealthBar->position.x = position.x;
 
-	myHealthBar->position.y = position.y+0.8;
+	myHealthBar->position.y = position.y + 0.8;
 
 }
 
 void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 {
 
+	if (currentState == HURT)
+		return;
 	
 	if(s == SLASHING)
 	{
@@ -120,12 +119,16 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 		uD = static_cast<int>(d.y);
 		lR = static_cast<int>(d.x);
 
+		//SDL_LogDebug(0,"uD %d, lR %d",uD,lR);
+
 		if(uD != -1 || lR != -1)
 		{
 			direction = uD;
 			if (lR != -1)
 				direction = lR;
 		}
+
+		//SDL_LogDebug(0,"direction %d",direction);
 
 		currentState = s;
 		currentDirection = d;
@@ -146,6 +149,8 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 		int direction = -1;
 		unsigned int uD, lR;
 		
+		//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Moving");
+
 		uD = static_cast<int>(d.y);
 		lR = static_cast<int>(d.x);
 
@@ -214,6 +219,8 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 
 	} else if(s==IDLE)
 	{
+
+		//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Going Idle" );
 
 		int direction = -1;
 		unsigned int uD, lR;

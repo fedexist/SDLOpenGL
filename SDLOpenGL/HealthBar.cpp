@@ -23,6 +23,10 @@ void HealthBar::healthToLevel(float life)
 
 }
 
+void HealthBar::update(float dt)
+{
+}
+
 HealthBar::~HealthBar()
 {
 }

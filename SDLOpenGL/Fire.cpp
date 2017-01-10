@@ -16,7 +16,7 @@ void Fire::onInteraction()
 {
 	for (int i = 0; i < areaSharing.size(); i++)
 	{
-		areaSharing.at(i)->getHit(0.1, this);
+		areaSharing.at(i)->getHit(0.5, this);
 	}
 }
 

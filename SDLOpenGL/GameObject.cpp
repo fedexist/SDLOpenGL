@@ -66,6 +66,24 @@ void GameObject::update(float dt)
 }
 
 
+bool GameObject::isHitboxInsideCell(glm::vec2 cell)
+{
+	/*
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "CurrentCell: %f %f", currentCell().x, currentCell().y);
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "SpriteCenter: %f %f", spriteCenter().x, spriteCenter().y);
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "R: Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().x + hitboxDimensions.x, cell.x + 1 );
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "L: Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().x - hitboxDimensions.x, cell.x );
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "U: Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().y + hitboxDimensions.y, cell.y + 1);
+	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "D: Dimensione Edge: %f, Cell coordinate: %f", spriteCenter().y - hitboxDimensions.y, cell.y);
+	*/
+
+	return  spriteCenter().x + hitboxDimensions.x < cell.x + 1 &&
+			spriteCenter().x - hitboxDimensions.x > cell.x &&
+			spriteCenter().y + hitboxDimensions.y < cell.y + 1 &&
+			spriteCenter().y - hitboxDimensions.y > cell.y;
+
+}
+
 bool GameObject::isWalkable(glm::vec2 candidateTranslation)
 {
 		glm::vec2 center = position + glm::vec2(0.5);
@@ -117,7 +135,7 @@ void GameObject::handleMovement(float dt, glm::vec2 forceInput)
 	//Fa è la forza di attrito
 	//mu è la costante di attrito
 	//Fas è la forza di attrito statico
-	v = 0.5; //velocità sensata, 0 = fermo, 0.5 = camminata lenta 1 = camminata, 2 = corsa
+	v = 0.3; //velocità sensata, 0 = fermo, 0.5 = camminata lenta 1 = camminata, 2 = corsa
 	alpha = (100.06f + (2*v * 0.01f)) * (1/pxlToMeter) * (1/mPToKg); //Mp * pxl/s^2
 	mu = 0.5;	//unitario real world number
 	Fa = mu * (9.81 / pxlToMeter) * mass; //Mp * pxl/s^2

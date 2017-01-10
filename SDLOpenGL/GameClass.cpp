@@ -3,6 +3,7 @@
 #include <fstream>
 #include "Player.h"
 #include "Fire.h"
+#include "Chest.h"
 #include "AI.h"
 
 
@@ -37,13 +38,14 @@ void GameClass::update(float dt)
 		setObjectWorldKnowledge(player_); //dovrebbe essere fatto per ogni actor
 		for (int i = 0; i < allAisArray.size(); i++)
 		{
-			allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt);
+
+			allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt, currentLevelLayout_l, currentLevelLayout_o, levelLayoutH,levelLayoutW);
 		}
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
 			gameObjectArray.at(i)->areaSharing.clear();
 		}
-		for (int i = 0; i < gameObjectArray.size();i++)
+		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
 			float ll, rl, ul, dl;
 			ll = gameObjectArray.at(i)->position.x - gameObjectArray.at(i)->hitboxDimensions.x;
@@ -61,11 +63,11 @@ void GameClass::update(float dt)
 				bool YAligned = (dl <= dlj && dl >= ulj) || (ul <= dlj && ul >= ulj);
 				/*if (XAligned )
 				{
-					SDL_LogDebug(0,"XAligned");
+				SDL_LogDebug(0,"XAligned");
 				}
 				if (YAligned)
 				{
-					SDL_LogDebug(0, "YAligned");
+				SDL_LogDebug(0, "YAligned");
 				}*/
 
 				if (XAligned && YAligned)
@@ -75,22 +77,24 @@ void GameClass::update(float dt)
 					gameObjectArray.at(j)->areaSharing.push_back(gameObjectArray.at(i));
 				}
 			}
+
 			Fire* fireThis = dynamic_cast<Fire*>(gameObjectArray.at(i));
 			Player* playerThis = dynamic_cast<Player*>(gameObjectArray.at(i));
 			//HealthBar* healthThis = dynamic_cast<HealthBar*>(gameObjectArray.at(i));
+			/*
 			if (fireThis)
 			{
-				fireThis->update(dt);
+			fireThis->update(dt);
 			}
 			if (playerThis)
 			{
-				playerThis->update(dt);
+			playerThis->update(dt);
 			}
-			
-			//gameObjectArray.at(i)->update(dt);
+			*/
+			gameObjectArray.at(i)->update(dt);
+			//player_->update(dt);
+			//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
 		}
-		//player_->update(dt);
-		//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
 	}
 
 	camera->update(dt);
@@ -104,16 +108,21 @@ void GameClass::loadMedia()
 	plane.loadMedia();
 
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
-	loadLevelLayout("room1", 10, 10);
+	loadLevelLayout("room1", 40, 40);
 
 	//Caricamento textures
 	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,60));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 60));
 	allTextures.push_back(LTexture2D("./assets/life.png", 64, 64,60));
 
+	allTextures.push_back(LTexture2D("./assets/orc.png", 64, 64, 60));
+	allTextures.push_back(LTexture2D("./assets/chest.png", 64, 64, 60));
+
 	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
-	allObjectsFactory.push_back(new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28));
+	allObjectsFactory.push_back(new Player(glm::vec2(0.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(3), 1, 26, 28));
 	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 4));
+	
+	allObjectsFactory.push_back(new Chest(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(4), 0.05, 0, 1));
 
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
@@ -128,15 +137,27 @@ void GameClass::loadMedia()
 			{
 				Fire* fireThis = dynamic_cast<Fire*>(allObjectsFactory.at(objectIndex));
 				Player* playerThis = dynamic_cast<Player*>(allObjectsFactory.at(objectIndex));
+				Chest* chestThis = dynamic_cast<Chest*>(allObjectsFactory.at(objectIndex));
 
 				if (fireThis)
 				{
-					gameObjectArray.push_back (new Fire(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Fire*>(allObjectsFactory.at(objectIndex))));
+					Fire* creatingFire = new Fire(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Fire*>(allObjectsFactory.at(objectIndex)));
+					creatingFire->resizeHitBox(glm::vec2(0.5,1));
+					gameObjectArray.push_back (creatingFire);
+				}
+
+				if (chestThis)
+				{
+					Chest* creatingChest = new Chest(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Chest*>(allObjectsFactory.at(objectIndex)));
+					//creatingChest->resizeHitBox(glm::vec2(0.5,1));
+					gameObjectArray.push_back (creatingChest);
 				}
 
 				if (playerThis)
 				{
-					Player* creatingPlayer = new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Player*>(allObjectsFactory.at(objectIndex)));
+
+					Player* creatingPlayer = new Player(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.00002, static_cast<Player*>(allObjectsFactory.at(objectIndex)));
+
 					creatingPlayer->myHealthBar = new HealthBar(glm::vec2(i, (levelLayoutH - j - 1)+1), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
 					creatingPlayer->myHealthBar->attachedTo = creatingPlayer;
 					gameObjectArray.push_back(creatingPlayer);
@@ -148,12 +169,12 @@ void GameClass::loadMedia()
 			}
 		}
 	}
-	
+	/*
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+	player_->isPlayer = true;
+	*/
 
 	centerDummy = new Player(glm::vec2(launcher->centredCoor(1024, 64), launcher->centredCoor(640, 64)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
-
-	player_->isPlayer = true;
 
 	HealthBar* playerHealthBar = new HealthBar(glm::vec2(4.5, 5.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
 	playerHealthBar->attachedTo =player_;
@@ -217,7 +238,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 
 
 
-	std::ifstream file(levelPath + levelName + ".csv");
+	std::ifstream file(levelPath + levelName + "_tiles.csv");
 
 	for(int row = 0; row < height; ++row)
 	{
@@ -244,7 +265,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 		
 	}
 
-	std::ifstream filel(levelPath + levelName + "_l.csv");
+	std::ifstream filel(levelPath + levelName + "_logic.csv");
 
 	for (int row = 0; row < height; ++row)
 	{
@@ -271,7 +292,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 
 	}
 
-	std::ifstream fileo(levelPath + levelName + "_o.csv");
+	std::ifstream fileo(levelPath + levelName + "_objects.csv");
 
 	for (int row = 0; row < height; ++row)
 	{
@@ -378,120 +399,124 @@ void GameClass::handleKeyboardEvents()
 
 	switch (gameState)
 	{
-	case LAUNCHER:
-	{
-				 if (currentKeyStates[SDL_SCANCODE_UP])
-				 {
-					 if (launcher->selectedButton > 0) launcher->selectedButton--;
-					 launcher->selectedCheck();
-				 }
-				 else if (currentKeyStates[SDL_SCANCODE_DOWN])
-				 {
-					 if (launcher->selectedButton < (launcher->buttons.size() - 1)) launcher->selectedButton++;
-					 launcher->selectedCheck();
-				 }
-				 else if (currentKeyStates[SDL_SCANCODE_RETURN])
-				 {
-					 if (launcher->selectedButton!=-1)
-					 {
-						 audio_manager->playSoundEffect("ButtonSelected");
-
-						 audio_manager->ManageMusic(STOP, "LauncherTheme");
-						 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
-						 audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
-					 }
-				 }
-				 break;}
-	case GAME:
-	{
-				 bool isMoving = currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_A] || currentKeyStates[SDL_SCANCODE_S] || currentKeyStates[SDL_SCANCODE_D];
-				 bool isSlashing = player_->coolDown == 0 && (currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT]);
-
-				 if (isMoving)
-				 {
-					 glm::vec2 uDlR = glm::vec2(-1, -1);
-					 if (currentKeyStates[SDL_SCANCODE_W])
-					 {
-						 uDlR.y = UP;
-					 }
-					 else if (currentKeyStates[SDL_SCANCODE_S])
-					 {
-						 uDlR.y = DOWN;
-					 }
-					 if (currentKeyStates[SDL_SCANCODE_A])
-					 {
-						 uDlR.x = LEFT;
-					 }
-					 else if (currentKeyStates[SDL_SCANCODE_D])
-					 {
-						 uDlR.x = RIGHT;
-					 }
-					 //player_->Move(uDlR);
-					 if (isSlashing)
-					 {
-						 glm::vec2 uDlRHit = glm::vec2(-1, -1);
-
-						 if (currentKeyStates[SDL_SCANCODE_UP])
-						 {
-							 uDlRHit.y = UP;
-						 }
-						 else if (currentKeyStates[SDL_SCANCODE_DOWN])
-						 {
-							 uDlRHit.y = DOWN;
-						 }
-						 if (currentKeyStates[SDL_SCANCODE_LEFT])
-						 {
-							 uDlRHit.x = LEFT;
-						 }
-						 else if (currentKeyStates[SDL_SCANCODE_RIGHT])
-						 {
-							 uDlRHit.x = RIGHT;
-						 }
-						 //SDL_LogDebug(0, "in the slashmove loop");
-						 player_->coolDown = 40;
-						 player_->Act(MOVING_SLASHING, uDlR, uDlRHit);
-						 audio_manager->playSoundEffect("SwordSwish");
-					 }
-					 else
-					 {
-						 player_->Act(MOVING, uDlR);
-						 //SDL_LogDebug(0, "in the move loop");
-					 }
-
-				 }
-				 else if (isSlashing && !isMoving)
-				 {
-					 //SDL_LogDebug(0, "SLASHING NOT MOVING, %d");
-					 glm::vec2 uDlR = glm::vec2(-1, -1);
+		case LAUNCHER:
+		{
 					 if (currentKeyStates[SDL_SCANCODE_UP])
 					 {
-						 uDlR.y = UP;
+						 if (launcher->selectedButton > 0) launcher->selectedButton--;
+						 launcher->selectedCheck();
 					 }
 					 else if (currentKeyStates[SDL_SCANCODE_DOWN])
 					 {
-						 uDlR.y = DOWN;
+						 if (launcher->selectedButton < (launcher->buttons.size() - 1)) launcher->selectedButton++;
+						 launcher->selectedCheck();
 					 }
-					 if (currentKeyStates[SDL_SCANCODE_LEFT])
+					 else if (currentKeyStates[SDL_SCANCODE_RETURN])
 					 {
-						 uDlR.x = LEFT;
+						 if (launcher->selectedButton!=-1)
+						 {
+							 audio_manager->playSoundEffect("ButtonSelected");
+
+							 audio_manager->ManageMusic(STOP, "LauncherTheme");
+							 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+							 audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
+						 }
 					 }
-					 else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+					 break;}
+		case GAME:
+		{
+
+			bool cooldownBool = int (SDL_GetTicks() - player_->coolDown) > 0;
+					 bool isMoving = currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_A] || currentKeyStates[SDL_SCANCODE_S] || currentKeyStates[SDL_SCANCODE_D];
+					 bool isSlashing = cooldownBool && (currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT]);
+
+					 if (isMoving)
 					 {
-						 uDlR.x = RIGHT;
+						 glm::vec2 uDlR = glm::vec2(-1, -1);
+						 if (currentKeyStates[SDL_SCANCODE_W])
+						 {
+							 uDlR.y = UP;
+						 }
+						 else if (currentKeyStates[SDL_SCANCODE_S])
+						 {
+							 uDlR.y = DOWN;
+						 }
+						 if (currentKeyStates[SDL_SCANCODE_A])
+						 {
+							 uDlR.x = LEFT;
+						 }
+						 else if (currentKeyStates[SDL_SCANCODE_D])
+						 {
+							 uDlR.x = RIGHT;
+						 }
+						 //player_->Move(uDlR);
+						 if (isSlashing)
+						 {
+							 glm::vec2 uDlRHit = glm::vec2(-1, -1);
+
+							 if (currentKeyStates[SDL_SCANCODE_UP])
+							 {
+								 uDlRHit.y = UP;
+							 }
+							 else if (currentKeyStates[SDL_SCANCODE_DOWN])
+							 {
+								 uDlRHit.y = DOWN;
+							 }
+							 if (currentKeyStates[SDL_SCANCODE_LEFT])
+							 {
+								 uDlRHit.x = LEFT;
+							 }
+							 else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+							 {
+								 uDlRHit.x = RIGHT;
+							 }
+							 //SDL_LogDebug(0, "in the slashmove loop");
+							 player_->coolDown = SDL_GetTicks() + 400;
+							 player_->Act(MOVING_SLASHING, uDlR, uDlRHit);
+							 audio_manager->playSoundEffect("SwordSwish");
+						 }
+						 else
+						 {
+							 player_->Act(MOVING, uDlR);
+							 //SDL_LogDebug(0, "in the move loop");
+						 }
+
 					 }
-					 //player_->Slash(uDlR, true);
-					 player_->coolDown = 40;
-					 player_->Act(SLASHING, uDlR);
-					 audio_manager->playSoundEffect("SwordSwish");
-				 }
-				 if (!(isMoving || isSlashing))
-				 {
-					 player_->Act(IDLE, glm::vec2(-1, -1));
-				 }
-				 break;}
-	default:
-	{
-			   break;}
+					 else if (isSlashing && !isMoving)
+					 {
+						 //SDL_LogDebug(0, "SLASHING NOT MOVING, %d");
+						 glm::vec2 uDlR = glm::vec2(-1, -1);
+						 if (currentKeyStates[SDL_SCANCODE_UP])
+						 {
+							 uDlR.y = UP;
+						 }
+						 else if (currentKeyStates[SDL_SCANCODE_DOWN])
+						 {
+							 uDlR.y = DOWN;
+						 }
+						 if (currentKeyStates[SDL_SCANCODE_LEFT])
+						 {
+							 uDlR.x = LEFT;
+						 }
+						 else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+						 {
+							 uDlR.x = RIGHT;
+						 }
+						 //player_->Slash(uDlR, true);
+						 player_->coolDown = SDL_GetTicks() + 400;
+						 player_->Act(SLASHING, uDlR);
+						 audio_manager->playSoundEffect("SwordSwish");
+					 }
+					 if (!(isMoving || isSlashing))
+					 {
+						 player_->Act(IDLE, glm::vec2(-1, -1));
+					 }
+					 break;
+		}
+		default:
+		{
+				   break;
+		}
 	}
 }
 

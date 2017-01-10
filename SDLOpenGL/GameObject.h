@@ -23,7 +23,7 @@ public:
 	//GameObject();
 	virtual ~GameObject();
 	void render();
-	virtual void update(float dt);
+	virtual void update(float dt)=0;
 	bool isPlayer = false;
 	GameObject* attachedTo = NULL;
 
@@ -47,9 +47,14 @@ public:
 		}
 	} gameObjectComparer;
 
+	//utility functions
 	glm::vec2 gridPositionToWorld() const { return glm::vec2( position.x * dimensions.x + dimensions.x / 2, position.y * dimensions.y + dimensions.y / 2 ); }
 	glm::vec2 spriteCenter() const { return glm::vec2(position.x + 0.5, position.y + 0.5); }
+	glm::vec2 currentCell() const { return glm::vec2(floorf(position.x + 0.5), floorf(position.y + 0.5)); }
 	glm::vec2 getLastTranslation() const { return glm::vec2( lastTranslation.x * dimensions.x, lastTranslation.y * dimensions.y); } //traslazione in coordinate mondo
+	bool isHitboxInsideCell(glm::vec2 cell);
+	void resizeHitBox(glm::vec2 resize) { hitboxDimensions = glm::vec2(hitboxDimensions.x*resize.x,hitboxDimensions.y*resize.y); };
+
 	bool isWalkable(glm::vec2 candidateTranslation);
 	virtual void getHit(float hitNumber, GameObject* hitter)
 	{
@@ -63,7 +68,7 @@ protected:
 
 	glm::vec2 position; //Il centro della sprite è Position + vec2(0.5)
 
-	glm::vec2 hitboxDimensions = glm::vec2(17.f/64.f, 30.f/64.f); //dimensione della hitbox rispetto al centro della sprite p.e. per una 64x64 -> (15,20), cioè una hitbox 30x40, con centro position + vec(0.5)
+	glm::vec2 hitboxDimensions = glm::vec2(30.f/64.f, 31.f/64.f); //dimensione della hitbox rispetto al centro della sprite p.e. per una 64x64 -> (15,20), cioè una hitbox 30x40, con centro position + vec(0.5)
 
 	std::vector<GameObject*> areaSharing;
 	LTexture2D* tex;
