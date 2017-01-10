@@ -119,7 +119,7 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 		uD = static_cast<int>(d.y);
 		lR = static_cast<int>(d.x);
 
-		SDL_LogDebug(0,"uD %d, lR %d",uD,lR);
+		//SDL_LogDebug(0,"uD %d, lR %d",uD,lR);
 
 		if(uD != -1 || lR != -1)
 		{
@@ -128,7 +128,7 @@ void Player::Act(State s, glm::vec2 d, glm::vec2 d2)
 				direction = lR;
 		}
 
-		SDL_LogDebug(0,"direction %d",direction);
+		//SDL_LogDebug(0,"direction %d",direction);
 
 		currentState = s;
 		currentDirection = d;

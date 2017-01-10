@@ -3,6 +3,7 @@
 #include <fstream>
 #include "Player.h"
 #include "Fire.h"
+#include "Chest.h"
 #include "AI.h"
 
 
@@ -101,10 +102,13 @@ void GameClass::loadMedia()
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 60));
 	allTextures.push_back(LTexture2D("./assets/life.png", 64, 64,60));
 	allTextures.push_back(LTexture2D("./assets/orc.png", 64, 64, 60));
+	allTextures.push_back(LTexture2D("./assets/chest.png", 64, 64, 60));
 
 	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(0.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(3), 1, 26, 28));
 	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 4));
+	
+	allObjectsFactory.push_back(new Chest(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(4), 0.05, 0, 1));
 
 	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
@@ -119,12 +123,20 @@ void GameClass::loadMedia()
 			{
 				Fire* fireThis = dynamic_cast<Fire*>(allObjectsFactory.at(objectIndex));
 				Player* playerThis = dynamic_cast<Player*>(allObjectsFactory.at(objectIndex));
+				Chest* chestThis = dynamic_cast<Chest*>(allObjectsFactory.at(objectIndex));
 
 				if (fireThis)
 				{
 					Fire* creatingFire = new Fire(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Fire*>(allObjectsFactory.at(objectIndex)));
 					creatingFire->resizeHitBox(glm::vec2(0.5,1));
 					gameObjectArray.push_back (creatingFire);
+				}
+
+				if (chestThis)
+				{
+					Chest* creatingChest = new Chest(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Chest*>(allObjectsFactory.at(objectIndex)));
+					//creatingChest->resizeHitBox(glm::vec2(0.5,1));
+					gameObjectArray.push_back (creatingChest);
 				}
 
 				if (playerThis)
