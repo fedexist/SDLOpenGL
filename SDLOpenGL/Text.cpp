@@ -7,16 +7,17 @@
 	Text text = FontManager->createText(std::string message, std::string font, SDL_color color, int size ); \
 	dove FontManager incorpora una HashMap<std::string, TTF_font*>, oltre a gestire il caricamento e il rilascio dei font.
 
-Text::Text(std::string path, std::string m, SDL_Color c, int size)
+Text::Text(TTF_Font* font_, std::string m, SDL_Color c, int size)
 {
 	pointSize = size;
-	fontPath = path;
 	message = m; 
 	color = c;
+	font = font_;
+	/*
 	if (!loadFont())
 	{
 		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "LoadFont failed: %s", TTF_GetError());
-	}
+	}*/
 }
 
 bool Text::loadFont()
@@ -24,7 +25,8 @@ bool Text::loadFont()
 	//libero la memoria
 	//free();
 	//init del font e creazione della surface per il render
-	font = TTF_OpenFont(fontPath.c_str(), pointSize);
+	//font = TTF_OpenFont(fontPath.c_str(), pointSize);
+
 	if (!(surface = TTF_RenderUTF8_Blended(font, message.c_str(), color)))
 	{
 		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Surface creation failed");
@@ -68,15 +70,14 @@ bool Text::loadFont()
 
 void Text::drawText(float posX, float posY)
 {
-
 	GLfloat Lvertices[] = {
 		posX*textDimensions.x, posY*textDimensions.y,
 		(posX + 1)*textDimensions.x, posY*textDimensions.y,
 		(posX + 1)*textDimensions.x, (posY + 1)*textDimensions.y,
-		posX*textDimensions.x, (posY + 1)*textDimensions.y
+		posX*textDimensions.x, (posY + 1)*textDimensions.y,
 	};
 
-	const float tex_verts[] = 
+	const GLfloat tex_verts[] = 
 	{
 		0,1,
 		1,1,
@@ -89,6 +90,8 @@ void Text::drawText(float posX, float posY)
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glTexCoordPointer(2, GL_FLOAT, 0, tex_verts);
 	glVertexPointer(2, GL_FLOAT, 0, Lvertices);
 	
 	glDrawArrays(GL_QUADS, 0, 4);
@@ -99,7 +102,6 @@ void Text::drawText(float posX, float posY)
 
 Text::~Text()
 {
-	TTF_CloseFont(font);
 }
 
 void Text::free()

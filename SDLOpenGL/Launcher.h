@@ -1,6 +1,7 @@
 #pragma once
 #include "Button.h"
 #include "Background.h"
+#include "FontManager.h"
 
 class Launcher
 {
@@ -15,7 +16,7 @@ class Launcher
 	glm::vec2 dimBackground;
 
 public:
-	Launcher(LWindow*);
+	Launcher(LWindow*, FontManager*);
 	~Launcher();
 	void render();
 	int selectedButton;

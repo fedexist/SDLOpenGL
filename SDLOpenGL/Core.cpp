@@ -169,13 +169,15 @@ bool Core::init()
 						SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"SDL_Mixer could not initialize! SDL Error: %s\n", Mix_GetError() );
 						success = false;
 					} 
-					if (TTF_Init() == -1)
+					if (!font_manager_.init())
 					{
 						SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_TTF could not initialize! SDL Error: %s\n", TTF_GetError());
 						success = false;
 					}
 					else
 					{
+						font_manager_.LoadFont("main_font", "general_font.ttf", 50);
+						Game->setFontManager(&font_manager_);
 						Game->setAudioManager(&audio_manager_);
 						SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadMedia()\n");
 						Game->loadMedia();
@@ -183,9 +185,9 @@ bool Core::init()
 
 						//	TODO: [RELEASE] sistemare la parte seguente per rispettare l'agnosticismo di Core.
 
-						launcher = new Launcher(getWindow());
+						launcher = new Launcher(getWindow(), &font_manager_);
 						Game->launcher = launcher;
-						help = new Help(getWindow());
+						help = new Help(getWindow(), &font_manager_);
 						Game->help = help;
 					}
 						

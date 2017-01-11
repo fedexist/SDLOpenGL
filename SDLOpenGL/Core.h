@@ -5,6 +5,7 @@
 #include "EventHandler.h"
 #include "GameClass.h"
 #include "AudioManager.h"
+#include "FontManager.h"
 
 typedef void(*Internalupdate)(float dt);
 typedef void(*InternalRender)();
@@ -40,6 +41,7 @@ private:
 		GameClass* Game;
 		Camera2D* camera;
 		AudioManager audio_manager_;
+		FontManager font_manager_;
 		Launcher* launcher;
 		Help* help;
 		

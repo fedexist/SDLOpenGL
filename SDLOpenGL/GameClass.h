@@ -7,6 +7,7 @@
 #include <SDL_ttf.h>
 #include "AudioManager.h"
 #include "Help.h"
+#include "FontManager.h"
 
 typedef enum GameState
 {
@@ -46,6 +47,7 @@ class GameClass
 	Camera2D* camera;
 	GameState gameState;
 	AudioManager* audio_manager;
+	FontManager* font_manager;
 
 public:
 	GameClass();
@@ -66,5 +68,6 @@ public:
 	void setAudioManager(AudioManager* audio_manager);
 
 	float distance(GameObject* obj1, GameObject* obj2) const;
+	void setFontManager(FontManager* font_manager);
 };
 

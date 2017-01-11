@@ -599,3 +599,8 @@ float GameClass::distance(GameObject* obj1, GameObject* obj2) const
 	return glm::distance2(position1, position2);
 
 }
+
+void GameClass::setFontManager(FontManager* font_manager)
+{
+	this->font_manager = font_manager;
+}

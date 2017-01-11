@@ -1,6 +1,7 @@
 #pragma once
 #include "Button.h"
 #include "Text.h"
+#include "FontManager.h"
 
 class Help
 {
@@ -14,7 +15,7 @@ class Help
 	glm::vec2 dimBackground;
 
 public:
-	Help(LWindow*);
+	Help(LWindow*, FontManager*);
 	~Help();
 	void render();
 	int selectedButton;

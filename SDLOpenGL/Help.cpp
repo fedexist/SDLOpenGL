@@ -5,7 +5,7 @@
 //	TODO: [RELEASE] Questa classe non dovrebbe esserci. Tutto ciò è gestibile da un'unica classe Launcher \
 	con diversi stati.
 
-Help::Help(LWindow* w)
+Help::Help(LWindow* w, FontManager* font_manager)
 {
 	texts = std::vector<Text*>();
 	buttons = std::vector<Button*>();
@@ -17,12 +17,19 @@ Help::Help(LWindow* w)
 
 	SDL_Color color = { 255, 255, 255 };
 	background = new Background("./assets/background_launcher.png", 1024, 640);
+
+	TTF_Font* font = font_manager->retrieveFont("main_font");
+	int size = font_manager->retrieveSize("main_font");;
+
+	Text* backText = new Text(font, "BACK", color, size);
+	backText->loadFont();
+
 	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
 					centredCoor(background->getBackgroundDim().y, dimButton.y) - 3), 
 					dimButton, 
 					new LTexture2D("./assets/button_back.png", dimButton.x, dimButton.y), 
-					LAUNCHER,
-					new Text("./assets/fonts/general_font.ttf", "BACK", color, 50)));
+					LAUNCHER, backText
+					));
 
 	for (Button* b : buttons)
 	{

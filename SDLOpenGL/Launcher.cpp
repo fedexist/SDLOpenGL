@@ -2,8 +2,9 @@
 #include "Launcher.h"
 #include "Button.h"
 
-Launcher::Launcher(LWindow* w)
+Launcher::Launcher(LWindow* w, FontManager* font_manager)
 {
+	SDL_LogDebug(0, "constructing launcher");
 	buttons = std::vector<Button*>();
 	texts = std::vector<Text*>();
 	dimButton = glm::vec2(256, 64);
@@ -14,18 +15,33 @@ Launcher::Launcher(LWindow* w)
 
 	SDL_Color color = { 255, 255, 240 };
 	background = new Background("./assets/background_launcher.png", dimBackground.x, dimBackground.y);
+	
+
+	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Font is: %s, Size is: %d", &font, *size);
+
+	TTF_Font* font = font_manager->retrieveFont("main_font");
+	int size = font_manager->retrieveSize("main_font");
+
+	SDL_LogDebug(0, "building start text");
+	Text* startText = new Text(font, "START", color, size);
+	SDL_LogDebug(0, "loading font for start text");
+	startText->loadFont();
+
 	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
 					centredCoor(background->getBackgroundDim().y, dimButton.y) - 1), 
 					dimButton, 
 					new LTexture2D("./assets/button_start.png", dimButton.x, dimButton.y), 
-					GAME, 
-					new Text("./assets/fonts/general_font.ttf", "START", color, 50)));
+					GAME, startText
+					));
+
+	Text* helpText = new Text(font, "HELP", color, size);
+	helpText->loadFont();
+
 	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
 					centredCoor(background->getBackgroundDim().y, dimButton.y) - 3), 
 					dimButton, 
 					new LTexture2D("./assets/button_help.png", dimButton.x, dimButton.y), 
-					HELP, 
-					new Text("./assets/fonts/general_font.ttf", "HELP", color, 50)));
+					HELP, helpText));
 
 	for (Button* b : buttons)
 	{
@@ -34,6 +50,8 @@ Launcher::Launcher(LWindow* w)
 	selectedCheck();
 
 	title = new LTexture2D("./assets/title.png", 512, 128);
+
+	SDL_LogDebug(0, "Finished constructing launcher");
 }
 
 void Launcher::render()

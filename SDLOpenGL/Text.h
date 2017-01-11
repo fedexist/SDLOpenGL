@@ -13,8 +13,9 @@ class Text
 	GLuint textureID;	
 
 public:
-	Text(std::string path, std::string message, SDL_Color, int ptSize);
+	Text() {};
 	~Text();
+	Text(TTF_Font* font_, std::string m, SDL_Color c, int size);
 	bool loadFont();
 	void drawText(float posX, float posY);
 	void free();
