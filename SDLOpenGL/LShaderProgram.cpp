@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "LShaderProgram.h"
 
+//	TODO: [RELEASE] Generalizzare ulteriormente la gestione degli shader con una pipeline standard \
+	e.g. ShaderProgram shader = LShaderProgram("shader.frag", "shader.vert", ... ) \
+	
+
 
 LShaderProgram::LShaderProgram()
 {

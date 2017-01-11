@@ -2,6 +2,11 @@
 #include "Text.h"
 
 
+//	TODO: [RELEASE] all'attuale implementazione, per ogni singolo testo viene caricato da memoria il relativo font \
+	La struttura dovrebbe essere con una classe interna a Core che offre come "servizio" l'uso di Font caricati all'init: \
+	Text text = FontManager->createText(std::string message, std::string font, SDL_color color, int size ); \
+	dove FontManager incorpora una HashMap<std::string, TTF_font*>, oltre a gestire il caricamento e il rilascio dei font.
+
 Text::Text(std::string path, std::string m, SDL_Color c, int size)
 {
 	pointSize = size;
@@ -10,7 +15,7 @@ Text::Text(std::string path, std::string m, SDL_Color c, int size)
 	color = c;
 	if (!loadFont())
 	{
-		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "LoadFont failed");
+		SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "LoadFont failed: %s", TTF_GetError());
 	}
 }
 
@@ -94,6 +99,7 @@ void Text::drawText(float posX, float posY)
 
 Text::~Text()
 {
+	TTF_CloseFont(font);
 }
 
 void Text::free()

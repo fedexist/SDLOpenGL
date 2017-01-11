@@ -29,7 +29,6 @@ bool LTexture2D::loadFromFile()
 	
 			glGenTextures(1, &texId);
 			glBindTexture(GL_TEXTURE_2D, texId);
-			SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "texID: %d", texId);
 			glGenerateMipmap(GL_TEXTURE_2D);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, loadedSurface->w, loadedSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, loadedSurface->pixels);
 

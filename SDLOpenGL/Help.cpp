@@ -2,6 +2,8 @@
 #include "Help.h"
 #include "Button.h"
 
+//	TODO: [RELEASE] Questa classe non dovrebbe esserci. Tutto ciò è gestibile da un'unica classe Launcher \
+	con diversi stati.
 
 Help::Help(LWindow* w)
 {

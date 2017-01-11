@@ -65,10 +65,11 @@ void LWindow::handleEvent( SDL_Event& e )
 			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();*/
 			coreInstance->updateProjection(mWidth - old_width, mHeight - old_height);
-			SDL_GL_SwapWindow(mWindow);
-			coreInstance->renderPresent();
+			//	TODO: [RELEASE] Eliminare queste 2 righe: per riferimento, il TODO in Core.cpp
 			coreInstance->getLauncher()->onUpdateWindow();
 			coreInstance->getHelp()->onUpdateWindow();
+			SDL_GL_SwapWindow(mWindow);
+			coreInstance->renderPresent();
 			break;
 
 			//Repaint on exposure
