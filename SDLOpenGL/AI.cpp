@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "AI.h"
 
-PathFinder AI::pathfinder_ = PathFinder();
-
 AI::AI(Player* myCharacter, Player* enemy)
 {
 	this->myCharacter = myCharacter;
@@ -10,12 +8,17 @@ AI::AI(Player* myCharacter, Player* enemy)
 	curState = idle;
 }
 
-void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W)
+void AI::updateWorld(std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W)
+{
+	pathfinder_.updateWorld(logicLevelMap, objectLevelMap, H,W);
+
+}
+
+void AI::update(float distance, float dt)
 {
 	changeState(distance);
 	//SDL_LogDebug(0, "State has changed");
 	//dothings
-	pathfinder_.updateWorld(logicLevelMap, objectLevelMap, H,W);
 	switch (curState)
 	{
 		
