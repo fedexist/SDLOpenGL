@@ -124,7 +124,7 @@ void GameClass::loadMedia()
 	
 	allObjectsFactory.push_back(new Chest(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(4), 0.05, 0, 1));
 
-	player_ = new Player(glm::vec2(10, 10), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+	player_ = new Player(glm::vec2(8, 10), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
 	player_->isPlayer = true;
 

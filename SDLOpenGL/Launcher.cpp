@@ -22,9 +22,9 @@ Launcher::Launcher(LWindow* w, FontManager* font_manager)
 	TTF_Font* font = font_manager->retrieveFont("main_font");
 	int size = font_manager->retrieveSize("main_font");
 
-	SDL_LogDebug(0, "building start text");
+	//SDL_LogDebug(0, "building start text");
 	Text* startText = new Text(font, "START", color, size);
-	SDL_LogDebug(0, "loading font for start text");
+	//SDL_LogDebug(0, "loading font for start text");
 	startText->loadFont();
 
 	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
@@ -51,7 +51,7 @@ Launcher::Launcher(LWindow* w, FontManager* font_manager)
 
 	title = new LTexture2D("./assets/title.png", 512, 128);
 
-	SDL_LogDebug(0, "Finished constructing launcher");
+	//SDL_LogDebug(0, "Finished constructing launcher");
 }
 
 void Launcher::render()

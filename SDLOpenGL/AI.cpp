@@ -12,7 +12,7 @@ AI::AI(Player* myCharacter, Player* enemy)
 
 void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W)
 {
-	if(changeState(distance))
+	changeState(distance);
 	//SDL_LogDebug(0, "State has changed");
 	//dothings
 	pathfinder_.updateWorld(logicLevelMap, objectLevelMap, H,W);
@@ -21,23 +21,23 @@ void AI::update(float distance, float dt, std::vector<GLint*> logicLevelMap, std
 		
 		case seek:
 		{
-			if (SDL_GetTicks() - reaction_counter < reaction)
-			{
-				//tempo passa
-			}
-			else
+			if (SDL_GetTicks() - reaction_counter > reaction)
 			{
 				reaction_counter = SDL_GetTicks();
 				//A*;
 				currentPath.clear();
 				currentPath = pathfinder_.findPath(myCharacter->currentCell(), enemy->currentCell()); //calcolo del nuovo percorso
+
+				if (currentPath.empty())
+					break;
+
 				pathIterator = currentPath.begin(); //nuovo iteratore impostato
 				if(currentPath.size() == 1)
 					nextNode = *pathIterator; //primo nodo obiettivo se c'è un solo passo necessario
 				else
 					nextNode = *++pathIterator; //primo nodo obiettivo se c'è più di un passo
 			}  
-			if(myCharacter->isHitboxInsideCell(nextNode.first) && *(pathIterator + 1) != currentPath.back() && currentPath.size() > 1)
+			if(currentPath.size() > 1 && myCharacter->isHitboxInsideCell(nextNode.first) && *(pathIterator + 1) != currentPath.back())
 			{
 				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Going to nextNode");
 				nextNode = *(++pathIterator);

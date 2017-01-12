@@ -1,6 +1,5 @@
 #pragma once
 #include "astar-algorithm/stlastar.h"
-#include "stdafx.h"
 
 
 #define DEBUG_LISTS 0;
