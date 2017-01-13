@@ -4,7 +4,6 @@
 #include "Player.h"
 #include "Camera2D.h"
 #include "Launcher.h"
-#include <SDL_ttf.h>
 #include "AudioManager.h"
 #include "Help.h"
 #include "FontManager.h"

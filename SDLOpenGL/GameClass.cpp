@@ -586,6 +586,7 @@ void GameClass::setObjectWorldKnowledge(GameObject * actor)
 void GameClass::setCamera2D(Camera2D* camera_)
 {
 	camera = camera_;
+	//	TODO: Non dovrebbe essere qua
 	camera->follow(centerDummy);
 }
 

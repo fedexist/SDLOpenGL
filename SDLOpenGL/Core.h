@@ -1,5 +1,4 @@
 #pragma once
-#include "stdafx.h"
 #include "LWindow.h"
 #include "GLHandler.h"
 #include "EventHandler.h"
