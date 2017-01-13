@@ -9,13 +9,14 @@ Help::Help(LWindow* w, FontManager* font_manager)
 {
 	texts = std::vector<Text*>();
 	buttons = std::vector<Button*>();
+	images = std::vector<LTexture2D*> ();
 	dimButton = glm::vec2(256, 64);
 	dimBackground = glm::vec2(1024, 640);
 	selectedButton = -1;
 	window = w;
 
 
-	SDL_Color color = { 255, 255, 255 };
+	SDL_Color color = { 190, 120, 35 };
 	background = new Background("./assets/background_launcher.png", 1024, 640);
 
 	TTF_Font* font = font_manager->retrieveFont("main_font");
@@ -27,7 +28,7 @@ Help::Help(LWindow* w, FontManager* font_manager)
 	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
 					centredCoor(background->getBackgroundDim().y, dimButton.y) - 3), 
 					dimButton, 
-					new LTexture2D("./assets/button_back.png", dimButton.x, dimButton.y), 
+					new LTexture2D("./assets/button.png", dimButton.x, dimButton.y), 
 					LAUNCHER, backText
 					));
 
@@ -36,18 +37,39 @@ Help::Help(LWindow* w, FontManager* font_manager)
 		b->positionPx = relativeCoor2pxCoor(b->positionRel, dimButton);
 	}
 
+	images.push_back(new LTexture2D("./assets/dir_arrows.png", 256, 128));
+	images.push_back(new LTexture2D("./assets/wasd.png", 256, 128));
+
+	color = { 0, 0, 0 };
+	Text* attackInfo = new Text(font, "Attack:", color, size);
+	attackInfo->loadFont();
+	texts.push_back(attackInfo);
+
+	Text* movementInfo = new Text(font, "Movement:", color, size);
+	movementInfo->loadFont();
+	texts.push_back(movementInfo);
+
+	background_commands = new LTexture2D("./assets/parchment.png", 770, 400);
+
 	selectedCheck();
 }
 void Help::render()
 {
 	background->render();
+	background_commands->drawSprite(centredCoor(background->getBackgroundDim().x, 770),centredCoor(background->getBackgroundDim().y, 400) + 0.20, 0, 0);
+	int i = 0;
+	for (LTexture2D* image : images)
+	{
+		image->drawSprite(centredCoor(background->getBackgroundDim().x, 256)+0.5, centredCoor(background->getBackgroundDim().y, 128) + 1.25*i++, 0, 0);
+	}
 	for (Button* button : buttons)
 	{
 		button->render();
 	}
+	i = 0;
 	for (Text* text : texts)
 	{
-		text->drawText(centredCoor(dimBackground.x, text->textDimensions.x), centredCoor(dimBackground.y, text->textDimensions.y));
+		text->drawText(centredCoor(background->getBackgroundDim().x, text->textDimensions.x) - 0.75, centredCoor(background->getBackgroundDim().y, text->textDimensions.y) + 4*i++);
 	}
 }
 

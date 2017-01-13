@@ -9,6 +9,8 @@ class Help
 	friend class Button;
 	std::vector<Button*> buttons;
 	std::vector<Text*> texts;
+	std::vector<LTexture2D*> images;
+	LTexture2D* background_commands;
 	Background* background;
 	LWindow* window;
 	glm::vec2 dimButton;

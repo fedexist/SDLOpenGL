@@ -13,7 +13,7 @@ Launcher::Launcher(LWindow* w, FontManager* font_manager)
 	window = w;
 
 
-	SDL_Color color = { 255, 255, 240 };
+	SDL_Color color = { 190, 120, 35 };
 	background = new Background("./assets/background_launcher.png", dimBackground.x, dimBackground.y);
 	
 
@@ -30,7 +30,7 @@ Launcher::Launcher(LWindow* w, FontManager* font_manager)
 	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
 					centredCoor(background->getBackgroundDim().y, dimButton.y) - 1), 
 					dimButton, 
-					new LTexture2D("./assets/button_start.png", dimButton.x, dimButton.y), 
+					new LTexture2D("./assets/button.png", dimButton.x, dimButton.y), 
 					GAME, startText
 					));
 
@@ -40,7 +40,7 @@ Launcher::Launcher(LWindow* w, FontManager* font_manager)
 	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
 					centredCoor(background->getBackgroundDim().y, dimButton.y) - 3), 
 					dimButton, 
-					new LTexture2D("./assets/button_help.png", dimButton.x, dimButton.y), 
+					new LTexture2D("./assets/button.png", dimButton.x, dimButton.y), 
 					HELP, helpText));
 
 	for (Button* b : buttons)
