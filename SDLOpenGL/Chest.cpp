@@ -2,14 +2,19 @@
 #include "Chest.h"
 
 
-Chest::Chest(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, LTexture2D* tex, float mass, unsigned int begInd, unsigned int endInd) :
-GameObject(pos, mom, dim, vis, canInt, tex, mass, begInd, endInd)
+Chest::Chest(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, LTexture2D* tex, float mass, unsigned int begInd, unsigned int endInd, AudioManager* am) :
+GameObject(pos, mom, dim, vis, canInt, tex, mass, begInd, endInd, am)
 {
 }
 
 Chest::Chest(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, float mass, Chest* other) :
-GameObject(pos, mom, dim, vis, canInt, other->tex, mass, other->startingIndexFrame, other->endingIndexFrame)
+GameObject(pos, mom, dim, vis, canInt, other->tex, mass, other->startingIndexFrame, other->endingIndexFrame, other->audio_manager)
 {
+}
+
+void Chest::addTreasure(Treasure treasure)
+{
+	this->treasure = treasure;
 }
 
 void Chest::onInteraction()
@@ -24,6 +29,7 @@ void Chest::onInteraction()
 			open = false;
 			curIndexFrame = startingIndexFrame = 1;
 			endingIndexFrame = 2;
+			audio_manager->playSoundEffect("OpenChest");
 		}
 	}
 }

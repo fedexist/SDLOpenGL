@@ -3,7 +3,7 @@
 
 
 Player::Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, LTexture2D* tex, float mass, unsigned int begInd, unsigned int endInd): 
-	GameObject(pos, mom, dim, vis, canInt, tex, mass, begInd, endInd)
+	GameObject(pos, mom, dim, vis, canInt, tex, mass, begInd, endInd, NULL)
 {
 	lifepoints = 1000.0f;
 	damage = 50.0f;
@@ -12,7 +12,7 @@ Player::Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canIn
 }
 
 Player::Player(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, float mass, Player* other) :
-GameObject(pos, mom, dim, vis, canInt,other->tex, mass, other->startingIndexFrame,other->endingIndexFrame)
+GameObject(pos, mom, dim, vis, canInt,other->tex, mass, other->startingIndexFrame,other->endingIndexFrame,NULL)
 {
 	lifepoints = 1000.0f;
 	damage = 50.0f;

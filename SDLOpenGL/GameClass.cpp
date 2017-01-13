@@ -17,6 +17,7 @@ GameClass::GameClass(std::string title)
 	allObjectsFactory = std::vector<GameObject*>();
 	allAisArray = std::vector<AI*>();
 	allTextures = std::vector<LTexture2D>();
+	allChestsArray = std::vector<GameObject*>();
 	gameState = LAUNCHER;
 }
 
@@ -33,14 +34,20 @@ GameClass::~GameClass()
 
 void GameClass::update(float dt)
 {
+	
 	if(gameState == GAME)
 	{
 		setObjectWorldKnowledge(player_); //dovrebbe essere fatto per ogni actor
-		for (int i = 0; i < allAisArray.size(); i++)
+		AIHandicapCounter++;
+		if (AIHandicapCounter == AIHandicapAI)
 		{
-
-			allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt);
+			for (int i = 0; i < allAisArray.size(); i++)
+			{
+				allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt);
+			}
+			AIHandicapCounter = 0;
 		}
+		
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
 			gameObjectArray.at(i)->areaSharing.clear();
@@ -78,8 +85,8 @@ void GameClass::update(float dt)
 				}
 			}
 
-			Fire* fireThis = dynamic_cast<Fire*>(gameObjectArray.at(i));
-			Player* playerThis = dynamic_cast<Player*>(gameObjectArray.at(i));
+			//Fire* fireThis = dynamic_cast<Fire*>(gameObjectArray.at(i));
+			//Player* playerThis = dynamic_cast<Player*>(gameObjectArray.at(i));
 			//HealthBar* healthThis = dynamic_cast<HealthBar*>(gameObjectArray.at(i));
 			/*
 			if (fireThis)
@@ -122,9 +129,9 @@ void GameClass::loadMedia()
 	allObjectsFactory.push_back(new Player(glm::vec2(0.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(3), 1, 26, 28));
 	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 4));
 	
-	allObjectsFactory.push_back(new Chest(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(4), 0.05, 0, 1));
+	allObjectsFactory.push_back(new Chest(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(4), 0.05, 0, 1, audio_manager));
 
-	player_ = new Player(glm::vec2(8, 10), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+	player_ = new Player(glm::vec2(3, 1), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
 	player_->isPlayer = true;
 
@@ -151,6 +158,7 @@ void GameClass::loadMedia()
 					Chest* creatingChest = new Chest(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Chest*>(allObjectsFactory.at(objectIndex)));
 					//creatingChest->resizeHitBox(glm::vec2(0.5,1));
 					gameObjectArray.push_back (creatingChest);
+					allChestsArray.push_back(creatingChest);
 				}
 
 				if (playerThis)
@@ -163,7 +171,7 @@ void GameClass::loadMedia()
 					gameObjectArray.push_back(creatingPlayer);
 					gameObjectArray.push_back(creatingPlayer->myHealthBar);
 					 
-					AI* enemyAI = new AI(creatingPlayer, player_);
+					AI* enemyAI = new AI(creatingPlayer, player_,audio_manager);
 					enemyAI->updateWorld(currentLevelLayout_l, currentLevelLayout_o, levelLayoutH, levelLayoutW);
 					allAisArray.push_back(enemyAI);
 				}
@@ -184,10 +192,31 @@ void GameClass::loadMedia()
 	gameObjectArray.push_back(player_); 
 	gameObjectArray.push_back(player_->myHealthBar);
 
+	std::srand(std::time(0));
+
+	std::vector<int> chestIndexRandomized;
+	for (int i = 0; i < allChestsArray.size();i++)
+	{
+		chestIndexRandomized.push_back(i);
+	}
+
+	std::random_shuffle(chestIndexRandomized.begin(), chestIndexRandomized.end());
+
+	for (int i = 0; i < allChestsArray.size(); i++)
+	{ 
+		Chest* thisChest = dynamic_cast <Chest*> (allChestsArray[chestIndexRandomized[i]]);
+		
+		if (i < 2)
+			thisChest->addTreasure(Chest::KEY);
+		else
+			thisChest->addTreasure(Chest::COIN);
+	}
+
 	audio_manager->LoadMusic("./assets/music/journeys.mp3","MainTheme");
 	audio_manager->LoadMusic("./assets/music/castlejam.mp3", "LauncherTheme");
 	audio_manager->LoadSoundEffect("./assets/sfx/swish.wav", "SwordSwish");
 	audio_manager->LoadSoundEffect("./assets/sfx/buttonsel.wav", "ButtonSelected");
+	audio_manager->LoadSoundEffect("./assets/sfx/door_open_004.wav", "OpenChest");
 	audio_manager->setMusicVolume(0.75f);
 
 	audio_manager->ManageMusic(PLAY, "LauncherTheme", MIX_FADING_IN, 3000);

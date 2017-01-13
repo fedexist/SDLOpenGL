@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, LTexture2D* texture, float mass, unsigned int beginIndex, unsigned int endingIndex)
+GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, LTexture2D* texture, float mass, unsigned int beginIndex, unsigned int endingIndex,AudioManager* am)
 {
 	position = position_;
 	momentum = momentum_;
@@ -22,6 +22,8 @@ GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimen
 
 	for (int i = 0; i < 3; i++)
 		currentWorldKnowledge.push_back(new GLint[3]);
+
+	audio_manager = am;
 }
 
 GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, float mass, GameObject *factory)
@@ -47,6 +49,7 @@ GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimen
 	for (int i = 0; i < 3; i++)
 		currentWorldKnowledge.push_back(new GLint[3]);
 
+	audio_manager = factory->audio_manager;
 }
 
 void GameObject::render()

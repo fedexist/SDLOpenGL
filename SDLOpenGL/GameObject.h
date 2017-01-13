@@ -1,5 +1,6 @@
 #pragma once
 #include "LTexture2D.h"
+#include "AudioManager.h"
 
 class GameObject{
 
@@ -12,13 +13,13 @@ class GameObject{
 	glm::vec2 lastTranslation; //traslazione in coordinate griglia
 	bool visible;
 	bool canInteractWith;
-	
+
 	float mass;
 
 	std::vector< GLint* > currentWorldKnowledge;
 	
 public:
-	GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, LTexture2D* texture, float mass, unsigned int beginIndex, unsigned int endingIndex);
+	GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, LTexture2D* texture, float mass, unsigned int beginIndex, unsigned int endingIndex, AudioManager* am);
 	GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, float mass, GameObject *factory);
 	//GameObject();
 	virtual ~GameObject();
@@ -66,6 +67,8 @@ protected:
 	unsigned int endingIndexFrame;
 	unsigned int framePeriodIndex;
 
+	AudioManager* audio_manager;
+	
 	glm::vec2 position; //Il centro della sprite è Position + vec2(0.5)
 
 	glm::vec2 hitboxDimensions = glm::vec2(30.f/64.f, 31.f/64.f); //dimensione della hitbox rispetto al centro della sprite p.e. per una 64x64 -> (15,20), cioè una hitbox 30x40, con centro position + vec(0.5)

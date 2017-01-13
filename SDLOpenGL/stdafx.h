@@ -14,6 +14,8 @@
 #include <vector>
 #include <algorithm>
 #include <array>
+#include <ctime>
+#include <cstdlib> 
 
 //glew, glu and glm inclusions
 #include <GL/glew.h>

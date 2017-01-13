@@ -24,6 +24,7 @@ class GameClass
 	std::vector<GameObject*> gameObjectArray;
 	std::vector<GameObject*> allObjectsFactory;
 	std::vector<AI*> allAisArray;
+	std::vector<GameObject*> allChestsArray;
 	Player* player_ = nullptr;
 	Player* centerDummy = nullptr;
 	Launcher* launcher;
@@ -48,6 +49,9 @@ class GameClass
 	GameState gameState;
 	AudioManager* audio_manager;
 	FontManager* font_manager;
+
+	int AIHandicapAI = 2; //quando il contatore arriva 2 aggiorno le AI
+	int	AIHandicapCounter=0;
 
 public:
 	GameClass();

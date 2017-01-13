@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "AI.h"
 
-AI::AI(Player* myCharacter, Player* enemy)
+AI::AI(Player* myCharacter, Player* enemy, AudioManager* am)
 {
 	this->myCharacter = myCharacter;
 	this->enemy = enemy;
+	audio_manager = am;
 	curState = idle;
 }
 
@@ -127,6 +128,7 @@ void AI::update(float distance, float dt)
 
 			if (int (SDL_GetTicks() - myCharacter->coolDown) > 0 )
 			{
+				audio_manager->playSoundEffect("SwordSwish");
 				myCharacter->Act(SLASHING, glm::vec2(hitDirectionX, hitDirectionY));
 				myCharacter->coolDown = SDL_GetTicks() + 500;
 			}
