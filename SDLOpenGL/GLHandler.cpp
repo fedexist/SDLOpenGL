@@ -29,17 +29,6 @@ bool GLHandler::initGL(LWindow* window)
 
 	camera.setOrtho2DProjection(0.0f, float(window->getWidth()), 0.0f, float(window->getHeight()));
 
-	/*
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	left = 0.0f;
-	right = 1 *float(window->getWidth());
-	bottom = 0.0f;
-	top = 1 *float(window->getHeight());
-
-	gluOrtho2D(left, right, bottom,  top);*/
-
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );

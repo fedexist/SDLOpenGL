@@ -1,5 +1,4 @@
 #pragma once
-#include "GameClass.h"
 #include "Text.h"
 
 typedef enum LButtonSprite

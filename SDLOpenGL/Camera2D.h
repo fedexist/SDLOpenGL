@@ -1,4 +1,5 @@
 #pragma once
+
 class Camera2D
 {
 	bool isFreeMovement;

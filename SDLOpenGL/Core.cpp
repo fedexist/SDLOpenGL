@@ -28,9 +28,9 @@ Core::Core(int w, int h, ::Internalupdate update, ::InternalRender render)
 	InternalRender = render;
 }*/
 
-//	TODO: [RELEASE] Sistemare la struttura di cartelle del repository.
+//	REFACTOR: [RELEASE] Sistemare la struttura di cartelle del repository.
 
-//	TODO: [RELEASE] Core dovrebbe gestire i cicli di update e render con delle callback \
+//	REFACTOR: [RELEASE] Core dovrebbe gestire i cicli di update e render con delle callback \
 	InternalUpdate e InternalRender, la cui signature deve essere rispettata dalla GameClass, \
 	che a questo punto, può avere qualsiasi nome
 
