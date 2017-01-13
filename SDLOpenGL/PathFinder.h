@@ -1,6 +1,5 @@
 #pragma once
 #include "astar-algorithm/stlastar.h"
-#include "stdafx.h"
 
 
 #define DEBUG_LISTS 0;
@@ -34,7 +33,7 @@ class PathFinder
 public:
 	PathFinder();
 	~PathFinder();
-	unsigned int width, height;
+	static unsigned int width, height;
 	static std::vector<GLint*> map;
 	std::vector< NodeDirection > findPath(glm::vec2 start, glm::vec2 goal);
 	void updateWorld(std::vector<GLint*> logicLevelMap, std::vector<GLint*> objectLevelMap, GLint H, GLint W);

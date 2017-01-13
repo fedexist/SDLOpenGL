@@ -39,7 +39,7 @@ void GameClass::update(float dt)
 		for (int i = 0; i < allAisArray.size(); i++)
 		{
 
-			allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt, currentLevelLayout_l, currentLevelLayout_o, levelLayoutH,levelLayoutW);
+			allAisArray.at(i)->update(distance(allAisArray.at(i)->myCharacter, player_), dt);
 		}
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
@@ -124,7 +124,7 @@ void GameClass::loadMedia()
 	
 	allObjectsFactory.push_back(new Chest(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(4), 0.05, 0, 1));
 
-	player_ = new Player(glm::vec2(4.5, 4.5), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+	player_ = new Player(glm::vec2(8, 10), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
 	player_->isPlayer = true;
 
@@ -163,7 +163,9 @@ void GameClass::loadMedia()
 					gameObjectArray.push_back(creatingPlayer);
 					gameObjectArray.push_back(creatingPlayer->myHealthBar);
 					 
-					allAisArray.push_back(new AI(creatingPlayer, player_));
+					AI* enemyAI = new AI(creatingPlayer, player_);
+					enemyAI->updateWorld(currentLevelLayout_l, currentLevelLayout_o, levelLayoutH, levelLayoutW);
+					allAisArray.push_back(enemyAI);
 				}
 
 			}
@@ -206,10 +208,7 @@ void GameClass::render()
 		sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
-			//if (gameObjectArray.at(i)->isPlayer)
-			//	((Player*)gameObjectArray.at(i))->render();
-			//else
-				gameObjectArray.at(i)->render();
+			gameObjectArray.at(i)->render();
 		}
 		break;
 	default:

@@ -2,6 +2,7 @@
 #include "PathFinder.h"
 
 std::vector<GLint*> PathFinder::map = std::vector<GLint*>();
+unsigned int PathFinder::height, PathFinder::width = 0;
 
 PathFinder::PathFinder()
 {
@@ -9,6 +10,8 @@ PathFinder::PathFinder()
 	objectToCost.put(0,8);
 	//Spawner = 1
 	objectToCost.put(1,1);
+	//Chest = 3
+	objectToCost.put(3,1);
 }
 
 
@@ -22,11 +25,13 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 
 	unsigned int SearchCount = 0;
 
-	const unsigned int NumSearches = 1;
+	const unsigned int NumSearches = 2;
 
 		while(SearchCount < NumSearches)
 	{
 
+			//SDL_LogDebug(0, "Start from: %f, %f", start.x, start.y);
+			//SDL_LogDebug(0, "Goal is: %f, %f", goal.x, goal.y);
 		// Create a start state
 		MapSearchNode nodeStart;
 		nodeStart.x = start.x;
@@ -88,6 +93,8 @@ vector< NodeDirection > PathFinder::findPath(glm::vec2 start, glm::vec2 goal)
 
 		}
 		while( SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SEARCHING );
+
+		//SDL_LogDebug(0, "Searchsteps: %d", SearchSteps);
 
 		if( SearchState == AStarSearch<MapSearchNode>::SEARCH_STATE_SUCCEEDED )
 		{
@@ -204,7 +211,9 @@ void PathFinder::updateWorld(std::vector<GLint*> logicLevelMap, std::vector<GLin
 		}
 	}
 
-
+	width = W;
+	height = H;
+	/*
 	string s = "";
 	for (int i = 0; i < H; i++)
 	{
@@ -213,9 +222,14 @@ void PathFinder::updateWorld(std::vector<GLint*> logicLevelMap, std::vector<GLin
 			s += " " + std::to_string(map[i][j]);
 		}
 		s += "\n";
-	}
-	//SDL_LogDebug(1, s.c_str());
-  
+	}*/
+	//SDL_LogDebug(1, s.c_str()); 
+
+	//SDL_LogDebug(0, "width: %d, height: %d, %d", width, height, height - 1 - 1);
+
+	//SDL_LogDebug(0, "(3, 1) cost is: %d", GetMap(3, 1));
+
+	//SDL_LogDebug(0, "wrong (3, 1) cost is: %d", map[3][1]);
 }
 
 bool PathFinder::MapSearchNode::IsSameState( MapSearchNode &rhs )
@@ -238,7 +252,7 @@ float PathFinder::MapSearchNode::GoalDistanceEstimate( MapSearchNode &nodeGoal )
 	//return fabsf(x - nodeGoal.x) + fabsf(y - nodeGoal.y);	
 
 	//Norma euclidea
-	return sqrt( powf(fabsf(x - nodeGoal.x), 2) + powf(fabsf(y - nodeGoal.y), 2));
+	return SDL_sqrtf( powf(fabsf(x - nodeGoal.x), 2) + powf(fabsf(y - nodeGoal.y), 2));
 }
 
 bool PathFinder::MapSearchNode::IsGoal( MapSearchNode &nodeGoal )
@@ -250,7 +264,10 @@ bool PathFinder::MapSearchNode::IsGoal( MapSearchNode &nodeGoal )
 
 int PathFinder::GetMap(int x, int y)
 {
-	return map[y][x];
+	if (x < 0 || y < 0 || x > width || y > height)
+		return -2;
+
+	return map[height - y - 1][x];
 }
 
 // This generates the successors to the given Node. It uses a helper function called
@@ -309,6 +326,7 @@ bool PathFinder::MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astar
 
 	//Successori diagonali
 
+
 	if( (GetMap( x+1, y+1 ) != -1) 
 		&& !((parent_x == x+1) && (parent_y == y+1))
 		)
@@ -350,6 +368,7 @@ bool PathFinder::MapSearchNode::GetSuccessors( AStarSearch<MapSearchNode> *astar
 
 float PathFinder::MapSearchNode::GetCost( MapSearchNode &successor )
 {
-	return (float) GetMap( x, y );
+	//SDL_LogDebug(0, "Cost is: %f", static_cast<float>(GetMap(x, y)));
+	return static_cast<float>(GetMap(x, y));
 
 }
