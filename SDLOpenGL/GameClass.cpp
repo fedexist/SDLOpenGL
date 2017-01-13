@@ -118,16 +118,16 @@ void GameClass::loadMedia()
 	loadLevelLayout("room1", 40, 40);
 
 	//Caricamento textures
-	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,60));
+	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,120));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 60));
-	allTextures.push_back(LTexture2D("./assets/life.png", 64, 64,60));
+	allTextures.push_back(LTexture2D("./assets/life2.png", 64, 64,120));
 
 	allTextures.push_back(LTexture2D("./assets/orc.png", 64, 64, 60));
 	allTextures.push_back(LTexture2D("./assets/chest.png", 64, 64, 60));
 
 	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(0.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(3), 1, 26, 28));
-	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 4));
+	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 1));
 	
 	allObjectsFactory.push_back(new Chest(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(4), 0.05, 0, 1, audio_manager));
 

@@ -26,10 +26,12 @@ void Chest::onInteraction()
 	{
 		if (areaSharing.at(i)->isPlayer)
 		{
-			open = false;
+			open = true;
 			curIndexFrame = startingIndexFrame = 1;
 			endingIndexFrame = 2;
 			audio_manager->playSoundEffect("OpenChest");
+			Player* player = dynamic_cast<Player*> (areaSharing.at(i));
+			player->treasureAnimate(treasure);
 		}
 	}
 }

@@ -109,7 +109,7 @@ void AudioManager::playSoundEffect(std::string key)
 
 	if(requestedEffect == nullptr)
 	{
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"Cannot find requested track! Mix Error: %s\n", Mix_GetError() );
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,"Cannot find requested sound effect! Mix Error: %s\n", Mix_GetError() );
 		return;
 	}
 

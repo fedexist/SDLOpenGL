@@ -72,6 +72,8 @@ public:
 
 	void Act(State s, glm::vec2 d, glm::vec2 d2 = glm::vec2(0,0));
 
+	void treasureAnimate(int);
+
 	HealthBar* myHealthBar;
 
 	int inSlashingAnim(){ 

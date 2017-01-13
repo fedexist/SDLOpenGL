@@ -259,3 +259,21 @@ void Player::handleFight()
 
 	//SDL_LogDebug(0, "Fighting direction %d, %d, indexFrrame %d", int(currentDirection.x), int(currentDirection.y), curIndexFrame);
 }
+
+void Player::treasureAnimate(int treasure)
+{
+	
+	if (treasure == 1)//coin
+	{
+		myHealthBar->timer = SDL_GetTicks() + 2000;
+		myHealthBar->curIndexFrame = myHealthBar->startingIndexFrame = 1;
+		myHealthBar->endingIndexFrame = 8;
+	}
+	
+	if (treasure == 0) //key
+	{
+		myHealthBar->timer = SDL_GetTicks() + 2000;
+		myHealthBar->curIndexFrame = myHealthBar->startingIndexFrame = 9;
+		myHealthBar->endingIndexFrame = 13;
+	}
+}

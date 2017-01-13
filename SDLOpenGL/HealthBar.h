@@ -5,7 +5,7 @@ class HealthBar :
 {
 	friend class Player;
 	int level;
-	
+	float timer;
 public:
 	void healthToLevel(float life);
 	void update(float dt);

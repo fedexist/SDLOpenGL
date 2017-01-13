@@ -18,13 +18,29 @@ void HealthBar::healthToLevel(float life)
 {
 	level = 8 - floor(8 * (1000 - life) / 1000); //Full life: 8 - (ceil(8*0/1000)) = 8 / half life : 8 - (ceil(8*500/1000)) = 4 / no life: 8 - (ceil(8*1000/1000)) = 0
 	//SDL_LogDebug(0, "health level %d, life%f", level, life);
-	curIndexFrame = startingIndexFrame = 8-level;
+	int index = (8 - level)*8;
+	curIndexFrame = startingIndexFrame = index;
 	endingIndexFrame = startingIndexFrame+1;
 
 }
 
 void HealthBar::update(float dt)
 {
+	//SDL_LogDebug(0, "%f %d", timer, SDL_GetTicks());
+	
+	if (startingIndexFrame == 9 && timer - SDL_GetTicks() < 1750)
+	{
+		curIndexFrame = startingIndexFrame = 12;
+		endingIndexFrame = 13; //blocca animazione della chiave
+	}
+
+	if (timer-SDL_GetTicks() < 0)
+	{
+		int index = (8 - level)*8;
+		curIndexFrame = startingIndexFrame = index;
+		endingIndexFrame = startingIndexFrame+1;
+	}
+	handleAnims(dt);
 }
 
 HealthBar::~HealthBar()
