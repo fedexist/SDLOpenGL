@@ -6,7 +6,6 @@
 class Help
 {
 	friend class GameClass;
-	friend class Button;
 	std::vector<Button*> buttons;
 	std::vector<Text*> texts;
 	std::vector<LTexture2D*> images;

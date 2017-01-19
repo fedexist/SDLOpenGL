@@ -1,22 +1,17 @@
 #pragma once
-#include "Button.h"
-#include "Background.h"
-#include "FontManager.h"
-
-class Launcher
+class DeathMenu
 {
 	friend class GameClass;
 	std::vector<Button*> buttons;
-	std::vector<Text*> texts;
+	Text* deathText;
 	Background* background;
-	LTexture2D* title;
 	LWindow* window;
 	glm::vec2 dimButton;
 	glm::vec2 dimBackground;
-
+	LTexture2D* deadPlayer;
 public:
-	Launcher(LWindow*, FontManager*);
-	~Launcher();
+	DeathMenu(LWindow*, FontManager*);
+	~DeathMenu();
 	void render();
 	int selectedButton;
 	void selectedCheck();

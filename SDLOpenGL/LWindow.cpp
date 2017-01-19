@@ -68,6 +68,7 @@ void LWindow::handleEvent( SDL_Event& e )
 			//	REFACTOR: [RELEASE] Eliminare queste 2 righe: per riferimento, il TODO in Core.cpp
 			coreInstance->getLauncher()->onUpdateWindow();
 			coreInstance->getHelp()->onUpdateWindow();
+			coreInstance->getDeathMenu()->onUpdateWindow();
 			SDL_GL_SwapWindow(mWindow);
 			coreInstance->renderPresent();
 			break;

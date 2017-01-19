@@ -5,6 +5,7 @@
 #include "GameClass.h"
 #include "AudioManager.h"
 #include "FontManager.h"
+#include "DeathMenu.h"
 
 typedef void(*Internalupdate)(float dt);
 typedef void(*InternalRender)();
@@ -31,7 +32,8 @@ class Core
 		InternalRender InternalRender;
 		Launcher* getLauncher();
 		Help* getHelp();
-		
+		DeathMenu* getDeathMenu();
+
 private:
 		LWindow window_;
 		SDL_Renderer* mRenderer;
@@ -43,6 +45,7 @@ private:
 		FontManager font_manager_;
 		Launcher* launcher;
 		Help* help;
+		DeathMenu* deathMenu;
 		
 		//const double dt = 10.0f;
 		double startTime, frameTime, updateTime, lastTimeStamp;

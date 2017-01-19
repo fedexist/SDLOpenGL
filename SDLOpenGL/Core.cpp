@@ -176,7 +176,8 @@ bool Core::init()
 					}
 					else
 					{
-						font_manager_.LoadFont("main_font", "general_font.ttf", 50);
+						font_manager_.loadFont("main_font", "general_font.ttf", 50);
+						font_manager_.loadFont("death_font", "death_font.ttf", 100);
 						Game->setFontManager(&font_manager_);
 						Game->setAudioManager(&audio_manager_);
 						SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadMedia()\n");
@@ -189,6 +190,8 @@ bool Core::init()
 						Game->launcher = launcher;
 						help = new Help(getWindow(), &font_manager_);
 						Game->help = help;
+						deathMenu = new DeathMenu(getWindow(), &font_manager_);
+						Game->deathMenu = deathMenu;
 					}
 						
 
@@ -226,6 +229,12 @@ Help* Core::getHelp()
 {
 	return help;
 }
+
+DeathMenu* Core::getDeathMenu()
+{
+	return deathMenu;
+}
+
 
 void Core::update()
 {

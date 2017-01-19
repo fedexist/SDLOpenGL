@@ -12,6 +12,7 @@ class Button
 {
 	friend class Launcher;
 	friend class Help;
+	friend class DeathMenu;
 
 public:
 	Button();

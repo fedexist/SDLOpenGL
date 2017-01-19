@@ -15,7 +15,7 @@ bool FontManager::init()
 	return true;
 }
 
-bool FontManager::LoadFont(std::string tag, std::string path, int pointSize)
+bool FontManager::loadFont(std::string tag, std::string path, int pointSize)
 {
 	TTF_Font* font = TTF_OpenFont((fonts_path + path).c_str(), pointSize);
 	if(font == nullptr)

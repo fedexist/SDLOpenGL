@@ -90,12 +90,6 @@
     <ClInclude Include="AI.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="astar-algorithm\fsa.h">
-      <Filter>File di intestazione\A%2a-alg</Filter>
-    </ClInclude>
-    <ClInclude Include="astar-algorithm\stlastar.h">
-      <Filter>File di intestazione\A%2a-alg</Filter>
-    </ClInclude>
     <ClInclude Include="PathFinder.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
@@ -109,6 +103,18 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Text.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="FontManager.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="DeathMenu.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
@@ -195,6 +201,15 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="FontManager.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="DeathMenu.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>

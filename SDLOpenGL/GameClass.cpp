@@ -101,6 +101,12 @@ void GameClass::update(float dt)
 			gameObjectArray.at(i)->update(dt);
 			//player_->update(dt);
 			//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "I'm in the update function of GameClass, current delta is: %f\n", dt);
+
+			if (player_->isDead())
+			{
+				//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "CenterDummy pos: %f, %f", centerDummy->position.x, centerDummy->position.y);
+				setGameState(DEAD);
+			}
 		}
 	}
 
@@ -217,6 +223,7 @@ void GameClass::loadMedia()
 	audio_manager->LoadSoundEffect("./assets/sfx/swish.wav", "SwordSwish");
 	audio_manager->LoadSoundEffect("./assets/sfx/buttonsel.wav", "ButtonSelected");
 	audio_manager->LoadSoundEffect("./assets/sfx/door_open_004.wav", "OpenChest");
+	audio_manager->LoadSoundEffect("./assets/sfx/death_effect.wav", "DeathEffect");
 	audio_manager->setMusicVolume(0.75f);
 
 	audio_manager->ManageMusic(PLAY, "LauncherTheme", MIX_FADING_IN, 3000);
@@ -231,6 +238,9 @@ void GameClass::render()
 		break;
 	case HELP:
 		help->render();
+		break;
+	case DEAD:
+		deathMenu->render();
 		break;
 	case GAME:
 		plane.render(&currentLevelLayout, levelLayoutW, levelLayoutH);
@@ -413,6 +423,28 @@ void GameClass::handleMouseEvents(const SDL_Event& e)
 			}
 			break;
 			}
+		case DEAD:
+		{
+			deathMenu->selectedButton = -1;
+			deathMenu->selectedCheck();
+			for (int i = 0; i < deathMenu->buttons.size(); i++)
+			{
+
+				Button* b = deathMenu->buttons.at(i);
+				if (b->isInside(x, y))
+				{
+					deathMenu->selectedButton = i;
+					deathMenu->selectedCheck();
+
+					if (e.type == SDL_MOUSEBUTTONUP && deathMenu->selectedButton == i)
+					{
+						audio_manager->playSoundEffect("ButtonSelected");
+						setGameState(deathMenu->buttons.at(deathMenu->selectedButton)->getOnClickTransition());
+					}
+				}
+			}
+			break;
+		}
 		default:
 		{
 			break;
@@ -597,17 +629,33 @@ void GameClass::setGameState(GameState gs)
 	switch (gameState)
 	{
 	case GAME:
-		{
+	{
+		audio_manager->ManageMusic(STOP, "LauncherTheme");
+		audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
+		camera->follow(player_);
+		camera->centerOnObject(player_);
+		break;
+	}
+	case DEAD:
+	{
+		audio_manager->setEffectsVolume(0.5f);
+		audio_manager->ManageMusic(STOP, "MainTheme");
+		audio_manager->playSoundEffect("DeathEffect");
+		camera->follow(centerDummy);
+		camera->centerOnObject(centerDummy);
+		break;
+	}
+	case RESTART:
+	{
 
-			audio_manager->ManageMusic(STOP, "LauncherTheme");
-			audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
-			camera->follow(player_);
-			camera->centerOnObject(player_);
-			break;
-		}
+		break;
+	}
+	case EXIT:
+	{
+		exit(EXIT_SUCCESS);
+	}
 	default:
 	{
-		camera->follow(centerDummy);
 		break;
 	}
 	}

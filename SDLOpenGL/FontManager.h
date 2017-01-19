@@ -9,7 +9,7 @@ class FontManager
 	const std::string fonts_path = "./assets/fonts/";
 public:
 	bool init();
-	bool LoadFont(std::string tag, std::string path, int pointSize);
+	bool loadFont(std::string tag, std::string path, int pointSize);
 	TTF_Font* retrieveFont(std::string tag);
 	int retrieveSize(std::string tag);
 	FontManager();
