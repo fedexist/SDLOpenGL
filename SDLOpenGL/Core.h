@@ -10,6 +10,15 @@
 typedef void(*Internalupdate)(float dt);
 typedef void(*InternalRender)();
 
+template<typename T>
+struct deleter : std::unary_function<const T*, void>
+{
+	void operator() (const T *ptr) const
+	{
+		delete ptr;
+	}
+};
+
 class Core
 {
 	public:

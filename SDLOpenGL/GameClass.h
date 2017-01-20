@@ -13,19 +13,22 @@ typedef enum GameState
 	LAUNCHER,
 	GAME,
 	HELP,
-	DEAD,
+	GAMEOVER,
 	EXIT,
-	RESTART
 }GameState;
 
 class GameClass
 {
 	friend class Core;
+
 	std::string windowTitle;
+
 	std::vector<GameObject*> gameObjectArray;
 	std::vector<GameObject*> allObjectsFactory;
 	std::vector<AI*> allAisArray;
 	std::vector<GameObject*> allChestsArray;
+	std::vector<Player*> allEnemiesArray;
+
 	Player* player_ = nullptr;
 	Player* centerDummy = nullptr;
 	Launcher* launcher;
@@ -55,6 +58,8 @@ class GameClass
 	int AIHandicapAI = 2; //quando il contatore arriva 2 aggiorno le AI
 	int	AIHandicapCounter=0;
 
+	void quit();
+
 public:
 	GameClass();
 	GameClass(std::string title);
@@ -63,12 +68,16 @@ public:
 	void loadMedia();
 	void render();
 	void loadLevelLayout(std::string, unsigned int, unsigned int);
+
+	void populateWorld();
+	void emptyWorld();
+
 	void handleMouseEvents(const SDL_Event& e);
 	void handleEvents(SDL_Event& e);
 	void handleKeyboardEvents();
-	glm::vec2 positionToScreen(GameObject * obj);
 	
 	void setObjectWorldKnowledge(GameObject*); //The World gives knowledge to the gameobject about its whereabouts
+
 	void setCamera2D(Camera2D* camera);
 	void setGameState(GameState gs);
 	void setAudioManager(AudioManager* audio_manager);

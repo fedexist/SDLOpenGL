@@ -13,8 +13,10 @@ DeathMenu::DeathMenu(LWindow* w, FontManager* font_manager)
 	deadPlayer = new LTexture2D();
 
 	SDL_Color color = { 138, 7, 7 };
+
 	TTF_Font* font = font_manager->retrieveFont("death_font");
 	int size = font_manager->retrieveSize("death_font");
+
 	deathText = new Text(font, "YOU DIED", color, size);
 	deathText->loadFont();
 
@@ -29,7 +31,7 @@ DeathMenu::DeathMenu(LWindow* w, FontManager* font_manager)
 	buttons.push_back(new Button(glm::vec2(centredCoor(dimBackground.x, dimButton.x) - 0.6, centredCoor(dimBackground.y, dimButton.y) - 3),
 		dimButton,
 		new LTexture2D("./assets/button.png", dimButton.x, dimButton.y),
-		RESTART, restartText
+		GAME, restartText
 		));
 
 	Text* exitText = new Text(font, "EXIT", color, size);

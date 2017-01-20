@@ -28,6 +28,10 @@ Camera2D::~Camera2D()
 
 void Camera2D::follow(GameObject * obj)
 {
+	if( obj != followedGameObject && isCameraCentered)
+	{
+		isCameraCentered = false;
+	}
 	followedGameObject = dummyObjectPointer = obj;
 	isFreeMovement = false;
 }
@@ -177,7 +181,7 @@ void Camera2D::setOrtho2DProjection(GLfloat left_, GLfloat right_, GLfloat botto
 
 	gluOrtho2D(left, right, bottom, top);
 
-	SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Ortho2D projection set at: left: %f, right: %f, bottom: %f, top: %f", left, right, bottom, top);
+	//SDL_LogDebug(SDL_LOG_CATEGORY_RENDER, "Ortho2D projection set at: left: %f, right: %f, bottom: %f, top: %f", left, right, bottom, top);
 
 }
 
@@ -199,7 +203,7 @@ void Camera2D::applyZoom(float zoom_)
 }
 
 
-void Camera2D::updateProjectionOnResize(GLfloat w, GLfloat h, GLfloat resize_w, GLfloat resize_h)
+void Camera2D::resetProjection(GLfloat w, GLfloat h, GLfloat resize_w, GLfloat resize_h)
 {
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Left: %f, right: %f, bottom: %f, top: %f", left, right, bottom, top);
 	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "Viewport W: %f, Viewport H: %f, Resize W: %f, Resize H: %f", w, h, resize_w, resize_h);

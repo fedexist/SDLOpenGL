@@ -264,8 +264,6 @@ void Core::update()
 void Core::render()
 {
 
-		//Free Camera Movement
-	//FreeCameraMovement();
 	lastTimeStamp = SDL_GetTicks() - frameTime;
 
 	gl_handler_.gl_renderer_.Render(Game);
@@ -283,7 +281,7 @@ LWindow* Core::getWindow()
 
 void Core::updateProjection(GLfloat resize_w, GLfloat resize_h) const
 {
-	camera->updateProjectionOnResize(window_.getWidth(), window_.getHeight(), resize_w, resize_h);
+	camera->resetProjection(window_.getWidth(), window_.getHeight(), resize_w, resize_h);
 }
 
 bool Core::checkQuitEvent()

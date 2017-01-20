@@ -20,6 +20,9 @@ class Camera2D
 
 	const float maxZoom = 2.0f; //zoom massimo
 	float currentZoom;
+
+	void centerOnObject(GameObject*);
+
 public:
 	Camera2D();
 	Camera2D(float);
@@ -32,7 +35,6 @@ public:
 	void setOrtho2DProjection(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top);
 	void applyZoom();
 	void applyZoom(float zoom_);
-	void updateProjectionOnResize(GLfloat w, GLfloat h, GLfloat old_w, GLfloat old_h);
-	void centerOnObject(GameObject*);
+	void resetProjection(GLfloat w, GLfloat h, GLfloat old_w = 0, GLfloat old_h = 0);
 };
 
