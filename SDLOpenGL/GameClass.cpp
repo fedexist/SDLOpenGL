@@ -93,9 +93,6 @@ void GameClass::update(float dt)
 				setGameState(GAMEOVER);
 			}
 		}
-	} else if(gameState == LAUNCHER)
-	{
-		camera->follow(centerDummy);
 	}
 
 	camera->update(dt);
@@ -137,6 +134,7 @@ void GameClass::loadMedia()
 	audio_manager->ManageMusic(PLAY, "LauncherTheme", MIX_FADING_IN, 3000);
 
 	populateWorld();
+	camera->follow(centerDummy);
 }
 
 void GameClass::render()
@@ -354,6 +352,7 @@ void GameClass::populateWorld()
 			thisChest->addTreasure(Chest::KEY);
 		else
 			thisChest->addTreasure(Chest::COIN);
+
 	}
 }
 
@@ -408,7 +407,6 @@ void GameClass::handleMouseEvents(const SDL_Event& e)
 						setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
 					}
 				}
-				delete b;
 			}
 			break;
 			}	
@@ -431,7 +429,6 @@ void GameClass::handleMouseEvents(const SDL_Event& e)
 						setGameState(help->buttons.at(help->selectedButton)->getOnClickTransition());
 					}
 				}
-				delete b;
 			}
 			break;
 			}

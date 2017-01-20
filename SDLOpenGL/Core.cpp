@@ -180,9 +180,10 @@ bool Core::init()
 						font_manager_.loadFont("death_font", "death_font.ttf", 100);
 						Game->setFontManager(&font_manager_);
 						Game->setAudioManager(&audio_manager_);
+						Game->setCamera2D(camera);
 						SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadMedia()\n");
 						Game->loadMedia();
-						Game->setCamera2D(camera);
+						
 
 						//	TODO: [RELEASE] sistemare la parte seguente per rispettare l'agnosticismo di Core.
 
