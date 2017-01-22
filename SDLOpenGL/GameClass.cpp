@@ -358,15 +358,16 @@ void GameClass::populateWorld()
 
 void GameClass::emptyWorld()
 {
+	
 	std::for_each (gameObjectArray.begin (), gameObjectArray.end (), deleter<GameObject> ());
 	gameObjectArray.clear();
-
+	
 	std::for_each (allChestsArray.begin (), allChestsArray.end (), deleter<GameObject> ());
 	allChestsArray.clear();
-
+	
 	std::for_each (allEnemiesArray.begin (), allEnemiesArray.end (), deleter<GameObject> ());
 	allEnemiesArray.clear();
-
+	
 	std::for_each (allAisArray.begin (), allAisArray.end (), deleter<AI> ());
 	allAisArray.clear();
 	
@@ -646,15 +647,14 @@ void GameClass::setGameState(GameState gs)
 		}
 		case GAMEOVER:
 		{
-			audio_manager->setEffectsVolume(0.5f);
+			audio_manager->setEffectsVolume(0.1f);
 			audio_manager->ManageMusic(STOP, "MainTheme");
 			audio_manager->playSoundEffect("DeathEffect");
 			
 			camera->follow(centerDummy);
 			camera->resetProjection(window->getWidth(), window->getHeight());
-
 			emptyWorld();
-
+	
 			break;
 		}
 		case EXIT:

@@ -9,6 +9,8 @@ class DeathMenu
 	glm::vec2 dimButton;
 	glm::vec2 dimBackground;
 	LTexture2D* deadPlayer;
+	Layout* layout;
+
 public:
 	DeathMenu(LWindow*, FontManager*);
 	~DeathMenu();

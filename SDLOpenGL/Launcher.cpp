@@ -4,14 +4,13 @@
 
 Launcher::Launcher(LWindow* w, FontManager* font_manager)
 {
-	SDL_LogDebug(0, "constructing launcher");
 	buttons = std::vector<Button*>();
 	texts = std::vector<Text*>();
 	dimButton = glm::vec2(256, 64);
 	dimBackground = glm::vec2(1024,640);
 	selectedButton = -1;
 	window = w;
-
+	layout = new Layout(dimBackground, 8, 8);
 
 	SDL_Color color = { 190, 120, 35 };
 	background = new Background("./assets/background_launcher.png", dimBackground.x, dimBackground.y);
@@ -27,8 +26,7 @@ Launcher::Launcher(LWindow* w, FontManager* font_manager)
 	//SDL_LogDebug(0, "loading font for start text");
 	startText->loadFont();
 
-	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
-					centredCoor(background->getBackgroundDim().y, dimButton.y) - 1), 
+	buttons.push_back(new Button(layout->positionObject(dimButton, 4, 4), 
 					dimButton, 
 					new LTexture2D("./assets/button.png", dimButton.x, dimButton.y), 
 					GAME, startText
@@ -37,8 +35,7 @@ Launcher::Launcher(LWindow* w, FontManager* font_manager)
 	Text* helpText = new Text(font, "HELP", color, size);
 	helpText->loadFont();
 
-	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
-					centredCoor(background->getBackgroundDim().y, dimButton.y) - 3), 
+	buttons.push_back(new Button(layout->positionObject(dimButton, 4, 2), 
 					dimButton, 
 					new LTexture2D("./assets/button.png", dimButton.x, dimButton.y), 
 					HELP, helpText));
@@ -57,7 +54,8 @@ Launcher::Launcher(LWindow* w, FontManager* font_manager)
 void Launcher::render()
 {
 	background->render();
-	title->drawSprite(centredCoor(background->getBackgroundDim().x, 512), centredCoor(background->getBackgroundDim().y, 128) + 1.75, 0, 0);
+	glm::vec2 titlePos = layout->positionObject(glm::vec2(512,128), 4, 7);
+	title->drawSprite(titlePos.x, titlePos.y, 0, 0);
 	for (Button* button : buttons)
 	{
 		button->render();
@@ -85,13 +83,6 @@ void Launcher::selectedCheck()
 	}
 }
 
-float Launcher::centredCoor(float dimPlane, float dimObj)
-{
-	float result = (dimPlane / dimObj) / 2 - (dimObj / dimObj) / 2;
-	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "result: %f", result);
-	return result;
-}
-
 glm::vec2 Launcher::relativeCoor2pxCoor(glm::vec2 pos, glm::vec2 dimensions)
 {
 	return glm::vec2(((window->getWidth() - dimBackground.x) / 2) + pos.x*dimensions.x, ((window->getHeight() - dimBackground.y) / 2) + dimBackground.y - pos.y*dimensions.y);
@@ -103,4 +94,11 @@ void Launcher::onUpdateWindow()
 	{
 		b->positionPx = relativeCoor2pxCoor(b->positionRel, dimButton);
 	}
+}
+
+float Launcher::centredCoor(float dimPlane, float dimObj)
+{
+	float result = (dimPlane / dimObj) / 2 - (dimObj / dimObj) / 2;
+	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "result: %f", result);
+	return result;
 }

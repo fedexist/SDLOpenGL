@@ -14,7 +14,7 @@ Help::Help(LWindow* w, FontManager* font_manager)
 	dimBackground = glm::vec2(1024, 640);
 	selectedButton = -1;
 	window = w;
-
+	layout = new Layout(dimBackground, 8, 8);
 
 	SDL_Color color = { 190, 120, 35 };
 	background = new Background("./assets/background_launcher.png", 1024, 640);
@@ -25,8 +25,7 @@ Help::Help(LWindow* w, FontManager* font_manager)
 	Text* backText = new Text(font, "BACK", color, size);
 	backText->loadFont();
 
-	buttons.push_back(new Button(glm::vec2(centredCoor(background->getBackgroundDim().x, dimButton.x), 
-					centredCoor(background->getBackgroundDim().y, dimButton.y) - 3), 
+	buttons.push_back(new Button(layout->positionObject(dimButton, 4, 1), 
 					dimButton, 
 					new LTexture2D("./assets/button.png", dimButton.x, dimButton.y), 
 					LAUNCHER, backText
@@ -56,21 +55,25 @@ Help::Help(LWindow* w, FontManager* font_manager)
 void Help::render()
 {
 	background->render();
-	background_commands->drawSprite(centredCoor(background->getBackgroundDim().x, 770),centredCoor(background->getBackgroundDim().y, 400) + 0.20, 0, 0);
-	int i = 0;
-	for (LTexture2D* image : images)
-	{
-		image->drawSprite(centredCoor(background->getBackgroundDim().x, 256)+0.5, centredCoor(background->getBackgroundDim().y, 128) + 1.25*i++, 0, 0);
-	}
+	glm::vec2 posBgComm = layout->positionObject(glm::vec2(770, 400), 4, 5);
+	background_commands->drawSprite(posBgComm.x, posBgComm.y, 0, 0);
+
+	glm::vec2 pos = layout->positionObject(glm::vec2(256, 128), 5, 4);
+	images.at(0)->drawSprite(pos.x, pos.y, 0, 0);
+	
+	pos = layout->positionObject(glm::vec2(256, 128), 5, 6);
+	images.at(1)->drawSprite(pos.x, pos.y, 0, 0);
+
 	for (Button* button : buttons)
 	{
 		button->render();
 	}
-	i = 0;
-	for (Text* text : texts)
-	{
-		text->drawText(centredCoor(background->getBackgroundDim().x, text->textDimensions.x) - 0.75, centredCoor(background->getBackgroundDim().y, text->textDimensions.y) + 4*i++);
-	}
+
+	pos = layout->positionObject(texts.at(0)->textDimensions, 3, 4);
+	texts.at(0)->drawText(pos.x, pos.y);
+	
+	pos = layout->positionObject(texts.at(1)->textDimensions, 3, 6);
+	texts.at(1)->drawText(pos.x, pos.y);
 }
 
 Help::~Help()

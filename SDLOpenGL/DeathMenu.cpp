@@ -9,8 +9,7 @@ DeathMenu::DeathMenu(LWindow* w, FontManager* font_manager)
 	dimBackground = glm::vec2(1024, 640);
 	selectedButton = -1;
 	window = w;
-
-	deadPlayer = new LTexture2D();
+	layout = new Layout(dimBackground, 8, 8);
 
 	SDL_Color color = { 138, 7, 7 };
 
@@ -28,7 +27,7 @@ DeathMenu::DeathMenu(LWindow* w, FontManager* font_manager)
 	Text* restartText = new Text(font, "RETRY", color, size);
 	restartText->loadFont();
 
-	buttons.push_back(new Button(glm::vec2(centredCoor(dimBackground.x, dimButton.x) - 0.6, centredCoor(dimBackground.y, dimButton.y) - 3),
+	buttons.push_back(new Button(layout->positionObject(dimButton, 2, 2),
 		dimButton,
 		new LTexture2D("./assets/button.png", dimButton.x, dimButton.y),
 		GAME, restartText
@@ -37,7 +36,7 @@ DeathMenu::DeathMenu(LWindow* w, FontManager* font_manager)
 	Text* exitText = new Text(font, "EXIT", color, size);
 	exitText->loadFont();
 
-	buttons.push_back(new Button(glm::vec2(centredCoor(dimBackground.x, dimButton.x) + 0.6, centredCoor(dimBackground.y, dimButton.y) - 3),
+	buttons.push_back(new Button(layout->positionObject(dimButton, 6, 2),
 		dimButton,
 		new LTexture2D("./assets/button.png", dimButton.x, dimButton.y),
 		EXIT, exitText
@@ -52,8 +51,8 @@ DeathMenu::DeathMenu(LWindow* w, FontManager* font_manager)
 }
 void DeathMenu::render()
 {
-	//background->render();
-	deathText->drawText(centredCoor(dimBackground.x, deathText->textDimensions.x), centredCoor(dimBackground.y, deathText->textDimensions.y) + 1);
+	glm::vec2 textPos = layout->positionObject(deathText->textDimensions, 4, 5);
+	deathText->drawText(textPos.x, textPos.y);
 	for (Button* button : buttons)
 	{
 		button->render();
@@ -79,14 +78,6 @@ void DeathMenu::selectedCheck()
 		//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "button: %d", selectedButton);
 	}
 }
-
-float DeathMenu::centredCoor(float dimPlane, float dimObj)
-{
-	float result = (dimPlane / dimObj) / 2 - (dimObj / dimObj) / 2;
-	//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "result: %f", result);
-	return result;
-}
-
 
 glm::vec2 DeathMenu::relativeCoor2pxCoor(glm::vec2 pos, glm::vec2 dimensions)
 {

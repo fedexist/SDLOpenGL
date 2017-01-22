@@ -2,6 +2,7 @@
 #include "Button.h"
 #include "Text.h"
 #include "FontManager.h"
+#include "Layout.h"
 
 class Help
 {
@@ -14,6 +15,7 @@ class Help
 	LWindow* window;
 	glm::vec2 dimButton;
 	glm::vec2 dimBackground;
+	Layout* layout;
 
 public:
 	Help(LWindow*, FontManager*);
