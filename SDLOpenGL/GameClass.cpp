@@ -355,10 +355,8 @@ void GameClass::emptyWorld()
 	std::for_each (gameObjectArray.begin (), gameObjectArray.end (), deleter<GameObject> ());
 	gameObjectArray.clear();
 	
-	//std::for_each (allChestsArray.begin (), allChestsArray.end (), deleter<GameObject> ());
 	allChestsArray.clear();
 	
-	//std::for_each (allEnemiesArray.begin (), allEnemiesArray.end (), deleter<GameObject> ());
 	allEnemiesArray.clear();
 	
 	std::for_each (allAisArray.begin (), allAisArray.end (), deleter<AI> ());

@@ -35,11 +35,9 @@ ButtonMenu::ButtonMenu(LWindow* w, FontManager* fm)
 
 	//gameover elements
 	gameoverButtons = std::vector<Button*>();
-	gameoverText;
 
 	//victory elements
 	victoryButtons = std::vector<Button*>();
-	victoryText;
 
 	//textElems
 	SDL_Color color = { 138, 7, 7 };

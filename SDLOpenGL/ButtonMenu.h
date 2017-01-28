@@ -1,4 +1,7 @@
 #pragma once
+#include "Layout.h"
+#include "Button.h"
+#include "Background.h"
 
 typedef enum MenuState
 {

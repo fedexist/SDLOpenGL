@@ -5,7 +5,6 @@
 #include "GameClass.h"
 #include "AudioManager.h"
 #include "FontManager.h"
-#include "DeathMenu.h"
 #include "ButtonMenu.h"
 
 typedef void(*Internalupdate)(float dt);
@@ -40,9 +39,6 @@ class Core
 		~Core();
 		Internalupdate Internalupdate;
 		InternalRender InternalRender;
-		Launcher* getLauncher();
-		Help* getHelp();
-		DeathMenu* getDeathMenu();
 		ButtonMenu* getMenu();
 
 private:
@@ -54,9 +50,6 @@ private:
 		Camera2D* camera;
 		AudioManager audio_manager_;
 		FontManager font_manager_;
-		Launcher* launcher;
-		Help* help;
-		DeathMenu* deathMenu;
 		ButtonMenu* menu;
 		
 		//const double dt = 10.0f;

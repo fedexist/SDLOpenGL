@@ -186,14 +186,6 @@ bool Core::init()
 						
 
 						//	TODO: [RELEASE] sistemare la parte seguente per rispettare l'agnosticismo di Core.
-						/*
-						launcher = new Launcher(getWindow(), &font_manager_);
-						Game->launcher = launcher;
-						help = new Help(getWindow(), &font_manager_);
-						Game->help = help;
-						deathMenu = new DeathMenu(getWindow(), &font_manager_);
-						Game->deathMenu = deathMenu;
-						*/
 						menu = new ButtonMenu(getWindow(), &font_manager_);
 						Game->menu = menu;
 					}
@@ -224,20 +216,6 @@ void Core::handleEvents()
 //	TODO: [RELEASE] eliminare launcher ed help per release finale \
 	Core deve essere agnostico rispetto ai sistemi di mera logica di gioco. 
 
-Launcher* Core::getLauncher()
-{
-	return launcher;
-}
-
-Help* Core::getHelp()
-{
-	return help;
-}
-
-DeathMenu* Core::getDeathMenu()
-{
-	return deathMenu;
-}
 
 ButtonMenu* Core::getMenu()
 {

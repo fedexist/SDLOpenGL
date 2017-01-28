@@ -3,10 +3,9 @@
 #include "DrawingPlane.h"
 #include "Player.h"
 #include "Camera2D.h"
-#include "Launcher.h"
 #include "AudioManager.h"
-#include "Help.h"
 #include "FontManager.h"
+#include "ButtonMenu.h"
 
 typedef enum GameState
 {
@@ -32,11 +31,7 @@ class GameClass
 
 	Player* player_ = nullptr;
 	Player* centerDummy = nullptr;
-	/*
-	Launcher* launcher;
-	Help* help;
-	DeathMenu* deathMenu;
-	*/
+
 	DrawingPlane plane;
 	LWindow* window;
 	

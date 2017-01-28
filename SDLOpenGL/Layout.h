@@ -1,9 +1,6 @@
 #pragma once
 class Layout
 {
-	friend class Launcher;
-	friend class Help;
-	friend class DeathMenu;
 
 	glm::vec2 backgroundDim;
 	glm::vec2 gridDim;

@@ -31,6 +31,7 @@
 #include <SDL_image.h>
 #include <SDL_opengl.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 
 //Core engine header inclusion
 #include "Core.h"

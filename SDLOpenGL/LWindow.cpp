@@ -60,17 +60,9 @@ void LWindow::handleEvent( SDL_Event& e )
 			case SDL_WINDOWEVENT_SIZE_CHANGED:
 			mWidth = e.window.data1;
 			mHeight = e.window.data2;
-			/*
-			glViewport(0, 0, );
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();*/
+
 			coreInstance->updateProjection(mWidth - old_width, mHeight - old_height);
-			//	REFACTOR: [RELEASE] Eliminare queste 2 righe: per riferimento, il TODO in Core.cpp
-			/*
-			coreInstance->getLauncher()->onUpdateWindow();
-			coreInstance->getHelp()->onUpdateWindow();
-			coreInstance->getDeathMenu()->onUpdateWindow();
-			*/
+			//	REFACTOR: [RELEASE] Eliminare questa riga: per riferimento, il TODO in Core.cpp
 			coreInstance->getMenu()->onUpdateWindow();
 			SDL_GL_SwapWindow(mWindow);
 			coreInstance->renderPresent();
