@@ -186,13 +186,16 @@ bool Core::init()
 						
 
 						//	TODO: [RELEASE] sistemare la parte seguente per rispettare l'agnosticismo di Core.
-
+						/*
 						launcher = new Launcher(getWindow(), &font_manager_);
 						Game->launcher = launcher;
 						help = new Help(getWindow(), &font_manager_);
 						Game->help = help;
 						deathMenu = new DeathMenu(getWindow(), &font_manager_);
 						Game->deathMenu = deathMenu;
+						*/
+						menu = new ButtonMenu(getWindow(), &font_manager_);
+						Game->menu = menu;
 					}
 						
 
@@ -234,6 +237,11 @@ Help* Core::getHelp()
 DeathMenu* Core::getDeathMenu()
 {
 	return deathMenu;
+}
+
+ButtonMenu* Core::getMenu()
+{
+	return menu;
 }
 
 

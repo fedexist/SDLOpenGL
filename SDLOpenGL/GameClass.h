@@ -14,7 +14,8 @@ typedef enum GameState
 	GAME,
 	HELP,
 	GAMEOVER,
-	EXIT,
+	VICTORY,
+	EXIT
 }GameState;
 
 class GameClass
@@ -31,11 +32,15 @@ class GameClass
 
 	Player* player_ = nullptr;
 	Player* centerDummy = nullptr;
+	/*
 	Launcher* launcher;
 	Help* help;
 	DeathMenu* deathMenu;
+	*/
 	DrawingPlane plane;
 	LWindow* window;
+	
+	ButtonMenu* menu;
 	std::vector<GLuint*> currentLevelLayout;
 
 	std::vector<GLint*> currentLevelLayout_o;

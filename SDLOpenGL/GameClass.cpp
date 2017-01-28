@@ -125,6 +125,7 @@ void GameClass::loadMedia()
 
 	audio_manager->LoadMusic("./assets/music/journeys.mp3","MainTheme");
 	audio_manager->LoadMusic("./assets/music/castlejam.mp3", "LauncherTheme");
+	audio_manager->LoadMusic("./assets/music/victory_theme.mp3", "VictoryTheme");
 	audio_manager->LoadSoundEffect("./assets/sfx/swish.wav", "SwordSwish");
 	audio_manager->LoadSoundEffect("./assets/sfx/buttonsel.wav", "ButtonSelected");
 	audio_manager->LoadSoundEffect("./assets/sfx/door_open_004.wav", "OpenChest");
@@ -141,15 +142,6 @@ void GameClass::render()
 {
 	switch (gameState)
 	{
-	case LAUNCHER:
-		launcher->render();
-		break;
-	case HELP:
-		help->render();
-		break;
-	case GAMEOVER:
-		deathMenu->render();
-		break;
 	case GAME:
 		plane.render(&currentLevelLayout, levelLayoutW, levelLayoutH);
 		sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
@@ -160,6 +152,7 @@ void GameClass::render()
 		}
 		break;
 	default:
+		menu->render();
 		break;
 	}
 }
@@ -326,7 +319,7 @@ void GameClass::populateWorld()
 		}
 	}
 
-	centerDummy = new Player(glm::vec2(launcher->centredCoor(1024, 64), launcher->centredCoor(640, 64)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
+	centerDummy = new Player(glm::vec2(menu->centredCoor(1024, 64), menu->centredCoor(640, 64)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
 	HealthBar* playerHealthBar = new HealthBar(glm::vec2(4.5, 5.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
 	playerHealthBar->attachedTo = player_;
@@ -383,73 +376,93 @@ void GameClass::handleEvents(SDL_Event& e)
 
 void GameClass::handleMouseEvents(const SDL_Event& e)
 {
-	if ((e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP))
+	if ((e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) && gameState != GAME)
 	{
 		int x, y;
 		SDL_GetMouseState(&x, &y);
-		switch (gameState)
+		menu->selectedButton = -1;
+
+		switch (menu->menuState)
 		{
-		case LAUNCHER:
+		case LAUNCHERM:
 		{
-			launcher->selectedButton = -1;
-			launcher->selectedCheck();
-			for (int i = 0; i < launcher->buttons.size(); i++)
+			menu->selectedCheck(menu->launcherButtons);
+			for (int i = 0; i < menu->launcherButtons.size(); i++)
 			{
 
-				Button* b = launcher->buttons[i];
+				Button* b = menu->launcherButtons.at(i);
 				if (b->isInside(x, y))
 				{
-					launcher->selectedButton = i;
-					launcher->selectedCheck();
+					menu->selectedButton = i;
+					menu->selectedCheck(menu->launcherButtons);
 
-					if (e.type == SDL_MOUSEBUTTONUP && launcher->selectedButton == i)
+					if (e.type == SDL_MOUSEBUTTONUP && menu->selectedButton == i)
 					{
 						audio_manager->playSoundEffect("ButtonSelected");
-						setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
+						setGameState(menu->launcherButtons.at(menu->selectedButton)->getOnClickTransition());
 					}
 				}
 			}
 			break;
 			}	
-		case HELP:
+		case HELPM:
 		{
-			help->selectedButton = -1;
-			help->selectedCheck();
-			for (int i = 0; i < help->buttons.size(); i++)
+			menu->selectedCheck(menu->helpButtons);
+			for (int i = 0; i < menu->helpButtons.size(); i++)
 			{
 
-				Button* b = help->buttons.at(i);
+				Button* b = menu->helpButtons.at(i);
 				if (b->isInside(x, y))
 				{
-					help->selectedButton = i;
-					help->selectedCheck();
+					menu->selectedButton = i;
+					menu->selectedCheck(menu->helpButtons);
 
-					if (e.type == SDL_MOUSEBUTTONUP && help->selectedButton == i)
+					if (e.type == SDL_MOUSEBUTTONUP && menu->selectedButton == i)
 					{
 						audio_manager->playSoundEffect("ButtonSelected");
-						setGameState(help->buttons.at(help->selectedButton)->getOnClickTransition());
+						setGameState(menu->helpButtons.at(menu->selectedButton)->getOnClickTransition());
 					}
 				}
 			}
 			break;
 			}
-		case GAMEOVER:
+		case GAMEOVERM:
 		{
-			deathMenu->selectedButton = -1;
-			deathMenu->selectedCheck();
-			for (int i = 0; i < deathMenu->buttons.size(); i++)
+			menu->selectedCheck(menu->gameoverButtons);
+			for (int i = 0; i < menu->gameoverButtons.size(); i++)
 			{
 
-				Button* b = deathMenu->buttons.at(i);
+				Button* b = menu->gameoverButtons.at(i);
 				if (b->isInside(x, y))
 				{
-					deathMenu->selectedButton = i;
-					deathMenu->selectedCheck();
+					menu->selectedButton = i;
+					menu->selectedCheck(menu->gameoverButtons);
 
-					if (e.type == SDL_MOUSEBUTTONUP && deathMenu->selectedButton == i)
+					if (e.type == SDL_MOUSEBUTTONUP && menu->selectedButton == i)
 					{
 						audio_manager->playSoundEffect("ButtonSelected");
-						setGameState(deathMenu->buttons.at(deathMenu->selectedButton)->getOnClickTransition());
+						setGameState(menu->gameoverButtons.at(menu->selectedButton)->getOnClickTransition());
+					}
+				}
+			}
+			break;
+		}
+		case VICTORYM:
+		{
+			menu->selectedCheck(menu->victoryButtons);
+			for (int i = 0; i < menu->victoryButtons.size(); i++)
+			{
+
+				Button* b = menu->victoryButtons.at(i);
+				if (b->isInside(x, y))
+				{
+					menu->selectedButton = i;
+					menu->selectedCheck(menu->victoryButtons);
+
+					if (e.type == SDL_MOUSEBUTTONUP && menu->selectedButton == i)
+					{
+						audio_manager->playSoundEffect("ButtonSelected");
+						setGameState(menu->victoryButtons.at(menu->selectedButton)->getOnClickTransition());
 					}
 				}
 			}
@@ -469,30 +482,6 @@ void GameClass::handleKeyboardEvents()
 
 	switch (gameState)
 	{
-		case LAUNCHER:
-		{
-					 if (currentKeyStates[SDL_SCANCODE_UP])
-					 {
-						 if (launcher->selectedButton > 0) launcher->selectedButton--;
-						 launcher->selectedCheck();
-					 }
-					 else if (currentKeyStates[SDL_SCANCODE_DOWN])
-					 {
-						 if (launcher->selectedButton < (launcher->buttons.size() - 1)) launcher->selectedButton++;
-						 launcher->selectedCheck();
-					 }
-					 else if (currentKeyStates[SDL_SCANCODE_RETURN])
-					 {
-						 if (launcher->selectedButton!=-1)
-						 {
-							 audio_manager->playSoundEffect("ButtonSelected");
-
-							 audio_manager->ManageMusic(STOP, "LauncherTheme");
-							 setGameState(launcher->buttons.at(launcher->selectedButton)->getOnClickTransition());
-							 audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
-						 }
-					 }
-					 break;}
 		case GAME:
 		{
 
@@ -628,6 +617,16 @@ void GameClass::setGameState(GameState gs)
 {
 	switch (gs)
 	{
+		case LAUNCHER:
+		{
+			menu->setMenuState(LAUNCHERM);
+			break;
+		}
+		case HELP:
+		{
+			menu->setMenuState(HELPM);
+			break;
+		}
 		case GAME:
 		{
 			if(gameState == GAMEOVER)
@@ -647,7 +646,8 @@ void GameClass::setGameState(GameState gs)
 		}
 		case GAMEOVER:
 		{
-			audio_manager->setEffectsVolume(0.1f);
+			menu->setMenuState(GAMEOVERM);
+			audio_manager->setEffectsVolume(0.4f);
 			audio_manager->ManageMusic(STOP, "MainTheme");
 			audio_manager->playSoundEffect("DeathEffect");
 			
@@ -655,6 +655,18 @@ void GameClass::setGameState(GameState gs)
 			camera->resetProjection(window->getWidth(), window->getHeight());
 			emptyWorld();
 	
+			break;
+		}
+		case VICTORY:
+		{
+			menu->setMenuState(VICTORYM);
+			audio_manager->ManageMusic(STOP, "MainTheme");
+			audio_manager->ManageMusic(PLAY, "VictoryTheme", MIX_FADING_IN, 3000);
+			
+			camera->follow(centerDummy);
+			camera->resetProjection(window->getWidth(), window->getHeight());
+			emptyWorld();
+
 			break;
 		}
 		case EXIT:
