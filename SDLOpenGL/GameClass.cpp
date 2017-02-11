@@ -110,7 +110,7 @@ void GameClass::loadMedia()
 	loadLevelLayout("room1", 40, 40);
 
 	//Caricamento textures
-	allTextures.push_back(LTexture2D("./assets/CampFireFinished.png",64,64,120));
+	allTextures.push_back(LTexture2D("./assets/fire.png",64,64,120));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 60));
 	allTextures.push_back(LTexture2D("./assets/life2.png", 64, 64,120));
 
@@ -184,11 +184,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 	{
 		std::string line;
 		getline(file, line);
-		
-		
-		//if ( !file.good() )
-			//break;
-
+			
 		std::stringstream iss(line);
 
 		for (int col = 0; col < width; ++col)
@@ -196,9 +192,6 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 			std::string val;
 			getline(iss, val, ',');
 			
-			//if ( !iss.good() )
-				//break;
-
 			currentLevelLayout[row][col] = stoi(val);
 			
 		}
@@ -212,19 +205,12 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 		std::string line;
 		getline(filel, line);
 
-
-		//if ( !file.good() )
-		//break;
-
 		std::stringstream iss(line);
 
 		for (int col = 0; col < width; ++col)
 		{
 			std::string val;
 			getline(iss, val, ',');
-
-			//if ( !iss.good() )
-			//break;
 
 			currentLevelLayout_l[row][col] = stoi(val);
 
@@ -239,19 +225,12 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 		std::string line;
 		getline(fileo, line);
 
-
-		//if ( !file.good() )
-		//break;
-
 		std::stringstream iss(line);
 
 		for (int col = 0; col < width; ++col)
 		{
 			std::string val;
 			getline(iss, val, ',');
-
-			//if ( !iss.good() )
-			//break;
 
 			currentLevelLayout_o.at(row)[col] = stoi(val);
 
