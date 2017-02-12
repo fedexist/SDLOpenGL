@@ -275,5 +275,6 @@ void Player::treasureAnimate(int treasure)
 		myHealthBar->timer = SDL_GetTicks() + 2000;
 		myHealthBar->curIndexFrame = myHealthBar->startingIndexFrame = 9;
 		myHealthBar->endingIndexFrame = 13;
+		num_of_keys++;
 	}
 }
