@@ -16,6 +16,12 @@
     <Filter Include="File di intestazione\A%2a-alg">
       <UniqueIdentifier>{1bf7e6dd-81c5-4e11-8ff7-5a6fc4cc66d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\Core src">
+      <UniqueIdentifier>{d338cdaa-85db-45d7-adbc-5d695e99502b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di origine\Game src">
+      <UniqueIdentifier>{82625006-663e-4962-b7ab-e9f0561e4d5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -75,9 +81,6 @@
     <ClInclude Include="Button.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="Launcher.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
@@ -90,32 +93,29 @@
     <ClInclude Include="AI.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="PathFinder.h">
+    <ClInclude Include="HashTable.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Chest.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="Background.h">
+    <ClInclude Include="PathFinder.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="Help.h">
+    <ClInclude Include="Background.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="FontManager.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="HashTable.h">
-      <Filter>File di intestazione</Filter>
+    <ClInclude Include="astar-algorithm\stlastar.h">
+      <Filter>File di intestazione\A%2a-alg</Filter>
     </ClInclude>
-    <ClInclude Include="DeathMenu.h">
-      <Filter>File di intestazione</Filter>
+    <ClInclude Include="astar-algorithm\fsa.h">
+      <Filter>File di intestazione\A%2a-alg</Filter>
     </ClInclude>
     <ClInclude Include="Layout.h">
       <Filter>File di intestazione</Filter>
@@ -128,101 +128,89 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="SDLOpenGLMain.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="LWindow.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="GLHandler.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="GLRenderer.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="LShaderProgram.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="LSampleShader.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="LVertexShader.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="EventHandler.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="GameClass.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="LightShader.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="DrawingPlane.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="LTexture2D.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Core.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>File di origine</Filter>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
     <ClCompile Include="Camera2D.cpp">
-      <Filter>File di origine</Filter>
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>File di origine</Filter>
+    <ClCompile Include="GLHandler.cpp">
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
-    <ClCompile Include="Launcher.cpp">
-      <Filter>File di origine</Filter>
+    <ClCompile Include="GLRenderer.cpp">
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
-    <ClCompile Include="AudioManager.cpp">
-      <Filter>File di origine</Filter>
+    <ClCompile Include="LTexture2D.cpp">
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
-    <ClCompile Include="Fire.cpp">
-      <Filter>File di origine</Filter>
+    <ClCompile Include="LShaderProgram.cpp">
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
-    <ClCompile Include="HealthBar.cpp">
-      <Filter>File di origine</Filter>
+    <ClCompile Include="LSampleShader.cpp">
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
-    <ClCompile Include="AI.cpp">
-      <Filter>File di origine</Filter>
+    <ClCompile Include="LVertexShader.cpp">
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
-    <ClCompile Include="PathFinder.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Chest.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Background.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Help.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>File di origine</Filter>
+    <ClCompile Include="LightShader.cpp">
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
     <ClCompile Include="FontManager.cpp">
-      <Filter>File di origine</Filter>
+      <Filter>File di origine\Core src</Filter>
     </ClCompile>
-    <ClCompile Include="DeathMenu.cpp">
-      <Filter>File di origine</Filter>
+    <ClCompile Include="LWindow.cpp">
+      <Filter>File di origine\Core src</Filter>
+    </ClCompile>
+    <ClCompile Include="EventHandler.cpp">
+      <Filter>File di origine\Core src</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>File di origine\Core src</Filter>
+    </ClCompile>
+    <ClCompile Include="AI.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="Chest.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawingPlane.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="Fire.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClass.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="HealthBar.cpp">
+      <Filter>File di origine\Game src</Filter>
     </ClCompile>
     <ClCompile Include="Layout.cpp">
-      <Filter>File di origine</Filter>
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLOpenGLMain.cpp">
+      <Filter>File di origine\Game src</Filter>
     </ClCompile>
     <ClCompile Include="ButtonMenu.cpp">
-      <Filter>File di origine</Filter>
+      <Filter>File di origine\Game src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

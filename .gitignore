@@ -15,8 +15,6 @@
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-[Xx]64/
-[Xx]86/
 [Bb]uild/
 bld/
 [Bb]in/
@@ -243,6 +241,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-*.vcxproj
 libs/
-SDLOpenGL/SDLOpenGL.vcxproj.filters
+x64/Release Win7/
+SDLOpenGL/x64/Release Win7/
+!*.dll
