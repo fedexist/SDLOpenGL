@@ -285,6 +285,7 @@ xcopy "$(ProjectDir)3rd-party\dll\x64\*.dll" "$(OutputPath)" /s /e /h /y</Comman
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="Chest.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="DrawingPlane.h" />
     <ClInclude Include="Fire.h" />
     <ClInclude Include="FontManager.h" />
@@ -304,6 +305,7 @@ xcopy "$(ProjectDir)3rd-party\dll\x64\*.dll" "$(OutputPath)" /s /e /h /y</Comman
     <ClInclude Include="LWindow.h" />
     <ClInclude Include="PathFinder.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Portal.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Text.h" />
@@ -317,6 +319,7 @@ xcopy "$(ProjectDir)3rd-party\dll\x64\*.dll" "$(OutputPath)" /s /e /h /y</Comman
     <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="Chest.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="DrawingPlane.cpp" />
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="FontManager.cpp" />
@@ -338,6 +341,7 @@ xcopy "$(ProjectDir)3rd-party\dll\x64\*.dll" "$(OutputPath)" /s /e /h /y</Comman
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Win7|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Portal.cpp" />
     <ClCompile Include="SDLOpenGLMain.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

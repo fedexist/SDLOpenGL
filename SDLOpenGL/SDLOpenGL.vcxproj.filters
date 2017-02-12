@@ -123,6 +123,12 @@
     <ClInclude Include="ButtonMenu.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -210,6 +216,12 @@
       <Filter>File di origine\Game src</Filter>
     </ClCompile>
     <ClCompile Include="ButtonMenu.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>File di origine\Game src</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
       <Filter>File di origine\Game src</Filter>
     </ClCompile>
   </ItemGroup>
