@@ -63,6 +63,8 @@ public:
 	unsigned int coolDown = 0;
 	void setCurrentState(State s) { currentState = s; }
 	
+	int num_of_keys = 0;
+
 	void update(float dt);
 	void getHit(float hitNumber, GameObject* hitter);
 
@@ -70,7 +72,7 @@ public:
 	bool isSlashing(glm::vec2 d) const { return currentState == SLASHING && currentDirection == d; }
 	bool isIdle(glm::vec2 d) const { return currentState == IDLE && currentDirection == d; }
 	bool isDead() { return currentState == HURT; }
-
+	
 	void Act(State s, glm::vec2 d, glm::vec2 d2 = glm::vec2(0,0));
 
 	void treasureAnimate(int);

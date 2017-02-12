@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "Fire.h"
 #include "Chest.h"
+#include "Door.h"
+#include "Portal.h"
 #include "AI.h"
 
 
@@ -116,12 +118,25 @@ void GameClass::loadMedia()
 
 	allTextures.push_back(LTexture2D("./assets/orc.png", 64, 64, 60));
 	allTextures.push_back(LTexture2D("./assets/chest.png", 64, 64, 60));
+	
+	allTextures.push_back(LTexture2D("./assets/door.png", 64, 64, 60));
+	
+	allTextures.push_back(LTexture2D("./assets/portal.png", 64, 64, 60));
 
 	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(0.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(3), 1, 26, 28));
 	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 1));
 	
 	allObjectsFactory.push_back(new Chest(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(4), 0.05, 0, 1, audio_manager));
+
+	allObjectsFactory.push_back(new Door(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(5), 0.05, 0, 5, audio_manager));
+	
+	//NON FUNZIONA
+	allObjectsFactory.push_back(new Portal(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(6), 0.05, 6, 7, audio_manager));
+	allObjectsFactory.push_back(new Portal(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(6), 0.05, 7, 8, audio_manager));
+	allObjectsFactory.push_back(new Portal(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(6), 0.05, 3, 4, audio_manager));
+	allObjectsFactory.push_back(new Portal(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(6), 0.05, 2, 3, audio_manager));
+
 
 	audio_manager->LoadMusic("./assets/music/journeys.mp3","MainTheme");
 	audio_manager->LoadMusic("./assets/music/castlejam.mp3", "LauncherTheme");
@@ -250,6 +265,12 @@ void GameClass::populateWorld()
 
 	player_->isPlayer = true;
 
+	Portal* portalUpLeft = NULL;
+	Portal* portalDownLeft = NULL;
+	Portal* portalUpRight = NULL;
+	Portal* portalDownRight = NULL;
+
+
 	for (int j = 0; j < levelLayoutH; j++)
 	{
 		for (int i = 0; i < levelLayoutW; i++)
@@ -260,6 +281,29 @@ void GameClass::populateWorld()
 				Fire* fireThis = dynamic_cast<Fire*>(allObjectsFactory[objectIndex]);
 				Player* playerThis = dynamic_cast<Player*>(allObjectsFactory[objectIndex]);
 				Chest* chestThis = dynamic_cast<Chest*>(allObjectsFactory[objectIndex]);
+				Door* doorThis = dynamic_cast<Door*>(allObjectsFactory[objectIndex]);
+				Portal* portalThis = dynamic_cast<Portal*>(allObjectsFactory[objectIndex]);
+
+				SDL_LogDebug(0,"%d",objectIndex);
+				
+
+				if (portalThis)
+				{
+					SDL_LogDebug(0,"%d",portalThis->startingIndexFrame);
+					
+					if (portalThis->startingIndexFrame == 0)
+						portalUpLeft = new Portal(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Portal*>(allObjectsFactory.at(objectIndex)));
+
+					if (portalThis->startingIndexFrame == 1)
+						portalUpRight = new Portal(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Portal*>(allObjectsFactory.at(objectIndex)));
+
+					if (portalThis->startingIndexFrame == 4)
+						portalDownLeft = new Portal(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Portal*>(allObjectsFactory.at(objectIndex)));
+
+					if (portalThis->startingIndexFrame == 5)
+						portalDownRight = new Portal(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Portal*>(allObjectsFactory.at(objectIndex)));
+
+				}
 
 				if (fireThis)
 				{
@@ -276,6 +320,13 @@ void GameClass::populateWorld()
 					gameObjectArray.push_back(creatingChest);
 					allChestsArray.push_back(creatingChest);
 
+				}
+
+				if (doorThis)
+				{
+					Door* creatingDoor = new Door(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Door*>(allObjectsFactory.at(objectIndex)));
+					//creatingChest->resizeHitBox(glm::vec2(0.5,1));
+					gameObjectArray.push_back(creatingDoor);
 				}
 
 				if (playerThis)
@@ -297,7 +348,24 @@ void GameClass::populateWorld()
 			}
 		}
 	}
+	
+	if (portalUpLeft!=NULL)
+	{
+	portalUpLeft->UpLeft = portalUpLeft;
+	portalUpRight->UpLeft = portalUpLeft;
+	portalDownLeft->UpLeft = portalUpLeft;
+	portalDownRight->UpLeft = portalUpLeft;
 
+	portalUpLeft->Next = portalUpRight;
+	portalUpRight->Next = portalDownLeft;
+	portalDownLeft->Next = portalDownRight;
+	portalDownRight->Next = NULL;
+
+	gameObjectArray.push_back(portalUpLeft);
+	gameObjectArray.push_back(portalUpRight);
+	gameObjectArray.push_back(portalDownLeft);
+	gameObjectArray.push_back(portalDownRight);
+	 }
 	centerDummy = new Player(glm::vec2(menu->centredCoor(1024, 64), menu->centredCoor(640, 64)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
 	HealthBar* playerHealthBar = new HealthBar(glm::vec2(4.5, 5.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
