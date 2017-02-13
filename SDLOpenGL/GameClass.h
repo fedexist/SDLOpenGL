@@ -58,6 +58,8 @@ class GameClass
 	int AIHandicapAI = 2; //quando il contatore arriva 2 aggiorno le AI
 	int	AIHandicapCounter=0;
 
+	int timerToWin = 0;
+
 	void quit();
 
 public:

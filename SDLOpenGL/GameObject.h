@@ -11,7 +11,6 @@ class GameObject{
 	glm::vec2 momentum;
 	glm::vec2 dimensions; //dimensione della sola sprite
 	glm::vec2 lastTranslation; //traslazione in coordinate griglia
-	bool visible;
 	bool canInteractWith;
 
 	float mass;
@@ -19,6 +18,17 @@ class GameObject{
 	std::vector< GLint* > currentWorldKnowledge;
 	
 public:
+	/**
+  @param position_ GameObject starting position
+  @param momentum_ GameObject momentum
+  @param dimensions_ glm::vec2 containing the object dimensions
+  @param visible_ is it visible?
+  @param texture LTexture2D* pointing to the spritesheet this GameObject belongs
+  @param mass GameObject mass for the physics system
+  @param beginIndex This is the starting index of the GameObject animation
+  @param endingIndex This is the ending index of the GameObject animation
+  @param am AudioManager* pointing to the Core's AudioManager, needed when a GameObject need to play a sound effect  
+*/
 	GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, LTexture2D* texture, float mass, unsigned int beginIndex, unsigned int endingIndex, AudioManager* am);
 	GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimensions_, bool visible_, bool interactable, float mass, GameObject *factory);
 	//GameObject();
@@ -27,6 +37,8 @@ public:
 	virtual void update(float dt)=0;
 	bool isPlayer = false;
 	GameObject* attachedTo = NULL;
+	
+	bool visible;
 
 	class GameObjectComparer
 	{
@@ -44,6 +56,7 @@ public:
 				jvalue = j->position.y;
 			else
 				jvalue = j->attachedTo->position.y;
+
 			return (ivalue > jvalue);
 		}
 	} gameObjectComparer;

@@ -23,6 +23,9 @@ There's included the game, as the actual subject of the Computer Graphics assign
   - [Fire spritesheet](http://opengameart.org/content/camp-fire-animation-for-rpgs-finished)
   - [Undead Empire 2D assets for the tiles](http://opengameart.org/content/undeadempire-tileset-64x64-repack-floor-lava-walls-and-effects)
   - [Optimus Princeps font](http://www.dafont.com/optimusprinceps.font)
+  - [Door, chest and portal sound effects from GDC 2016 Game Audio Bundle](http://www.Sonniss.com)
+  -	[Portal textures](http://opengameart.org/content/teleporter-circle)
+  - [Door spritesheet](http://pixelation.org/index.php?topic=11587.0)
   - Music and a couple of sound effects from Stronghold Crusader soundtrack
   
  
