@@ -39,6 +39,7 @@ void GameClass::update(float dt)
 	
 	if(gameState == GAME)
 	{
+
 		//Update World Knowledge of the world to all the actors to get collisions working
 		setObjectWorldKnowledge(player_);
 		for (Player* enemy : allEnemiesArray)
@@ -55,11 +56,13 @@ void GameClass::update(float dt)
 			AIHandicapCounter = 0;
 		}
 		
-		//Update detection Y coordinate for rendering order
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
 			gameObjectArray[i]->areaSharing.clear();
 		}
+
+		
+		//Update detection Y coordinate for rendering order
 		for (int i = 0; i < gameObjectArray.size(); i++)
 		{
 			float ll, rl, ul, dl;
@@ -94,10 +97,17 @@ void GameClass::update(float dt)
 				//SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "CenterDummy pos: %f, %f", centerDummy->position.x, centerDummy->position.y);
 				setGameState(GAMEOVER);
 			}
+			if (!player_->visible)
+			{
+				if (timerToWin == 0)
+					timerToWin = SDL_GetTicks();
+				if (SDL_GetTicks() - timerToWin > 2000)
+					setGameState(VICTORY);
+			}
 		}
 	}
-
-	camera->update(dt);
+	if (player_->visible)
+		camera->update(dt);
 
 }
 
@@ -110,7 +120,7 @@ void GameClass::loadMedia()
 
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
 	loadLevelLayout("room1", 40, 40);
-
+	// REFACTOR ...
 	//Caricamento textures
 	allTextures.push_back(LTexture2D("./assets/fire.png",64,64,120));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 60));
@@ -123,6 +133,7 @@ void GameClass::loadMedia()
 	
 	allTextures.push_back(LTexture2D("./assets/portal.png", 64, 64, 60));
 
+	// REFACTOR ...
 	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(0.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(3), 1, 26, 28));
 	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 1));
@@ -131,7 +142,7 @@ void GameClass::loadMedia()
 
 	allObjectsFactory.push_back(new Door(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(5), 0.05, 0, 5, audio_manager));
 	
-	//NON FUNZIONA
+	
 	allObjectsFactory.push_back(new Portal(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(6), 0.05, 6, 7, audio_manager));
 	allObjectsFactory.push_back(new Portal(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(6), 0.05, 7, 8, audio_manager));
 	allObjectsFactory.push_back(new Portal(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(6), 0.05, 3, 4, audio_manager));
@@ -144,6 +155,7 @@ void GameClass::loadMedia()
 	audio_manager->LoadSoundEffect("./assets/sfx/swish.wav", "SwordSwish");
 	audio_manager->LoadSoundEffect("./assets/sfx/buttonsel.wav", "ButtonSelected");
 	audio_manager->LoadSoundEffect("./assets/sfx/door_open_004.wav", "OpenChest");
+	audio_manager->LoadSoundEffect("./assets/sfx/glow_med_L_to_R_002.wav", "OpenPortal");
 	audio_manager->LoadSoundEffect("./assets/sfx/death_effect.wav", "DeathEffect");
 	audio_manager->setMusicVolume(0.75f);
 
@@ -161,9 +173,20 @@ void GameClass::render()
 		plane.render(&currentLevelLayout, levelLayoutW, levelLayoutH);
 		sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
 
+		// REFACTOR ...
 		for (GameObject* gameObj : gameObjectArray)
 		{
-			gameObj->render();
+			if (!gameObj->visible)
+				continue;
+			if (dynamic_cast<Portal*>(gameObj))
+				gameObj->render();
+		}
+		for (GameObject* gameObj : gameObjectArray)
+		{
+			if (!gameObj->visible)
+				continue;
+			if (!dynamic_cast<Portal*>(gameObj))
+				gameObj->render();
 		}
 		break;
 	default:
@@ -261,6 +284,7 @@ void GameClass::loadLevelLayout(std::string levelName, unsigned int width, unsig
 
 void GameClass::populateWorld()
 {
+	//3,1
 	player_ = new Player(glm::vec2(3, 1), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
 
 	player_->isPlayer = true;
@@ -283,24 +307,20 @@ void GameClass::populateWorld()
 				Chest* chestThis = dynamic_cast<Chest*>(allObjectsFactory[objectIndex]);
 				Door* doorThis = dynamic_cast<Door*>(allObjectsFactory[objectIndex]);
 				Portal* portalThis = dynamic_cast<Portal*>(allObjectsFactory[objectIndex]);
-
-				SDL_LogDebug(0,"%d",objectIndex);
 				
 
 				if (portalThis)
 				{
-					SDL_LogDebug(0,"%d",portalThis->startingIndexFrame);
-					
-					if (portalThis->startingIndexFrame == 0)
+					if (portalThis->startingIndexFrame == 2)
 						portalUpLeft = new Portal(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Portal*>(allObjectsFactory.at(objectIndex)));
 
-					if (portalThis->startingIndexFrame == 1)
+					if (portalThis->startingIndexFrame == 3)
 						portalUpRight = new Portal(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Portal*>(allObjectsFactory.at(objectIndex)));
 
-					if (portalThis->startingIndexFrame == 4)
+					if (portalThis->startingIndexFrame == 6)
 						portalDownLeft = new Portal(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Portal*>(allObjectsFactory.at(objectIndex)));
 
-					if (portalThis->startingIndexFrame == 5)
+					if (portalThis->startingIndexFrame == 7)
 						portalDownRight = new Portal(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Portal*>(allObjectsFactory.at(objectIndex)));
 
 				}
@@ -310,7 +330,7 @@ void GameClass::populateWorld()
 					Fire* creatingFire = new Fire(glm::vec2(i, (levelLayoutH - j - 1)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<Fire*>(allObjectsFactory.at(objectIndex)));
 					creatingFire->resizeHitBox(glm::vec2(0.5, 1));
 					gameObjectArray.push_back(creatingFire);
-
+				
 				}
 
 				if (chestThis)
@@ -529,7 +549,8 @@ void GameClass::handleKeyboardEvents()
 	{
 		case GAME:
 		{
-
+			if (!player_->visible)
+				return;
 			bool cooldownBool = int (SDL_GetTicks() - player_->coolDown) > 0;
 			bool isMoving = currentKeyStates[SDL_SCANCODE_W] || currentKeyStates[SDL_SCANCODE_A] || currentKeyStates[SDL_SCANCODE_S] || currentKeyStates[SDL_SCANCODE_D];
 			bool isSlashing = cooldownBool && (currentKeyStates[SDL_SCANCODE_UP] || currentKeyStates[SDL_SCANCODE_DOWN] || currentKeyStates[SDL_SCANCODE_LEFT] || currentKeyStates[SDL_SCANCODE_RIGHT]);
@@ -685,7 +706,8 @@ void GameClass::setGameState(GameState gs)
 			audio_manager->ManageMusic(PLAY, "MainTheme", MIX_FADING_IN, 3000);
 
 			camera->resetProjection(window->getWidth(), window->getHeight());
-			camera->follow(player_);
+			if (player_->visible)
+				camera->follow(player_);
 
 			break;
 		}

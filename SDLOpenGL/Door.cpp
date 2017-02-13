@@ -25,6 +25,7 @@ void Door::onInteraction()
 			if (player->num_of_keys>0)
 			{	
 				open = true;
+				player->num_of_keys--;
 				audio_manager->playSoundEffect("OpenChest");
 			}
 			else
