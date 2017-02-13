@@ -36,7 +36,7 @@ public:
 	void render();
 	virtual void update(float dt)=0;
 	bool isPlayer = false;
-	GameObject* attachedTo = NULL;
+	GameObject* attachedTo = nullptr;
 	
 	bool visible;
 
@@ -47,12 +47,12 @@ public:
 		GameObjectComparer(){};
 		bool operator() (GameObject *i, GameObject *j) {
 			float ivalue, jvalue;
-			if (i->attachedTo == NULL)
+			if (i->attachedTo == nullptr)
 				ivalue = i->position.y;
 			else
 				ivalue = i->attachedTo->position.y;
 
-			if (j->attachedTo == NULL)
+			if (j->attachedTo == nullptr)
 				jvalue = j->position.y;
 			else
 				jvalue = j->attachedTo->position.y;

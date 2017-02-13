@@ -34,6 +34,7 @@ void Portal::onInteraction()
 			{
 				player->num_of_keys--;
 
+				audio_manager->ManageMusic(STOP, "MainTheme", MIX_FADING_OUT, 2000);
 				audio_manager->playSoundEffect("OpenPortal");
 				UpLeft->timeOpening = SDL_GetTicks();
 				UpLeft->openPortal();

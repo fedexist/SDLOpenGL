@@ -6,6 +6,7 @@
 #include "AudioManager.h"
 #include "FontManager.h"
 #include "ButtonMenu.h"
+#include "Portal.h"
 
 typedef enum GameState
 {
@@ -28,6 +29,7 @@ class GameClass
 	std::vector<AI*> allAisArray;
 	std::vector<GameObject*> allChestsArray;
 	std::vector<Player*> allEnemiesArray;
+	std::vector<Portal*> portalArray;
 
 	Player* player_ = nullptr;
 	Player* centerDummy = nullptr;
@@ -73,6 +75,7 @@ public:
 
 	void populateWorld();
 	void emptyWorld();
+	void portalSetup(Portal* portalUpLeft, Portal* portalUpRight, Portal* portalDownLeft, Portal* portalDownRight);
 
 	void handleMouseEvents(const SDL_Event& e);
 	void handleEvents(SDL_Event& e);

@@ -120,20 +120,18 @@ void GameClass::loadMedia()
 
 	SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to loadLevelLayout()\n");
 	loadLevelLayout("room1", 40, 40);
-	// REFACTOR ...
+
+	// REFACTOR: Using an hashmap is better and makes easier to retrieve a texture
 	//Caricamento textures
 	allTextures.push_back(LTexture2D("./assets/fire.png",64,64,120));
 	allTextures.push_back(LTexture2D("./assets/player.png", 64, 64, 60));
 	allTextures.push_back(LTexture2D("./assets/life2.png", 64, 64,120));
-
 	allTextures.push_back(LTexture2D("./assets/orc.png", 64, 64, 60));
-	allTextures.push_back(LTexture2D("./assets/chest.png", 64, 64, 60));
-	
+	allTextures.push_back(LTexture2D("./assets/chest.png", 64, 64, 60));	
 	allTextures.push_back(LTexture2D("./assets/door.png", 64, 64, 60));
-	
 	allTextures.push_back(LTexture2D("./assets/portal.png", 64, 64, 60));
 
-	// REFACTOR ...
+	// REFACTOR: Using an hashmap is better and makes easier to retrieve a GameObject
 	allObjectsFactory.push_back(new Fire(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(0), 0.05, 0, 4));
 	allObjectsFactory.push_back(new Player(glm::vec2(0.0, 0.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(3), 1, 26, 28));
 	allObjectsFactory.push_back(new HealthBar(glm::vec2(0.0, 0.0), glm::vec2(0, 0), glm::vec2(64, 64), true, true, &allTextures.at(2), 0.05, 0, 1));
@@ -155,7 +153,7 @@ void GameClass::loadMedia()
 	audio_manager->LoadSoundEffect("./assets/sfx/swish.wav", "SwordSwish");
 	audio_manager->LoadSoundEffect("./assets/sfx/buttonsel.wav", "ButtonSelected");
 	audio_manager->LoadSoundEffect("./assets/sfx/door_open_004.wav", "OpenChest");
-	audio_manager->LoadSoundEffect("./assets/sfx/glow_med_L_to_R_002.wav", "OpenPortal");
+	audio_manager->LoadSoundEffect("./assets/sfx/teleport.wav", "OpenPortal");
 	audio_manager->LoadSoundEffect("./assets/sfx/death_effect.wav", "DeathEffect");
 	audio_manager->setMusicVolume(0.75f);
 
@@ -173,21 +171,12 @@ void GameClass::render()
 		plane.render(&currentLevelLayout, levelLayoutW, levelLayoutH);
 		sort(gameObjectArray.begin(), gameObjectArray.end(), gameObjectArray.at(0)->gameObjectComparer);
 
-		// REFACTOR ...
-		for (GameObject* gameObj : gameObjectArray)
-		{
-			if (!gameObj->visible)
-				continue;
-			if (dynamic_cast<Portal*>(gameObj))
-				gameObj->render();
-		}
-		for (GameObject* gameObj : gameObjectArray)
-		{
-			if (!gameObj->visible)
-				continue;
-			if (!dynamic_cast<Portal*>(gameObj))
-				gameObj->render();
-		}
+		// REFACTOR 2 different unary_functions, renderer and noPortalRender might be too much -> functors are probably better
+
+		std::for_each(portalArray.begin(), portalArray.end(), renderer());
+
+		std::for_each(gameObjectArray.begin(), gameObjectArray.end(), noPortalRenderer());
+
 		break;
 	default:
 		menu->render();
@@ -289,10 +278,10 @@ void GameClass::populateWorld()
 
 	player_->isPlayer = true;
 
-	Portal* portalUpLeft = NULL;
-	Portal* portalDownLeft = NULL;
-	Portal* portalUpRight = NULL;
-	Portal* portalDownRight = NULL;
+	Portal* portalUpLeft = nullptr;
+	Portal* portalDownLeft = nullptr;
+	Portal* portalUpRight = nullptr;
+	Portal* portalDownRight = nullptr;
 
 
 	for (int j = 0; j < levelLayoutH; j++)
@@ -368,33 +357,17 @@ void GameClass::populateWorld()
 			}
 		}
 	}
-	
-	if (portalUpLeft!=NULL)
-	{
-	portalUpLeft->UpLeft = portalUpLeft;
-	portalUpRight->UpLeft = portalUpLeft;
-	portalDownLeft->UpLeft = portalUpLeft;
-	portalDownRight->UpLeft = portalUpLeft;
 
-	portalUpLeft->Next = portalUpRight;
-	portalUpRight->Next = portalDownLeft;
-	portalDownLeft->Next = portalDownRight;
-	portalDownRight->Next = NULL;
+	portalSetup(portalUpLeft, portalUpRight, portalDownLeft, portalDownRight);
 
-	gameObjectArray.push_back(portalUpLeft);
-	gameObjectArray.push_back(portalUpRight);
-	gameObjectArray.push_back(portalDownLeft);
-	gameObjectArray.push_back(portalDownRight);
-	 }
 	centerDummy = new Player(glm::vec2(menu->centredCoor(1024, 64), menu->centredCoor(640, 64)), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, &allTextures.at(1), 1, 26, 28);
-
 	HealthBar* playerHealthBar = new HealthBar(glm::vec2(4.5, 5.0), glm::vec2(0.0, 0.0), glm::vec2(64, 64), true, true, 1.0, static_cast<HealthBar*>(allObjectsFactory.at(2)));
 	playerHealthBar->attachedTo = player_;
 	player_->myHealthBar = playerHealthBar;
 	gameObjectArray.push_back(player_);
 	gameObjectArray.push_back(player_->myHealthBar);
 
-	std::srand(std::time(0));
+	std::srand(std::time(nullptr));
 
 	std::vector<int> chestIndexRandomized;
 	for (int i = 0; i < allChestsArray.size(); i++)
@@ -425,10 +398,41 @@ void GameClass::emptyWorld()
 	allChestsArray.clear();
 	
 	allEnemiesArray.clear();
+
+	std::for_each (portalArray.begin (), portalArray.end (), deleter<GameObject> ());
+	portalArray.clear();
 	
 	std::for_each (allAisArray.begin (), allAisArray.end (), deleter<AI> ());
 	allAisArray.clear();
 	
+}
+
+void GameClass::portalSetup(Portal* portalUpLeft, Portal* portalUpRight, Portal* portalDownLeft, Portal* portalDownRight)
+{
+	if (portalUpLeft!= nullptr)
+	{
+		portalUpLeft->UpLeft = portalUpLeft;
+		portalUpRight->UpLeft = portalUpLeft;
+		portalDownLeft->UpLeft = portalUpLeft;
+		portalDownRight->UpLeft = portalUpLeft;
+
+		portalUpLeft->Next = portalUpRight;
+		portalUpRight->Next = portalDownLeft;
+		portalDownLeft->Next = portalDownRight;
+		portalDownRight->Next = nullptr;
+
+		portalArray.push_back(portalUpLeft);
+		portalArray.push_back(portalUpRight);
+		portalArray.push_back(portalDownLeft);
+		portalArray.push_back(portalDownRight);
+		gameObjectArray.push_back(portalUpLeft);
+		gameObjectArray.push_back(portalUpRight);
+		gameObjectArray.push_back(portalDownLeft);
+		gameObjectArray.push_back(portalDownRight);
+
+	}
+
+
 }
 
 
@@ -695,7 +699,7 @@ void GameClass::setGameState(GameState gs)
 		}
 		case GAME:
 		{
-			if(gameState == GAMEOVER)
+			if(gameState == GAMEOVER || gameState == VICTORY)
 			{
 				SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION, "About to repopulate world after gameover");
 				populateWorld();

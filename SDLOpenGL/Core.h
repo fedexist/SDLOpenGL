@@ -19,6 +19,23 @@ struct deleter : std::unary_function<const T*, void>
 	}
 };
 
+struct renderer : std::unary_function<const Portal*, void>
+{
+	void operator() (Portal *ptr) const
+	{
+		ptr->render();
+	}
+};
+
+struct noPortalRenderer : std::unary_function<const GameObject*, void>
+{
+	void operator() (GameObject *ptr) const
+	{
+		if(!dynamic_cast<Portal*>(ptr))
+			ptr->render();
+	}
+};
+
 class Core
 {
 	public:
