@@ -139,7 +139,7 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;opengl32.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /h /y
+      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /i /h /y
 xcopy "$(ProjectDir)3rd-party\dll\x86\*.dll" "$(OutputPath)" /s /e /h /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -159,7 +159,7 @@ xcopy "$(ProjectDir)3rd-party\dll\x86\*.dll" "$(OutputPath)" /s /e /h /y</Comman
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;opengl32.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /h /y
+      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /i /h /y
 xcopy "$(ProjectDir)3rd-party\dll\x64\*.dll" "$(OutputPath)" /s /e /h /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -183,7 +183,7 @@ xcopy "$(ProjectDir)3rd-party\dll\x64\*.dll" "$(OutputPath)" /s /e /h /y</Comman
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;opengl32.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /h /y
+      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /i /h /y
 xcopy "$(ProjectDir)3rd-party\dll\x86\*.dll" "$(OutputPath)" /s /e /h /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -207,7 +207,7 @@ xcopy "$(ProjectDir)3rd-party\dll\x86\*.dll" "$(OutputPath)" /s /e /h /y</Comman
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;opengl32.lib;glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /h /y
+      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /i /h /y
 xcopy "$(ProjectDir)3rd-party\dll\x86\*.dll" "$(OutputPath)" /s /e /h /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -237,7 +237,7 @@ xcopy "$(ProjectDir)3rd-party\dll\x86\*.dll" "$(OutputPath)" /s /e /h /y</Comman
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /h /y
+      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /i /h /y
 xcopy "$(ProjectDir)3rd-party\dll\x64\*.dll" "$(OutputPath)" /s /e /h /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -267,7 +267,7 @@ xcopy "$(ProjectDir)3rd-party\dll\x64\*.dll" "$(OutputPath)" /s /e /h /y</Comman
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /h /y
+      <Command>xcopy "$(ProjectDir)assets" "$(OutputPath)assets" /s /e /i /h /y
 xcopy "$(ProjectDir)3rd-party\dll\x64\*.dll" "$(OutputPath)" /s /e /h /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
