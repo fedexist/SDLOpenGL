@@ -392,16 +392,12 @@ void GameClass::emptyWorld()
 {
 	
 	std::for_each (gameObjectArray.begin (), gameObjectArray.end (), deleter<GameObject> ());
-	gameObjectArray.clear();
-	
-	allChestsArray.clear();
-	
-	allEnemiesArray.clear();
-
-	std::for_each (portalArray.begin (), portalArray.end (), deleter<GameObject> ());
-	portalArray.clear();
-	
 	std::for_each (allAisArray.begin (), allAisArray.end (), deleter<AI> ());
+	
+	gameObjectArray.clear();	
+	allChestsArray.clear();	
+	allEnemiesArray.clear();
+	portalArray.clear();
 	allAisArray.clear();
 	
 }

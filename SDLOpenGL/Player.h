@@ -74,7 +74,7 @@ public:
 	unsigned int coolDown = 0;
 	void setCurrentState(State s) { currentState = s; }
 	
-	int num_of_keys = 2;
+	int num_of_keys = 0;
 
 	void update(float dt);
 	void getHit(float hitNumber, GameObject* hitter);
