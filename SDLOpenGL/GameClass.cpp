@@ -19,7 +19,7 @@ GameClass::GameClass(std::string title)
 	allObjectsFactory = std::vector<GameObject*>();
 	allAisArray = std::vector<AI*>();
 	allTextures = std::vector<LTexture2D>();
-	allChestsArray = std::vector<GameObject*>();
+	allChestsArray = std::vector<Chest*>();
 	allEnemiesArray = std::vector<Player*>();
 	gameState = LAUNCHER;
 }
@@ -297,7 +297,6 @@ void GameClass::populateWorld()
 				Door* doorThis = dynamic_cast<Door*>(allObjectsFactory[objectIndex]);
 				Portal* portalThis = dynamic_cast<Portal*>(allObjectsFactory[objectIndex]);
 				
-
 				if (portalThis)
 				{
 					if (portalThis->startingIndexFrame == 2)
@@ -379,7 +378,7 @@ void GameClass::populateWorld()
 
 	for (int i = 0; i < allChestsArray.size(); i++)
 	{
-		Chest* thisChest = dynamic_cast <Chest*> (allChestsArray[chestIndexRandomized[i]]);
+		Chest* thisChest = allChestsArray[chestIndexRandomized[i]];
 
 		if (i < 2)
 			thisChest->addTreasure(Chest::KEY);

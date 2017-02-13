@@ -21,7 +21,7 @@ void Door::onInteraction()
 	{
 		if (areaSharing.at(i)->isPlayer)
 		{
-			Player* player = dynamic_cast<Player*> (areaSharing.at(i));
+			Player* player = static_cast<Player*> (areaSharing.at(i));
 			if (player->num_of_keys>0)
 			{	
 				open = true;

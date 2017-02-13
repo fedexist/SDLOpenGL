@@ -30,7 +30,7 @@ void Chest::onInteraction()
 			curIndexFrame = startingIndexFrame = 1;
 			endingIndexFrame = 2;
 			audio_manager->playSoundEffect("OpenChest");
-			Player* player = dynamic_cast<Player*> (areaSharing.at(i));
+			Player* player = static_cast<Player*>(areaSharing.at(i));
 			player->treasureAnimate(treasure);
 		}
 	}

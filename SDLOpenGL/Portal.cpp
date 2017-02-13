@@ -29,7 +29,7 @@ void Portal::onInteraction()
 				return;
 			}
 		
-		Player* player = dynamic_cast<Player*> (areaSharing.at(i));
+		Player* player = static_cast<Player*> (areaSharing.at(i));
 		if (player->num_of_keys > 0)
 			{
 				player->num_of_keys--;
@@ -59,7 +59,7 @@ void Portal::teleport()
 	{
 		if (areaSharing.at(i)->isPlayer)
 		{
-			Player* thisPlayer = dynamic_cast<Player*>(areaSharing.at(i));
+			Player* thisPlayer = static_cast<Player*>(areaSharing.at(i));
 			thisPlayer->myHealthBar->visible = false;
 			thisPlayer->visible = false;
 		}
