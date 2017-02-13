@@ -54,18 +54,12 @@ GameObject::GameObject(glm::vec2 position_, glm::vec2 momentum_, glm::vec2 dimen
 
 void GameObject::render()
 {
-	tex->drawSprite(position.x, position.y, 0.5, curIndexFrame);
+	if(visible)
+		tex->drawSprite(position.x, position.y, 0.5, curIndexFrame);
 }
 
 void GameObject::update(float dt)
 {
-
-	/*handleAnims(dt);
-	glm::vec2 forceInput = glm::vec2(0.f, 0.f);
-
-	//movement
-	handleMovement(dt, forceInput);
-	*/
 }
 
 

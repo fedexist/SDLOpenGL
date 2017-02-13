@@ -6,6 +6,8 @@
 #include "AudioManager.h"
 #include "FontManager.h"
 #include "ButtonMenu.h"
+#include "Portal.h"
+#include "Chest.h"
 
 typedef enum GameState
 {
@@ -26,30 +28,29 @@ class GameClass
 	std::vector<GameObject*> gameObjectArray;
 	std::vector<GameObject*> allObjectsFactory;
 	std::vector<AI*> allAisArray;
-	std::vector<GameObject*> allChestsArray;
+	std::vector<Chest*> allChestsArray;
 	std::vector<Player*> allEnemiesArray;
+	std::vector<Portal*> portalArray;
 
 	Player* player_ = nullptr;
 	Player* centerDummy = nullptr;
 
-	DrawingPlane plane;
-	LWindow* window;
-	
-	ButtonMenu* menu;
 	std::vector<GLuint*> currentLevelLayout;
-
 	std::vector<GLint*> currentLevelLayout_o;
-
 	std::vector<GLint*> currentLevelLayout_l;
+
+	std::vector< std::vector<GLuint*> > cachedLevelLayouts;
+	std::vector< std::vector<GLint*> > cachedLevelLayouts_o;
+	std::vector< std::vector<GLint*> > cachedLevelLayouts_l;
+
 
 	std::vector<LTexture2D> allTextures;
 	unsigned int levelLayoutW, levelLayoutH;
 	std::string levelPath = "./assets/levels/";
-	std::vector< std::vector<GLuint*> > cachedLevelLayouts;
 
-	std::vector< std::vector<GLint*> > cachedLevelLayouts_o;
-
-	std::vector< std::vector<GLint*> > cachedLevelLayouts_l;
+	DrawingPlane plane;
+	LWindow* window;	
+	ButtonMenu* menu;
 	Camera2D* camera;
 	GameState gameState;
 	AudioManager* audio_manager;
@@ -57,6 +58,8 @@ class GameClass
 
 	int AIHandicapAI = 2; //quando il contatore arriva 2 aggiorno le AI
 	int	AIHandicapCounter=0;
+
+	int timerToWin = 0;
 
 	void quit();
 
@@ -71,6 +74,7 @@ public:
 
 	void populateWorld();
 	void emptyWorld();
+	void portalSetup(Portal* portalUpLeft, Portal* portalUpRight, Portal* portalDownLeft, Portal* portalDownRight);
 
 	void handleMouseEvents(const SDL_Event& e);
 	void handleEvents(SDL_Event& e);

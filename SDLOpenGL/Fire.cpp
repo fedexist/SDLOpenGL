@@ -3,12 +3,12 @@
 
 
 Fire::Fire(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, LTexture2D* tex, float mass, unsigned int begInd, unsigned int endInd) :
-GameObject(pos, mom, dim, vis, canInt, tex, mass, begInd, endInd, NULL)
+GameObject(pos, mom, dim, vis, canInt, tex, mass, begInd, endInd, nullptr)
 {
 }
 
 Fire::Fire(glm::vec2 pos, glm::vec2 mom, glm::vec2 dim, bool vis, bool canInt, float mass, Fire* other) :
-GameObject(pos, mom, dim, vis, canInt, other->tex, mass, other->startingIndexFrame, other->endingIndexFrame,NULL)
+GameObject(pos, mom, dim, vis, canInt, other->tex, mass, other->startingIndexFrame, other->endingIndexFrame, nullptr)
 {
 }
 

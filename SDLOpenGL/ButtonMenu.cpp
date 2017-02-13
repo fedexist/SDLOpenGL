@@ -76,7 +76,7 @@ ButtonMenu::ButtonMenu(LWindow* w, FontManager* fm)
 	commandsTexts.push_back(movementInfo);
 
 	color = { 255, 215, 0 };
-	victoryText = new Text(font, "EXIT", color, size);
+	victoryText = new Text(font, "VICTORY", color, size);
 	victoryText->loadFont();
 
 	//buttons
