@@ -241,7 +241,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-libs/
 x64/Release Win7/
 SDLOpenGL/x64/Release Win7/
 !*.dll
+!*.lib
